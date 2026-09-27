@@ -1,7 +1,34 @@
 h1 {
-  color: blue;
+  color: white
+}
+
+h2 {
+  color: darkblue;
 }
 
 .clase {
-  color: red;
+  color: rgb(109, 182, 255)
+}
+
+body{
+  margin: 0;
+  padding: 0;
+}
+
+.header {
+  background-color: rgb(109, 182, 255);
+  color: white;      
+  text-align: center;        
+  padding: 40px 20px;       
+  width: 100%;
+  margin-top: 0;
+}
+
+.texto{
+  padding-left: 15px;
+  padding-right: 350px;
+}
+
+.titulo {
+  padding-left: 15px;
 }
