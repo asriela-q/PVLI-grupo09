@@ -1,4 +1,3 @@
-
 import Psy from "../player/playerMovement.js";
 
 export default class Animation extends Phaser.Scene {

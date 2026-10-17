@@ -23,6 +23,12 @@ let config = {
 			gravity: { y: 200 }, 
 			debug: false 
 		} 
+		checkCollision: {
+            up: true,
+            down: true,
+            left: true,
+            right: true
+        }
 	},
 
 	// ponemos las escenas utilizando el manager de Phaser
