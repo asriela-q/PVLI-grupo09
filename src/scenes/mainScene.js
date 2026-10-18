@@ -1,6 +1,6 @@
 import Psy from "../player/playerMovement.js";
 import Inventory from "../ObjectsAndInventory/Inventory.js";
-import Item from "../ObjectsAndInventory/Item.js";
+import Item from "../ObjectsAndInventory/Items.js";
 
 export default class Animation extends Phaser.Scene {
 

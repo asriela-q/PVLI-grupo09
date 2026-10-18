@@ -1,4 +1,4 @@
-import Inventory from "../ObjectsAndInventory.js";
+import Inventory from "../ObjectsAndInventory/Inventory.js";
 
 export default class Psy extends Phaser.GameObjects.Sprite {
 
