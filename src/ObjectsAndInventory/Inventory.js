@@ -21,12 +21,10 @@ export default class Inventory {
     addItemToInventory(itemId) {
         const iteminfo = ITEM_ENCYCLOPEDIA[itemId]; //La enciclopedia contiene la información de los stacks y el id del objeto
 
-        if(iteminfo && iteminfo.stackable && objectSlot.quantity < iteminfo.maxStack) { //Comprobamos si el objeto existe y si se puede apilar
-            const objectSlot = this.slots.find(slot => slot !== null && slot.id === itemId); //array.find: función de javascript que devuelve la casilla del array que cumpla las condiciones
-            if(objectSlot) {
-                objectSlot.quantity += 1;
-                return true;
-            }
+        const objectSlot = this.slots.find(slot => slot !== null && slot.id === itemId); //array.find: función de javascript que devuelve la casilla del array que cumpla las condiciones
+        if(objectSlot && iteminfo && iteminfo.stackable && objectSlot.quantity < iteminfo.maxStack) { //Comprobamos si el objeto existe y si se puede apilar 
+            objectSlot.quantity += 1;
+            return true;
         }
 
         const emptySlot = this.findEmptySlot();
