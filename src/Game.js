@@ -22,7 +22,7 @@ let config = {
 		arcade: { 
 			gravity: { y: 200 }, 
 			debug: false 
-		} 
+		},
 		checkCollision: {
             up: true,
             down: true,
