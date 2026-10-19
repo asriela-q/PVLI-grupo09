@@ -13,10 +13,13 @@ export default class Animation extends Phaser.Scene {
     preload() {
         this.load.image("psy", "./assets/images/placeholders/psy.jpg");
         this.load.image("wood", "./assets/images/placeholders/Wood.jpg");
+        this.load.image("bggame", "./assets/images/placeholders/bggame.jpg");
     }
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
+        let bggame = this.add.image(300, 300, "bggame");
+        bggame.setScale(1.5);
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setInteractive();
         player.setScale(0.3);
 
