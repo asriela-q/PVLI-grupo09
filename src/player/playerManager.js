@@ -3,8 +3,17 @@ Clase que maneja todo lo relacionado con el jugador, desde el movimiento hasta l
 sueño, hambre, estamina, etc.
 */
 
-
 import Inventory from "../objectsAndInventory/inventory.js";
+
+// velocidad:
+const RUN_SPEED = 250; // velocidad al correr
+const WALK_SPEED = 100; // velocidad al caminar
+
+// estamina:
+const STAMINA = 3; // en segundos
+const RUN_THRESHOLD = STAMINA * 0.25; // requerimiento mínimo de estamina para poder volver a correr
+const RECOVERY_CD = 1; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
+
 
 export default class Psy extends Phaser.GameObjects.Sprite {
 
@@ -28,21 +37,14 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.right = this.scene.input.keyboard.addKey('D');
         this.run = this.scene.input.keyboard.addKey('SHIFT');
 
-        this.speed;
-
-        // atributos:
-        this.maxStamina = 3; // en segundos
-        this.currentStamina = this.maxStamina;
-        this.runThreshold = this.maxStamina * 0.25; // requerimiento mínimo de estamina para poder volver a correr
-        this.runCd = 2; // cooldown cuando tu stamina llega por debajo de el threshold
-        this.recoveryCd = 1; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
-
-        this.lastFrame; // guarda una acción que se realizó en el frame anterior
+        this.speed; // velocidad del player
+        this.currentStamina = STAMINA; // estamina restante del jugador
+        this.modCd = RECOVERY_CD; // variable modificable del cooldown
 
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
-    inputHandler(){
+    walkHandler(){
         // movimiento vertical
         if (this.up.isDown) this.body.setVelocityY(-this.speed);
         else if (this.down.isDown) this.body.setVelocityY(this.speed);
@@ -60,20 +62,30 @@ export default class Psy extends Phaser.GameObjects.Sprite {
 
     // método que gestiona la estamina
     staminaManager(dt){
-
-        
-
-        // manejo de la estamina
-        if (this.run.isDown && this.currentStamina > 0) { // si esta la tecla pulsada y la estamina es > 0
-            this.speed = 200;
-            this.currentStamina -= dt / 1000; // restamos la stamina mientras corremos
+        // comprobamos si se suelta la tecla de correr
+        const cd = Phaser.Input.Keyboard.JustUp(this.run);
+        // cuando termina de correr, empieza este cooldown y mientras sea > 0 el jugador no podrá volver a correr
+        if (cd || (this.modCd != RECOVERY_CD && this.modCd > 0)) {
+            this.speed = WALK_SPEED; // hacemos que deje de correr
+            this.modCd -= dt / 1000; // empezamos el cooldown
+            console.log("Cooldown: " + this.modCd);
         }
         else {
-            this.speed = 100;
-            if (this.currentStamina < this.maxStamina) this.currentStamina += dt / 1000;
-        }
+            if (this.modCd < 0) this.modCd = RECOVERY_CD; // reset del cooldown
 
-        console.log(this.currentStamina, this.maxStamina);
+            // manejo de la estamina
+            if (this.run.isDown && this.currentStamina > 0) { // si esta la tecla pulsada y tiene estamina, corre
+                this.speed = RUN_SPEED;
+                this.currentStamina -= dt / 1000; // restamos la stamina mientras corremos
+                if (this.currentStamina < 0) this.speed = WALK_SPEED; // si llega a 0 en este frame, ponemos la walk speed (ya que no vuelve a entrar en este if)
+            }
+            else {
+                this.speed = WALK_SPEED;
+                if (this.currentStamina < STAMINA) this.currentStamina += dt / 1000;
+            }
+            console.log("Current stamina: " + this.currentStamina);
+
+        }
     }
 
     preUpdate(t, dt){
@@ -81,8 +93,9 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         super.preUpdate(t, dt);
 
         // movimiento del jugador:
+        this.walkHandler();
         this.staminaManager(dt);
-        this.inputHandler();
+
 
     }
 
