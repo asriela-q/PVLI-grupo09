@@ -4,7 +4,7 @@ export default class Camera {
     {
         const cam=escena.cameras.main;
         cam.startFollow(player,true,lerp,lerp)
-        cam.setBounds(0, 0, ancho, alto);
+        cam.setBounds(0, 0, 5000, 5000);
         cam.setZoom(zoom);
     }
 }
