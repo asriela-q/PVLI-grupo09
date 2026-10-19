@@ -25,7 +25,9 @@ export default class Animation extends Phaser.Scene {
         player.setScale(0.3);
 
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
-        this.itemsGroup = this.physics.add.group();
+        this.itemsGroup = this.physics.add.group({
+            allowGravity: false
+        });
 
         //coger las dimensiones que ocupa el juego 
         let width=this.sys.game.config.width;
@@ -34,11 +36,11 @@ export default class Animation extends Phaser.Scene {
         //llamada a la función que organiza todo de la cámara
         Camera.followPl(this,player,0.5,0.5,width,height);
         
-
         //Creación de objetos
-        this.itemsGroup.add(new Item(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "wood", "wood").setScale(0.15));
-        this.itemsGroup.add(new Item(this, this.sys.game.canvas.width * 0.4, this.sys.game.canvas.height * 0.5, "wood", "wood").setScale(0.15));
+        this.itemsGroup.add(new Item(this, 10, 10, "wood", "wood").setScale(0.15));
+        this.itemsGroup.add(new Item(this, 55, 55, "wood", "wood").setScale(0.15));
 
+        //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
         this.physics.add.overlap(player, this.itemsGroup, player.collectItem, null, player); //Null: callback  
     }
