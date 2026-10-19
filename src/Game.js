@@ -10,6 +10,7 @@ let config = {
 	type: Phaser.AUTO,
 	width:  800,
 	height: 600,
+	parent: "gameScreen",
 	pixelArt: true,
 	scale: {
 		autoCenter: Phaser.Scale.CENTER_HORIZONTALLY
