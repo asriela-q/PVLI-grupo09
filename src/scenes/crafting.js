@@ -1,5 +1,5 @@
-import ITEM_ENCYCLOPEDIA from "./infoItems.js";
-import RECIPES_LIST from "./recipes.js";
+// import ITEM_ENCYCLOPEDIA from "../objectsAndInventory/infoItems.js";
+import RECIPES_LIST from "../objectsAndInventory/recipes.js";
 
 export default class Animation extends Phaser.Scene {
 
