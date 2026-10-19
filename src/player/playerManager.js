@@ -37,12 +37,14 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.down = this.scene.input.keyboard.addKey('S');
         this.right = this.scene.input.keyboard.addKey('D');
         this.run = this.scene.input.keyboard.addKey('SHIFT');
+        this.openInventory = this.scene.input.keyboard.addKey('E');
 
         this.speed; // velocidad del player
         this.currentStamina = STAMINA; // estamina restante del jugador
         this.modCd = RECOVERY_CD; // variable modificable del cooldown
         this.exCd = 0; // variable del cooldown de muerte
 
+        this.inventory.render(this.scene, x + 20, y);
         this.staminaBar = new StatsBar(scene, -380, -230, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200);
 
     }
@@ -77,7 +79,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
             if (cdStart || (this.modCd != RECOVERY_CD && this.modCd > 0)) {
                 //this.speed = WALK_SPEED; // hacemos que deje de correr
                 this.modCd -= dt / 1000; // empezamos el cooldown
-                console.log("Cooldown: " + this.modCd);
+                //console.log("Cooldown: " + this.modCd);
             }
             if (this.modCd < 0) this.modCd = RECOVERY_CD; // reset del cooldown
 
@@ -102,7 +104,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
                 // si la stamina es menor a la máxima y el cooldown entre sprints no está
                 if (this.currentStamina < STAMINA && !(this.modCd > 0 && this.modCd != RECOVERY_CD)) this.currentStamina += dt / 1000;
             }
-            console.log("Current stamina: " + this.currentStamina);
+            //console.log("Current stamina: " + this.currentStamina);
         }
     }
 
@@ -111,9 +113,17 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         super.preUpdate(t, dt);
 
         // movimiento del jugador:
-        this.walkHandler();
+        if(!this.inventory.isVisible)
+            this.walkHandler();
         this.staminaManager(dt);
 
+        this.inventory.updatePosition(this.x + 20, this.y);
+        if(Phaser.Input.Keyboard.JustDown(this.openInventory)) {
+            this.inventory.showInventory();
+            this.body.setVelocityX(0);
+            this.body.setVelocityY(0);
+        }
+        
         this.staminaBar.updateStamina(this.currentStamina, STAMINA);
 
     }

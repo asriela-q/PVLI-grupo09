@@ -50,4 +50,79 @@ export default class Inventory {
         }
         return numb;
     }
+
+    render(scene, x, y) {
+        //Guardar datos iniciales
+        this.currentScene = scene;
+        this.currentX = x;
+        this.currentY = y;
+
+        if (!this.container) {
+            this.container = scene.add.container(x, y);
+            this.container.setVisible(this.isVisible);
+        }
+
+        //Sirve para que se actualice mientras se renderiza el inventario
+        this.container.removeAll(true);
+
+        const bg = scene.add.rectangle(0, 0, 185, 185, 0x000000, 1).setOrigin(0);
+        this.container.add(bg);
+
+        const totalCols = 4; //Columnas totales, luego esto se usa para calcular las filas   
+        const slotSize = 40; //Tamaño en píxeles de cada cuadrícula del inventario     
+        const separation = 5; //Separación entre cuadrados      
+
+        for(let i = 0; i < this.slots.length; i++) {
+            //Guardamos cada objeto
+            let item = this.slots[i];
+
+            //Calculamos las filas y las columnas de la cuadrícula del inventario
+            let col = i % totalCols;
+            const row = Math.floor(i / totalCols); //Math.floor: aproxima decimales
+            let posX = separation + col * (slotSize + separation);
+            let posY = separation + row * (slotSize + separation);
+
+            const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize, 0xffffff, 1).setOrigin(0);
+            this.container.add(slotVisual); 
+            //Si el item existe indicamos su imagen y cantidad
+            if (item !== null) {
+                const itemIcono = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, item.id);
+                itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8);
+                this.container.add(itemIcono);
+
+                if (item.quantity >= 1) {
+                    const textoCantidad = scene.add.text(
+                        posX + slotSize - 2, 
+                        posY + slotSize - 2, 
+                        item.quantity.toString(), 
+                    ).setOrigin(1, 1);
+                    this.container.add(textoCantidad);
+                }
+            }
+        }
+    }
+
+    showInventory() {
+        this.isVisible = !this.isVisible;
+        if (this.container) {
+            this.container.setVisible(this.isVisible);
+            
+            // Si el jugador lo abre, volvemos a generar el render con los items actuales (actualizar básicamente)
+            if (this.isVisible && this.currentScene) {
+                this.render(this.currentScene, this.currentX, this.currentY);
+            }
+        }
+    }
+
+    /*
+    Método que hace que el inventario siga al objeto del cual es contenedor
+    */
+    updatePosition(x, y) {
+        this.currentX = x;
+        this.currentY = y;
+        if (this.container) {
+            this.container.x = x;
+            this.container.y = y;
+        }
+    }
 }
