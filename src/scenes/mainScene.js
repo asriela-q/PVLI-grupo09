@@ -3,6 +3,7 @@ import Inventory from "../objectsAndInventory/inventory.js";
 import Item from "../objectsAndInventory/items.js";
 import Camera from "../player/camera.js";
 import Craft from "../objectsAndInventory/craft.js";
+import StatsBar from "../player/barUIHandler.js";
 
 export default class Animation extends Phaser.Scene {
 
@@ -27,6 +28,7 @@ export default class Animation extends Phaser.Scene {
         player.setScale(0.3);
         let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
         craftingTable.setScale(0.3);
+        let staminaBar = player.staminaBar;
 
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
         this.itemsGroup = this.physics.add.group({
@@ -48,5 +50,4 @@ export default class Animation extends Phaser.Scene {
         //Mira si el jugador ha colisionado con un objeto
         this.physics.add.overlap(player, this.itemsGroup, player.collectItem, null, player); //Null: callback  
     }
-
 }

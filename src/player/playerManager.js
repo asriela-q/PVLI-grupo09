@@ -4,6 +4,7 @@ sueño, hambre, estamina, etc.
 */
 
 import Inventory from "../objectsAndInventory/inventory.js";
+import StatsBar from "./barUIHandler.js";
 
 // velocidad:
 const RUN_SPEED = 400; // velocidad al correr
@@ -11,7 +12,7 @@ const WALK_SPEED = 120; // velocidad al caminar
 
 // estamina:
 const STAMINA = 5; // en segundos
-const EXHAUST_CD = 4; // requerimiento mínimo de estamina para poder volver a correr
+const EXHAUST_CD = 4; // cooldown para la recuperación de estamina una vez 
 const RECOVERY_CD = 2.5; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
 
 
@@ -41,6 +42,8 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.currentStamina = STAMINA; // estamina restante del jugador
         this.modCd = RECOVERY_CD; // variable modificable del cooldown
         this.exCd = 0; // variable del cooldown de muerte
+
+        this.staminaBar = new StatsBar(scene, -380, -230, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200);
 
     }
 
@@ -111,6 +114,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.walkHandler();
         this.staminaManager(dt);
 
+        this.staminaBar.updateStamina(this.currentStamina, STAMINA);
 
     }
 
