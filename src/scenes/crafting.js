@@ -1,5 +1,7 @@
 // import ITEM_ENCYCLOPEDIA from "../objectsAndInventory/infoItems.js";
 import RECIPES_LIST from "../objectsAndInventory/recipes.js";
+import Inventory from "../objectsAndInventory/inventory.js";
+import Psy from "../player/playerManager.js";
 
 export default class Animation extends Phaser.Scene {
 
@@ -34,6 +36,7 @@ export default class Animation extends Phaser.Scene {
             const recipe = RECIPES_LIST.find(r => r.number === i);
             console.log(recipe);
             if(recipe.unlocked) {
+                
                 // se renderiza el cuadrado de la receta
                 let square = this.add.image(20, cont, "square").setOrigin(0, 0);
                 square.setScale(0.4);

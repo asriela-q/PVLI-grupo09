@@ -2,6 +2,7 @@ import Psy from "../player/playerManager.js";
 import Inventory from "../objectsAndInventory/inventory.js";
 import Item from "../objectsAndInventory/items.js";
 import Camera from "../player/camera.js";
+import Craft from "../objectsAndInventory/craft.js";
 
 export default class Animation extends Phaser.Scene {
 
@@ -15,14 +16,17 @@ export default class Animation extends Phaser.Scene {
         this.load.image("psy", "./assets/images/placeholders/psy.jpg");
         this.load.image("wood", "./assets/images/placeholders/Wood.jpg");
         this.load.image("bggame", "./assets/images/placeholders/bggame.jpg");
+        this.load.image("craft", "./assets/images/placeholders/craft.jpg");
     }
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
         let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
         bggame.setScale(2.5);
-        let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setInteractive();
+        let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
         player.setScale(0.3);
+        let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
+        craftingTable.setScale(0.3);
 
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
         this.itemsGroup = this.physics.add.group({
