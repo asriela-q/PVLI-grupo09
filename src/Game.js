@@ -37,7 +37,7 @@ let config = {
 };
 
 new Phaser.Game(config);
-this.scene.launch('CraftUI');  // lanza la escena para que corra a la vez que el juego
+// this.scene.launch('CraftUI');  // lanza la escena para que corra a la vez que el juego
 
 // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
 function preload () {
