@@ -1,6 +1,7 @@
 import Psy from "../player/playerMovement.js";
 import Inventory from "../ObjectsAndInventory/Inventory.js";
 import Item from "../ObjectsAndInventory/Items.js";
+import Camera from "../player/camera.js";
 
 export default class Animation extends Phaser.Scene {
 
@@ -25,6 +26,14 @@ export default class Animation extends Phaser.Scene {
 
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
         this.itemsGroup = this.physics.add.group();
+
+        //coger las dimensiones que ocupa el juego 
+        let width=this.sys.game.config.width;
+        let height=this.sys.game.config.heigth;
+
+        //llamada a la función que organiza todo de la cámara
+        Camera.followPl(this,player,0.5,1,width,height);
+        
 
         //Creación de objetos
         this.itemsGroup.add(new Item(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "wood", "wood").setScale(0.15));
