@@ -19,8 +19,8 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
-        let bggame = this.add.image(300, 300, "bggame");
-        bggame.setScale(1.5);
+        let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
+        bggame.setScale(2.5);
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setInteractive();
         player.setScale(0.3);
 
@@ -32,7 +32,7 @@ export default class Animation extends Phaser.Scene {
         let height=this.sys.game.config.heigth;
 
         //llamada a la función que organiza todo de la cámara
-        Camera.followPl(this,player,0.5,1,width,height);
+        Camera.followPl(this,player,0.5,0.5,width,height);
         
 
         //Creación de objetos
