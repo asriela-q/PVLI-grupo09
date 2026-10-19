@@ -1,4 +1,4 @@
-import ITEM_ENCYCLOPEDIA from "./InfoItems.js";
+import ITEM_ENCYCLOPEDIA from "./infoItems.js";
 
 export default class Item extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, itemId) {

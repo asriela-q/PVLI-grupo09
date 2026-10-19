@@ -1,4 +1,10 @@
-import Inventory from "../ObjectsAndInventory/Inventory.js";
+/*
+Clase que maneja todo lo relacionado con el jugador, desde el movimiento hasta los atributos como
+sueño, hambre, estamina, etc.
+*/
+
+
+import Inventory from "../objectsAndInventory/inventory.js";
 
 export default class Psy extends Phaser.GameObjects.Sprite {
 
@@ -14,6 +20,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
 
         // variables del constructor
 
+        // movimiento:
         // añadimos las teclas de movimiento
         this.up = this.scene.input.keyboard.addKey('W');
         this.left = this.scene.input.keyboard.addKey('A');
@@ -23,7 +30,16 @@ export default class Psy extends Phaser.GameObjects.Sprite {
 
         this.speed;
 
+        // atributos:
+
+
     }
+
+
+    staminaManager(){
+        
+    }
+
 
     preUpdate(t, dt){
         // lógica de psy

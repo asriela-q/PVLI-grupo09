@@ -3,7 +3,7 @@ Clase que maneja la lógica de guardar objetos, no hay estructura de Phaser,
 ya que tiene que funcionar independientemente de en la escena que se utilice
 */
 
-import ITEM_ENCYCLOPEDIA from "./InfoItems.js";
+import ITEM_ENCYCLOPEDIA from "./infoItems.js";
 
 export default class Inventory {
     constructor(numberSlots = 16) {
