@@ -6,13 +6,13 @@ sueño, hambre, estamina, etc.
 import Inventory from "../objectsAndInventory/inventory.js";
 
 // velocidad:
-const RUN_SPEED = 250; // velocidad al correr
-const WALK_SPEED = 100; // velocidad al caminar
+const RUN_SPEED = 400; // velocidad al correr
+const WALK_SPEED = 120; // velocidad al caminar
 
 // estamina:
-const STAMINA = 3; // en segundos
-const RUN_THRESHOLD = STAMINA * 0.25; // requerimiento mínimo de estamina para poder volver a correr
-const RECOVERY_CD = 1; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
+const STAMINA = 5; // en segundos
+const EXHAUST_CD = 4; // requerimiento mínimo de estamina para poder volver a correr
+const RECOVERY_CD = 2.5; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
 
 
 export default class Psy extends Phaser.GameObjects.Sprite {
@@ -40,6 +40,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.speed; // velocidad del player
         this.currentStamina = STAMINA; // estamina restante del jugador
         this.modCd = RECOVERY_CD; // variable modificable del cooldown
+        this.exCd = 0; // variable del cooldown de muerte
 
     }
 
@@ -62,29 +63,43 @@ export default class Psy extends Phaser.GameObjects.Sprite {
 
     // método que gestiona la estamina
     staminaManager(dt){
-        // comprobamos si se suelta la tecla de correr
-        const cd = Phaser.Input.Keyboard.JustUp(this.run);
-        // cuando termina de correr, empieza este cooldown y mientras sea > 0 el jugador no podrá volver a correr
-        if (cd || (this.modCd != RECOVERY_CD && this.modCd > 0)) {
-            this.speed = WALK_SPEED; // hacemos que deje de correr
-            this.modCd -= dt / 1000; // empezamos el cooldown
-            console.log("Cooldown: " + this.modCd);
-        }
-        else {
+        const cdStart = Phaser.Input.Keyboard.JustUp(this.run); // comprobamos si se suelta la tecla de correr
+        // cuando termina de correr, empieza este cooldown y mientras sea > 0 la estamina no se recuperará
+        
+        // si se queda sin estamina empieza un cooldown más largo y no puede correr
+        if (this.exCd <= EXHAUST_CD && this.exCd > 0){
+            this.exCd -= dt / 1000; // empezamos el cooldowN
+        } else {
+            // si se suelta la tecla de correr o el cooldown ya está en progreso, entra
+            if (cdStart || (this.modCd != RECOVERY_CD && this.modCd > 0)) {
+                //this.speed = WALK_SPEED; // hacemos que deje de correr
+                this.modCd -= dt / 1000; // empezamos el cooldown
+                console.log("Cooldown: " + this.modCd);
+            }
             if (this.modCd < 0) this.modCd = RECOVERY_CD; // reset del cooldown
 
             // manejo de la estamina
             if (this.run.isDown && this.currentStamina > 0) { // si esta la tecla pulsada y tiene estamina, corre
-                this.speed = RUN_SPEED;
-                this.currentStamina -= dt / 1000; // restamos la stamina mientras corremos
-                if (this.currentStamina < 0) this.speed = WALK_SPEED; // si llega a 0 en este frame, ponemos la walk speed (ya que no vuelve a entrar en este if)
+                // si corremos mientras el cooldown está activo, se hace reset
+                if (this.modCd > 0 && this.modCd != RECOVERY_CD) {
+                    this.modCd = RECOVERY_CD - dt;
+                }
+                    // corremos
+                    this.speed = RUN_SPEED;
+                    this.currentStamina -= dt / 1000; // restamos la stamina mientras corremos
+
+                // si llega a 0 en este frame, ponemos la walk speed (ya que no vuelve a entrar en este if)
+                if (this.currentStamina < 0) {
+                    this.speed = WALK_SPEED;
+                    this.exCd = EXHAUST_CD; // cuando llega a 0 empieza el cooldown largo
+                }
             }
             else {
                 this.speed = WALK_SPEED;
-                if (this.currentStamina < STAMINA) this.currentStamina += dt / 1000;
+                // si la stamina es menor a la máxima y el cooldown entre sprints no está
+                if (this.currentStamina < STAMINA && !(this.modCd > 0 && this.modCd != RECOVERY_CD)) this.currentStamina += dt / 1000;
             }
             console.log("Current stamina: " + this.currentStamina);
-
         }
     }
 
