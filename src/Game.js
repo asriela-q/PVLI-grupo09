@@ -4,7 +4,7 @@
  */
 import mainMenu from './scenes/mainMenu.js'; 
 import game from './scenes/mainScene.js'; 
-import craft from './scenes/crafting.js'; 
+import CraftUI from './scenes/crafting.js'; 
 
 let config = {
 	type: Phaser.AUTO,
@@ -33,10 +33,11 @@ let config = {
 	},
 
 	// ponemos las escenas utilizando el manager de Phaser
-	scene: [mainMenu, game, craft]
+	scene: [mainMenu, game, CraftUI]
 };
 
 new Phaser.Game(config);
+this.scene.launch('CraftUI');  // lanza la escena para que corra a la vez que el juego
 
 // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
 function preload () {

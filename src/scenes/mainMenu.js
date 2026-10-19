@@ -19,6 +19,10 @@ export default class Animation extends Phaser.Scene {
         let startButton = this.add.image(200, 200, "button").setOrigin(0 ,0).setInteractive();
         startButton.setScale(0.5);
         startButton.on("pointerdown", ()=>this.scene.start("main"));
+
+        let craftButton = this.add.image(200, 400, "button").setOrigin(0 ,0).setInteractive();
+        startButton.setScale(0.5);
+        startButton.on("pointerdown", ()=>this.scene.start("CraftUI"));
     }
 
 }
