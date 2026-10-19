@@ -35,4 +35,19 @@ export default class Inventory {
 
         return false; //No se pudo añadir el objeto de ninguna manera, el inventario está lleno
     }
+
+    // mira si un objeto está en el inventario y devuelve 0 si no está y la cantidad que hay si sí
+    checkInventory(itemId) {
+        let numb = 0;
+        let found = false;
+        let i = 0;
+        while(!found && i < this.slots.length) {
+            if (this.slots[i].id == itemId) {
+                numb = this.slots[i].quantity
+                found = true;
+            }     
+            i++;
+        }
+        return numb;
+    }
 }
