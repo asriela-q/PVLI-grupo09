@@ -6,8 +6,8 @@ ya que tiene que funcionar independientemente de en la escena que se utilice
 import ITEM_ENCYCLOPEDIA from "./infoItems.js";
 
 export default class Inventory {
-    constructor(numberSlots = 16) {
-        this.slots = Array(numberSlots).fill(null); //Cuando el slot de inventario está null es que no hay objetos almacenados en él
+    constructor(conterSlots = 16) {
+        this.slots = Array(conterSlots).fill(null); //Cuando el slot de inventario está null es que no hay objetos almacenados en él
     }
 
     findEmptySlot() { //Encuentra el primer slot vacío
@@ -38,17 +38,17 @@ export default class Inventory {
 
     // mira si un objeto está en el inventario y devuelve 0 si no está y la cantidad que hay si sí
     checkInventory(itemId) {
-        let numb = 0;
+        let cont = 0;
         let found = false;
         let i = 0;
         while(!found && i < this.slots.length) {
             if (this.slots[i].id == itemId) {
-                numb = this.slots[i].quantity
+                cont = this.slots[i].quantity
                 found = true;
             }     
             i++;
         }
-        return numb;
+        return cont;
     }
 
     render(scene, x, y) {

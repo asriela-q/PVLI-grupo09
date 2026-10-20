@@ -36,10 +36,15 @@ export default class Animation extends Phaser.Scene {
             const recipe = RECIPES_LIST.find(r => r.number === i);
             console.log(recipe);
             if(recipe.unlocked) {
-                
                 // se renderiza el cuadrado de la receta
-                let square = this.add.image(20, cont, "square").setOrigin(0, 0);
-                square.setScale(0.4);
+                if (recipe.craftable) {
+                    var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
+                    green.setScale(0.4);
+                }
+                else {
+                    var square = this.add.image(20, cont, "square").setOrigin(0, 0);
+                    square.setScale(0.4);
+                }
 
                 // se renderiza la imagen del objeto de la receta
                 let object = this.add.image(25, cont + 5, recipe.object).setOrigin(0, 0);
@@ -54,10 +59,10 @@ export default class Animation extends Phaser.Scene {
                 console.log(recipe.ing2);
                 let ingredient2 = this.add.image(225, cont + 5, recipe.ing2).setOrigin(0, 0);
                 ingredient2.setScale(0.1);
-                if(recipe.numIngredients > 2) {
-                    let ingredient3 = this.add.image(325, cont + 5, recipe.ing3).setOrigin(0, 0);
-                    ingredient3.setScale(0.1);
-                }
+                // if(recipe.numIngredients > 2) {
+                //     let ingredient3 = this.add.image(325, cont + 5, recipe.ing3).setOrigin(0, 0);
+                //     ingredient3.setScale(0.1);
+                // }
 
                 cont = cont + 170;
             }
@@ -65,6 +70,6 @@ export default class Animation extends Phaser.Scene {
     }
 
     preUpdate(time, delta) {
-        
+        square.on("pointerdown", ()=>this.scene.start("CraftUI"));
     }
 }

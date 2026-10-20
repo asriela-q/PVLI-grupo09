@@ -17,6 +17,7 @@ export default class Animation extends Phaser.Scene {
         this.load.image("wood", "./assets/images/placeholders/Wood.jpg");
         this.load.image("bggame", "./assets/images/placeholders/bggame.jpg");
         this.load.image("craft", "./assets/images/placeholders/craft.jpg");
+        this.load.image("coal", "../assets/images/placeholders/coal.jpg");
     }
 
     // create - método de las escenas que se llama una vez la escena está instanciada
@@ -44,9 +45,11 @@ export default class Animation extends Phaser.Scene {
         //Creación de objetos
         this.itemsGroup.add(new Item(this, 10, 10, "wood", "wood").setScale(0.15));
         this.itemsGroup.add(new Item(this, 55, 55, "wood", "wood").setScale(0.15));
+        this.itemsGroup.add(new Item(this, 100, 100, "coal", "coal").setScale(0.15));
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
-        this.physics.add.overlap(player, this.itemsGroup, player.collectItem, null, player); //Null: callback  
+        this.physics.add.overlap(player, this.itemsGroup, player.collectItem, null, player); //Null: callback 
+        // this.physics.add.overlap(player, craftingTable, craftingTable.activateCrafting, null, player);  // esto no va uwu
     }
 }
