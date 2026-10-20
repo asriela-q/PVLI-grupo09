@@ -3,7 +3,6 @@ import Inventory from "../objectsAndInventory/inventory.js";
 import Item from "../objectsAndInventory/items.js";
 import Camera from "../player/camera.js";
 import Craft from "../objectsAndInventory/craft.js";
-import StatsBar from "../player/barUIHandler.js";
 
 export default class Animation extends Phaser.Scene {
 

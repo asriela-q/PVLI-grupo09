@@ -12,7 +12,7 @@ const WALK_SPEED = 120; // velocidad al caminar
 
 // estamina:
 const STAMINA = 5; // en segundos
-const EXHAUST_CD = 4; // cooldown para la recuperación de estamina una vez 
+const EXHAUST_CD = 4; // cooldown para la recuperación de estamina una vez esta llega a 0
 const RECOVERY_CD = 2.5; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
 
 
@@ -23,15 +23,15 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.inventory = inventory;
 
         this.scene.add.existing(this); // Nos añadimos a la escena para ser mostrados
-        this.scene.physics.add.existing(this); //Le añadimos físicas al jugador
-        this.body.setAllowGravity(false); //Así el jugador no cae por la gravidad de la física
+        this.scene.physics.add.existing(this); // Le añadimos físicas al jugador
+        this.body.setAllowGravity(false); // Así el jugador no cae por la gravidad de la física
 
         this.cursors = this.scene.input.keyboard.createCursorKeys(); // Añadimos las flechas al input
 
         // variables del constructor
 
         // movimiento:
-        // añadimos las teclas de movimiento
+        // añadimos las teclas para el input
         this.up = this.scene.input.keyboard.addKey('W');
         this.left = this.scene.input.keyboard.addKey('A');
         this.down = this.scene.input.keyboard.addKey('S');
@@ -42,10 +42,10 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.speed; // velocidad del player
         this.currentStamina = STAMINA; // estamina restante del jugador
         this.modCd = RECOVERY_CD; // variable modificable del cooldown
-        this.exCd = 0; // variable del cooldown de muerte
+        this.exCd = 0; // variable del cooldown de estamina una vez llega a 0
 
         this.inventory.render(this.scene, x + 20, y);
-        this.staminaBar = new StatsBar(scene, -380, -230, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200);
+        this.staminaBar = new StatsBar(this.scene, -380, -230, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200); // barra de estamina
 
     }
 
@@ -64,6 +64,9 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         //if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
         // Shoot once on keydown
         //}
+        if (this.body.velocity.x == 0 && this.body.velocity.y == 0)
+            return false;
+        else return true;
     }
 
     // método que gestiona la estamina
@@ -76,7 +79,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
             this.exCd -= dt / 1000; // empezamos el cooldowN
         } else {
             // si se suelta la tecla de correr o el cooldown ya está en progreso, entra
-            if (cdStart || (this.modCd != RECOVERY_CD && this.modCd > 0)) {
+            if ((!this.inventory.isVisible && cdStart) || (this.modCd != RECOVERY_CD && this.modCd > 0)) {
                 //this.speed = WALK_SPEED; // hacemos que deje de correr
                 this.modCd -= dt / 1000; // empezamos el cooldown
                 //console.log("Cooldown: " + this.modCd);
@@ -84,7 +87,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
             if (this.modCd < 0) this.modCd = RECOVERY_CD; // reset del cooldown
 
             // manejo de la estamina
-            if (this.run.isDown && this.currentStamina > 0) { // si esta la tecla pulsada y tiene estamina, corre
+            if (this.run.isDown && this.currentStamina > 0 && this.walkHandler() && !this.inventory.isvisible) { // si esta la tecla pulsada y tiene estamina, corre
                 // si corremos mientras el cooldown está activo, se hace reset
                 if (this.modCd > 0 && this.modCd != RECOVERY_CD) {
                     this.modCd = RECOVERY_CD - dt;
