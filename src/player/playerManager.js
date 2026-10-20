@@ -52,13 +52,13 @@ export default class Psy extends Phaser.GameObjects.Sprite {
     // método que gestiona las acciones del jugador mediante el input del usuario
     walkHandler(){
         // movimiento vertical
-        if (this.up.isDown) this.body.setVelocityY(-this.speed);
-        else if (this.down.isDown) this.body.setVelocityY(this.speed);
+        if (this.up.isDown && !this.inventory.isVisible) this.body.setVelocityY(-this.speed);
+        else if (this.down.isDown && !this.inventory.isVisible) this.body.setVelocityY(this.speed);
         else this.body.setVelocityY(0);
 
         // movimiento horizontal
-        if (this.right.isDown) this.body.setVelocityX(this.speed);
-        else if(this.left.isDown) this.body.setVelocityX(-this.speed);
+        if (this.right.isDown && !this.inventory.isVisible) this.body.setVelocityX(this.speed);
+        else if(this.left.isDown && !this.inventory.isVisible) this.body.setVelocityX(-this.speed);
         else this.body.setVelocityX(0);
 
         //if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
@@ -98,6 +98,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
 
                 // si llega a 0 en este frame, ponemos la walk speed (ya que no vuelve a entrar en este if)
                 if (this.currentStamina < 0) {
+                    
                     this.speed = WALK_SPEED;
                     this.exCd = EXHAUST_CD; // cuando llega a 0 empieza el cooldown largo
                 }
@@ -116,8 +117,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         super.preUpdate(t, dt);
 
         // movimiento del jugador:
-        if(!this.inventory.isVisible)
-            this.walkHandler();
+        this.walkHandler();
         this.staminaManager(dt);
 
         this.inventory.updatePosition(this.x + 20, this.y);
