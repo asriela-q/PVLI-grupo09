@@ -17,4 +17,11 @@ export default class StatsBar extends Phaser.GameObjects.Rectangle{
         let size = Math.max(0, currentStamina / maxStamina);
         this.setSize(this.originalWidth * size, this.height);
     }
+
+    // método que modifica la barra de estamina según la restante
+    updateLife(currentLife, maxLife)
+    {
+        let size = Math.max(0, currentLife / maxLife);
+        this.setSize(this.originalWidth * size, this.height);
+    }
 }

@@ -35,6 +35,11 @@ export default class Animation extends Phaser.Scene {
             allowGravity: false
         });
 
+        //Grupo de Phaser para gestionar las físicas de los enemigos
+        this.enemiesGroup = this.physics.add.group({
+            allowGravity: false
+        });
+
         //coger las dimensiones que ocupa el juego 
         let width=this.sys.game.config.width;
         let height=this.sys.game.config.heigth;

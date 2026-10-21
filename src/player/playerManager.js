@@ -15,6 +15,9 @@ const STAMINA = 5; // en segundos
 const EXHAUST_CD = 4; // cooldown para la recuperación de estamina una vez esta llega a 0
 const RECOVERY_CD = 2.5; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
 
+//vida:
+const maxLife = 100;
+
 
 export default class Psy extends Phaser.GameObjects.Sprite {
 
@@ -44,9 +47,12 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.modCd = RECOVERY_CD; // variable modificable del cooldown
         this.exCd = 0; // variable del cooldown de estamina una vez llega a 0
 
-        this.inventory.render(this.scene, x + 20, y);
-        this.staminaBar = new StatsBar(this.scene, -380, -230, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200); // barra de estamina
+        this.maxLife = maxLife;
+        this.currentLife = maxLife; //Cuando creamos al jugador su vida es la máxima
 
+        this.inventory.render(this.scene, x + 20, y);
+        this.staminaBar = new StatsBar(this.scene, -380, -200, 200, 50, 0x56f854ff).setScrollFactor(0).setDepth(200); // barra de estamina
+        this.lifeBar = new StatsBar(this.scene, -380, -250, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200); //barra de vida
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
@@ -128,7 +134,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         }
         
         this.staminaBar.updateStamina(this.currentStamina, STAMINA);
-
+        this.lifeBar.updateLife(this.currentLife, maxLife);
     }
 
     create(){
@@ -140,6 +146,15 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         if(collected) { //Si se ha podido recolectar el objeto
             console.log("objeto recogido");
             item.destroy(); //Si el jugador recoge el objeto se destruye del mapa
+        }
+    }
+
+    takeDamage(damageAmount) {
+        this.currentLife -= damageAmount;
+        if(this.currentLife <= 0)
+        {
+            this.currentLife = 0; //Se evita que tomen valores negativos
+            //Si hay que hacer alguna animación/comportamiento de muerte o algo se pone aquí
         }
     }
 }
