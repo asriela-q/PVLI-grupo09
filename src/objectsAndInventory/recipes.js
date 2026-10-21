@@ -39,7 +39,7 @@ var RECIPES_LIST = [
         object: 'torch',
         number: 3,
         unlocked: true,
-        craftable: false,
+        craftable: true,
         numIngredients: 2,
         ing1: 'coal',
         quant1: 1,

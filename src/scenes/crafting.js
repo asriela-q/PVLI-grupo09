@@ -1,4 +1,4 @@
-// import ITEM_ENCYCLOPEDIA from "../objectsAndInventory/infoItems.js";
+import ITEM_ENCYCLOPEDIA from "../objectsAndInventory/infoItems.js";
 import RECIPES_LIST from "../objectsAndInventory/recipes.js";
 import Inventory from "../objectsAndInventory/inventory.js";
 import Psy from "../player/playerManager.js";
@@ -22,14 +22,16 @@ export default class Animation extends Phaser.Scene {
         this.load.image("stone", "../assets/images/placeholders/stone.jpg");
         this.load.image("coal", "../assets/images/placeholders/coal.jpg");
         this.load.image("wood", "../assets/images/placeholders/Wood.jpg");
+
+        // this.close = this.scene.input.keyboard.addKey('Q');
     }
 
     // create - método de las escenas que se llama una vez la escena está instanciada
-    create () {
+    create (data) {
         let bg = this.add.image(0, 0, "craftbg").setOrigin(0,0);
         bg.setScale(1);
         // const iteminfo = ITEM_ENCYCLOPEDIA[itemId];
-        
+        console.log(data.inventory);
         let cont = 20;
         console.log(Object.keys(RECIPES_LIST).length);
         for(let i = 0; i < Object.keys(RECIPES_LIST).length; i++) {
@@ -40,6 +42,7 @@ export default class Animation extends Phaser.Scene {
                 if (recipe.craftable) {
                     var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
                     green.setScale(0.4);
+                    green.on("pointerdown", ()=>this.craftRecipe(recipe, data.inventory));
                 }
                 else {
                     var square = this.add.image(20, cont, "square").setOrigin(0, 0);
@@ -69,7 +72,23 @@ export default class Animation extends Phaser.Scene {
         }
     }
 
-    preUpdate(time, delta) {
-        square.on("pointerdown", ()=>this.scene.start("CraftUI"));
+    preUpdate(t, dt) {
+        super.preUpdate(t, dt);
+        
+        if (this.close.isDown) this.scene.remove(this);
+    }
+
+    craftRecipe(recipe, inventory) {
+        console.log("entra en craft recipe");
+        for(let i = 0; i < recipe.quant1; i++) {
+            inventory.removeItem(recipe.ing1);
+            console.log(recipe.ing1 + "removed");
+        }
+        for(let i = 0; i < recipe.quant2; i++) {
+            inventory.removeItem(recipe.ing2);
+            console.log(recipe.ing2 + "removed");
+        }
+        inventory.addItemToInventory(recipe.object);
+        console.log("polnito muy muy riko");
     }
 }

@@ -36,6 +36,16 @@ export default class Inventory {
         return false; //No se pudo añadir el objeto de ninguna manera, el inventario está lleno
     }
 
+    removeItem(itemId) {
+        const objectSlot = this.slots.find(slot => slot !== null && slot.id === itemId);
+        console.log(objectSlot);
+        objectSlot.quantity -= 1;
+        if (objectSlot.quantity === 0) {
+            objectSlot.id = null;
+            objectSlot.quantity = null;
+        }
+    }
+
     // mira si un objeto está en el inventario y devuelve 0 si no está y la cantidad que hay si sí
     checkInventory(itemId) {
         let cont = 0;

@@ -15,8 +15,9 @@ export default class Craft extends Phaser.GameObjects.Sprite {
 
     // se llama al pulsar la tecla F en la mesa de crafteo
     activateCrafting(craftingTable) {
-        checkAvaibleCrafts();
         ()=>this.scene.start("CraftUI");
+        console.log("me voy a cortar las venas");
+        craftingTable.checkAvaibleCrafts();
     }
 
     // craftea la receta

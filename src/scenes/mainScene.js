@@ -26,8 +26,13 @@ export default class Animation extends Phaser.Scene {
         bggame.setScale(2.5);
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
         player.setScale(0.3);
-        let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
+        console.log(this.psyInventory);
+        let craftingTable = this.add.image(200, 400, "craft").setOrigin(0 ,0).setInteractive();
         craftingTable.setScale(0.3);
+        craftingTable.on("pointerdown", ()=>this.scene.start("CraftUI", { inventory: this.psyInventory }));
+
+        // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
+
         let staminaBar = player.staminaBar;
 
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
