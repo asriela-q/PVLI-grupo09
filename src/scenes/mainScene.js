@@ -13,7 +13,7 @@ export default class Animation extends Phaser.Scene {
 
     // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
     preload() {
-        this.load.image("psy", "./assets/images/placeholders/psy.jpg");
+        this.load.image("psy", "./assets/images/placeholders/psy.png");
         this.load.image("wood", "./assets/images/placeholders/Wood.jpg");
         this.load.image("bggame", "./assets/images/placeholders/bggame.jpg");
         this.load.image("craft", "./assets/images/placeholders/craft.jpg");
@@ -25,7 +25,7 @@ export default class Animation extends Phaser.Scene {
         let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
         bggame.setScale(2.5);
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
-        player.setScale(0.3);
+        player.setScale(0.7);
         console.log(this.psyInventory);
         let craftingTable = this.add.image(200, 400, "craft").setOrigin(0 ,0).setInteractive();
         craftingTable.setScale(0.3);
