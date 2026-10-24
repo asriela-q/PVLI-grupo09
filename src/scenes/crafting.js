@@ -16,7 +16,6 @@ export default class Animation extends Phaser.Scene {
         this.load.image("green", "../assets/images/placeholders/verde.jpg");
         this.load.image("metal", "../assets/images/placeholders/metal.jpg");
         this.load.image("metal_sword", "../assets/images/placeholders/metal_sword.jpg");
-        this.load.image("stone_sword", "../assets/images/placeholders/stone_sword.png");
         this.load.image("torch", "../assets/images/placeholders/torch.png");
         this.load.image("iron", "../assets/images/placeholders/iron.jpg");
         this.load.image("stone", "../assets/images/placeholders/stone.jpg");

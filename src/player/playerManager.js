@@ -18,12 +18,23 @@ const RECOVERY_CD = 2.5; // cooldown para la recuperación de estamina, para que
 //vida:
 const maxLife = 100;
 
+const baseAttack = 15;
+const baseDefense = 15;
 
-export default class Psy extends Phaser.GameObjects.Sprite {
+
+export default class Psy extends Phaser.GameObjects.Container {
 
     constructor(scene, x, y, texture, inventory){
-        super(scene, x, y, texture);
+        super(scene, x, y, []);
+        //Al ser un contenedor hay que añadir el sprite por separado
+        this.sprite = this.scene.add.sprite(0, 0, texture);
+
+        this.add(this.sprite);
         this.inventory = inventory;
+
+        this.weapon = this.scene.add.sprite(20, 0, "stone_sword"); 
+        this.weapon.setOrigin(0.5, 0.5).setScale(0.5, 0.5); //Pivote del arma con respecto al jugador
+        this.add(this.weapon);
 
         this.scene.add.existing(this); // Nos añadimos a la escena para ser mostrados
         this.scene.physics.add.existing(this); // Le añadimos físicas al jugador
@@ -41,6 +52,11 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.right = this.scene.input.keyboard.addKey('D');
         this.run = this.scene.input.keyboard.addKey('SHIFT');
         this.openInventory = this.scene.input.keyboard.addKey('E');
+        this.scene.input.on("pointerdown", (pointer)=>{
+            if(pointer.leftButtonDown() && !inventory.isVisible) {
+                this.attack();
+            }
+        })
 
         this.speed; // velocidad del player
         this.currentStamina = STAMINA; // estamina restante del jugador
@@ -51,20 +67,38 @@ export default class Psy extends Phaser.GameObjects.Sprite {
         this.currentLife = maxLife; //Cuando creamos al jugador su vida es la máxima
 
         this.inventory.render(this.scene, x + 20, y);
-        this.staminaBar = new StatsBar(this.scene, -380, -200, 200, 50, 0x56f854ff).setScrollFactor(0).setDepth(200); // barra de estamina
         this.lifeBar = new StatsBar(this.scene, -380, -250, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200); //barra de vida
+        this.staminaBar = new StatsBar(this.scene, -380, -200, 200, 50, 0x56f854ff).setScrollFactor(0).setDepth(200); // barra de estamina
+
+        this.playerAttack = baseAttack;
+        this.bonusAttack = 0;
+        this.playerDefense = baseDefense;
+        this.facingDirection = "right"; //Dirección del último movimiento;
+        this.isAttacking = false;
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
     walkHandler(){
         // movimiento vertical
-        if (this.up.isDown && !this.inventory.isVisible) this.body.setVelocityY(-this.speed);
-        else if (this.down.isDown && !this.inventory.isVisible) this.body.setVelocityY(this.speed);
+        if (this.up.isDown && !this.inventory.isVisible) { 
+            this.body.setVelocityY(-this.speed);
+            this.facingDirection = "up";
+        }
+        else if (this.down.isDown && !this.inventory.isVisible) { 
+            this.body.setVelocityY(this.speed);
+            this.facingDirection = "down";
+        }
         else this.body.setVelocityY(0);
 
         // movimiento horizontal
-        if (this.right.isDown && !this.inventory.isVisible) this.body.setVelocityX(this.speed);
-        else if(this.left.isDown && !this.inventory.isVisible) this.body.setVelocityX(-this.speed);
+        if (this.right.isDown && !this.inventory.isVisible) { 
+            this.body.setVelocityX(this.speed);
+            this.facingDirection = "right";
+        }
+        else if(this.left.isDown && !this.inventory.isVisible) { 
+            this.body.setVelocityX(-this.speed);
+            this.facingDirection = "left";
+        }
         else this.body.setVelocityX(0);
 
         //if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
@@ -120,7 +154,7 @@ export default class Psy extends Phaser.GameObjects.Sprite {
 
     preUpdate(t, dt){
         // lógica de psy
-        super.preUpdate(t, dt);
+        this.sprite.preUpdate(t, dt);
 
         // movimiento del jugador:
         this.walkHandler();
@@ -150,12 +184,56 @@ export default class Psy extends Phaser.GameObjects.Sprite {
     }
 
     takeDamage(damageAmount) {
-        this.currentLife -= damageAmount;
+        let totalDamage = damageAmount - this.playerDefense;
+        totalDamage = Math.max(1, totalDamage); //Esto es para que si por lo que sea sale que el daño es negativo hacer 1 de daño
+        this.currentLife -= totalDamage;
         if(this.currentLife <= 0)
         {
             this.currentLife = 0; //Se evita que tomen valores negativos
             //Si hay que hacer alguna animación/comportamiento de muerte o algo se pone aquí
         }
+    }
+
+    /*
+    Método que maneja la lógica de ataque de Psy.
+    Este método también manejará la animación de ataque cuando exista
+    */
+    attack(){
+        if(this.isAttacking) return;
+        console.log("Bomboclat");
+
+        let posAttackX = this.x, posAttackY = this.y, colliderHeight = 50, colliderWidth = 70; 
+
+        //Miramos la última dirección del jugador y colocamos el collider en función de ello
+        if (this.facingDirection === 'right') {
+            posAttackX = this.x + 50;
+        } else if (this.facingDirection === 'left') {
+            posAttackX = this.x - 50;
+        } else if (this.facingDirection === 'up') {
+            posAttackY = this.y - 50;
+        } else if (this.facingDirection === 'down') {
+            posAttackY = this.y + 50;
+        }
+
+        //Creamos el collider del arma
+        let attackCollider = this.scene.add.zone(posAttackX, posAttackY, colliderWidth, colliderHeight);
+        this.scene.physics.add.existing(attackCollider);
+        attackCollider.body.setAllowGravity(false);
+
+        //Si hay un enemigo con la capacidad de ser atacado le resta vida
+        if(this.scene.enemiesGroup) {
+            this.scene.physics.add.overlap(attackCollider, this.scene.enemiesGroup, (hitbox, enemy)=>{
+                if(enemy.takeDamage) {
+                    let totalAttack = this.playerAttack + bonusAttack;
+                    enemy.takeDamage(totalAttack);
+                }
+            }, null, this);
+        }
+
+        //El collider desaparece después de un cooldown
+        this.scene.time.delayedCall(150, () => {
+            attackCollider.destroy();
+        });
     }
 }
 
