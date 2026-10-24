@@ -105,6 +105,7 @@ export default class Inventory {
                         posX + slotSize - 2, 
                         posY + slotSize - 2, 
                         item.quantity.toString(), 
+                        { font: '20px Arial', fill: '#000000' }
                     ).setOrigin(1, 1);
                     this.container.add(textoCantidad);
                 }
