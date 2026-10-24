@@ -6,9 +6,7 @@ export default class Animation extends Phaser.Scene {
 
     // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
     preload() {
-        // primero cargamos las imágenes necesarias para el juego (todo el arte)
-        this.load.image("bg", "./assets/images/placeholders/bg.jpg");
-        this.load.image("button", "./assets/images/placeholders/button.png");
+        
     }
 
     // create - método de las escenas que se llama una vez la escena está instanciada

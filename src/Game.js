@@ -3,6 +3,7 @@
  * la clase Game de Phaser, encargada de crear e iniciar el juego.
  */
 import mainMenu from './scenes/mainMenu.js'; 
+import load from './scenes/load.js'; 
 import game from './scenes/mainScene.js'; 
 import CraftUI from './scenes/crafting.js'; 
 
@@ -33,7 +34,7 @@ let config = {
 	},
 
 	// ponemos las escenas utilizando el manager de Phaser
-	scene: [mainMenu, game, CraftUI]
+	scene: [load, mainMenu, game, CraftUI]
 };
 
 new Phaser.Game(config);

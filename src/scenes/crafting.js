@@ -11,16 +11,7 @@ export default class Animation extends Phaser.Scene {
 
     // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
     preload() {
-        this.load.image("craftbg", "../assets/images/placeholders/craftbg.jpg");
-        this.load.image("square", "../assets/images/placeholders/square.jpg");
-        this.load.image("green", "../assets/images/placeholders/verde.jpg");
-        this.load.image("metal", "../assets/images/placeholders/metal.jpg");
-        this.load.image("metal_sword", "../assets/images/placeholders/metal_sword.jpg");
-        this.load.image("torch", "../assets/images/placeholders/torch.png");
-        this.load.image("iron", "../assets/images/placeholders/iron.jpg");
-        this.load.image("stone", "../assets/images/placeholders/stone.jpg");
-        this.load.image("coal", "../assets/images/placeholders/coal.jpg");
-        this.load.image("wood", "../assets/images/placeholders/Wood.jpg");
+
 
         // this.close = this.scene.input.keyboard.addKey('Q');
     }
