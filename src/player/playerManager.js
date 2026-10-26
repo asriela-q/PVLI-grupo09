@@ -167,8 +167,8 @@ export default class Psy extends Phaser.GameObjects.Container {
             this.body.setVelocityY(0);
         }
         
-        this.staminaBar.updateStamina(this.currentStamina, STAMINA);
-        this.lifeBar.updateLife(this.currentLife, maxLife);
+        this.staminaBar.updateBar(this.currentStamina, STAMINA);
+        this.lifeBar.updateBar(this.currentLife, maxLife);
     }
 
     create(){
