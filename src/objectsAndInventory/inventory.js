@@ -3,11 +3,10 @@ Clase que maneja la lógica de guardar objetos, no hay estructura de Phaser,
 ya que tiene que funcionar independientemente de en la escena que se utilice
 */
 
-import ITEM_ENCYCLOPEDIA from "./infoItems.js";
-
 export default class Inventory {
-    constructor(conterSlots = 16) {
+    constructor(conterSlots = 16, ITEM_ENCYCLOPEDIA) {
         this.slots = Array(conterSlots).fill(null); //Cuando el slot de inventario está null es que no hay objetos almacenados en él
+        this.ITEM_ENCYCLOPEDIA = ITEM_ENCYCLOPEDIA;
     }
 
     findEmptySlot() { //Encuentra el primer slot vacío
@@ -19,7 +18,12 @@ export default class Inventory {
     comprueba el slot, si el slot está lleno debe guardarlo en otro
     */
     addItemToInventory(itemId) {
-        const iteminfo = ITEM_ENCYCLOPEDIA[itemId]; //La enciclopedia contiene la información de los stacks y el id del objeto
+        if (!this.ITEM_ENCYCLOPEDIA) {
+        console.error("La enciclopedia de items no está cargada");
+        return false;
+        }
+
+        const iteminfo = this.ITEM_ENCYCLOPEDIA[itemId]; //La enciclopedia contiene la información de los stacks y el id del objeto
 
         const objectSlot = this.slots.find(slot => slot !== null && slot.id === itemId); //array.find: función de javascript que devuelve la casilla del array que cumpla las condiciones
         if(objectSlot && iteminfo && iteminfo.stackable && objectSlot.quantity < iteminfo.maxStack) { //Comprobamos si el objeto existe y si se puede apilar 
@@ -41,8 +45,8 @@ export default class Inventory {
         console.log(objectSlot);
         objectSlot.quantity -= 1;
         if (objectSlot.quantity === 0) {
-            objectSlot.id = null;
-            objectSlot.quantity = null;
+            const index = this.slots.indexOf(objectSlot);
+            this.slots[index] = null;
         }
     }
 

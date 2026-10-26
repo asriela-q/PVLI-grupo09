@@ -1,4 +1,3 @@
-import ITEM_ENCYCLOPEDIA from "../objectsAndInventory/infoItems.js";
 import RECIPES_LIST from "../objectsAndInventory/recipes.js";
 import Inventory from "../objectsAndInventory/inventory.js";
 import Psy from "../player/playerManager.js";

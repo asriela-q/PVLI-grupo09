@@ -54,17 +54,7 @@ export default class Load extends Phaser.Scene {
         this.load.on('fileprogress', function (file) {
             assetText.setText('Loading asset: ' + file.key);
         });
-        this.load.on('complete', () => {
-            progressBar.destroy();
-            progressBox.destroy();
-            loadingText.destroy();
-            percentText.destroy();
-            assetText.destroy();
 
-            this.scene.start("start");
-        });
-           
-        
         //Todas las imágenes que queremos cargar
         this.load.image("bg", "./assets/images/placeholders/bg.jpg");
         this.load.image("button", "./assets/images/placeholders/button.png");
@@ -82,7 +72,22 @@ export default class Load extends Phaser.Scene {
         this.load.image("torch", "../assets/images/placeholders/torch.png");
         this.load.image("iron", "../assets/images/placeholders/iron.jpg");
         this.load.image("stone", "../assets/images/placeholders/stone.jpg");
-        this.load.image("coal", "../assets/images/placeholders/coal.jpg");
-        this.load.image("wood", "../assets/images/placeholders/Wood.jpg");
+
+        //Cargar json
+        this.load.json("infoItems", "../src/objectsAndInventory/infoItems.json");
+
+        this.load.on('complete', () => {
+            progressBar.destroy();
+            progressBox.destroy();
+            loadingText.destroy();
+            percentText.destroy();
+            assetText.destroy();
+
+            this.scene.start("start");
+        }); 
+    }
+
+    create() {
+        
     }
 }

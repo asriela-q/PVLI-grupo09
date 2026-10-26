@@ -18,6 +18,9 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
+        let ITEM_ENCYCLOPEDIA = this.cache.json.get("infoItems");
+        this.psyInventory.ITEM_ENCYCLOPEDIA = ITEM_ENCYCLOPEDIA;
+
         let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
         bggame.setScale(2.5);
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
@@ -42,16 +45,16 @@ export default class Animation extends Phaser.Scene {
         });
 
         //coger las dimensiones que ocupa el juego 
-        let width=this.sys.game.config.width;
-        let height=this.sys.game.config.heigth;
+        let width = this.sys.game.config.width;
+        let height = this.sys.game.config.height;
 
         //llamada a la función que organiza todo de la cámara
         Camera.followPl(this,player,0.5,0.5,width,height);
         
         //Creación de objetos
-        this.itemsGroup.add(new Item(this, 10, 10, "wood", "wood").setScale(0.15));
-        this.itemsGroup.add(new Item(this, 55, 55, "wood", "wood").setScale(0.15));
-        this.itemsGroup.add(new Item(this, 100, 100, "coal", "coal").setScale(0.15));
+        this.itemsGroup.add(new Item(this, 10, 10, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        this.itemsGroup.add(new Item(this, 55, 55, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        this.itemsGroup.add(new Item(this, 100, 100, "coal", "coal", ITEM_ENCYCLOPEDIA).setScale(0.15));
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
