@@ -8,15 +8,11 @@ export default class Animation extends Phaser.Scene {
         super ({key: "CraftUI"}); // nombre de la escena
     }
 
-    // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
-    preload() {
-
-
-        // this.close = this.scene.input.keyboard.addKey('Q');
-    }
-
     // create - método de las escenas que se llama una vez la escena está instanciada
     create (data) {
+        this.inventory = data.inventory;
+        this.close = this.input.keyboard.addKey("Q");
+
         let bg = this.add.image(0, 0, "craftbg").setOrigin(0,0);
         bg.setScale(1);
         // const iteminfo = ITEM_ENCYCLOPEDIA[itemId];
@@ -61,23 +57,27 @@ export default class Animation extends Phaser.Scene {
         }
     }
 
-    preUpdate(t, dt) {
-        super.preUpdate(t, dt);
-        
-        if (this.close.isDown) this.scene.remove(this);
+    update() {
+        if (Phaser.Input.Keyboard.JustDown(this.close)) this.closeUI();
     }
 
-    craftRecipe(recipe, inventory) {
+    craftRecipe(recipe) {
         console.log("entra en craft recipe");
         for(let i = 0; i < recipe.quant1; i++) {
-            inventory.removeItem(recipe.ing1);
+            this.inventory.removeItem(recipe.ing1);
             console.log(recipe.ing1 + "removed");
         }
         for(let i = 0; i < recipe.quant2; i++) {
-            inventory.removeItem(recipe.ing2);
+            this.inventory.removeItem(recipe.ing2);
             console.log(recipe.ing2 + "removed");
         }
-        inventory.addItemToInventory(recipe.object);
+        this.inventory.addItemToInventory(recipe.object);
         console.log("polnito muy muy riko");
+        this.closeUI();
+    }
+
+    closeUI() {
+        this.scene.resume("main");
+        this.scene.stop();
     }
 }

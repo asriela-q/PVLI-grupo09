@@ -13,10 +13,11 @@ export default class Craft extends Phaser.GameObjects.Sprite {
     }
 
     // se llama al pulsar la tecla F en la mesa de crafteo
-    activateCrafting(craftingTable) {
-        ()=>this.scene.start("CraftUI");
+    activateCrafting() {
+        this.checkAvaibleCrafts();
+        this.scene.scene.pause("main");
+        this.scene.scene.launch("CraftUI", { inventory: this.inventory });
         console.log("me voy a cortar las venas");
-        craftingTable.checkAvaibleCrafts();
     }
 
     // craftea la receta
@@ -33,6 +34,9 @@ export default class Craft extends Phaser.GameObjects.Sprite {
             if(this.inventory.checkInventory(recipe.ing1) >= recipe.quant1 &&
                this.inventory.checkInventory(recipe.ing2) >= recipe.quant2) {
                 recipe.craftable = true;
+            }
+            else {
+                recipe.craftable = false;
             }
         }
     }

@@ -25,8 +25,8 @@ export default class Inventory {
 
         const iteminfo = this.ITEM_ENCYCLOPEDIA[itemId]; //La enciclopedia contiene la información de los stacks y el id del objeto
 
-        const objectSlot = this.slots.find(slot => slot !== null && slot.id === itemId); //array.find: función de javascript que devuelve la casilla del array que cumpla las condiciones
-        if(objectSlot && iteminfo && iteminfo.stackable && objectSlot.quantity < iteminfo.maxStack) { //Comprobamos si el objeto existe y si se puede apilar 
+        const objectSlot = this.slots.find(slot => slot !== null && slot.id === itemId && iteminfo && iteminfo.stackable && slot.quantity < iteminfo.maxStack);
+        if (objectSlot) {
             objectSlot.quantity += 1;
             return true;
         }
@@ -41,26 +41,27 @@ export default class Inventory {
     }
 
     removeItem(itemId) {
-        const objectSlot = this.slots.find(slot => slot !== null && slot.id === itemId);
-        console.log(objectSlot);
-        objectSlot.quantity -= 1;
-        if (objectSlot.quantity === 0) {
-            const index = this.slots.indexOf(objectSlot);
-            this.slots[index] = null;
+        let removed = true;
+        const index = this.slots.findIndex(slot => slot !== null && slot.id === itemId);
+        if (index !== -1) {
+            this.slots[index].quantity -= 1;
+            if (this.slots[index].quantity <= 0) {
+                this.slots[index] = null;
+            }
         }
+        else {
+            removed = false;
+        }
+        return removed;
     }
 
     // mira si un objeto está en el inventario y devuelve 0 si no está y la cantidad que hay si sí
     checkInventory(itemId) {
         let cont = 0;
-        let found = false;
-        let i = 0;
-        while(!found && i < this.slots.length) {
-            if (this.slots[i].id == itemId) {
-                cont = this.slots[i].quantity
-                found = true;
-            }     
-            i++;
+        for (const slot of this.slots) {
+            if (slot !== null && slot.id === itemId) {
+                cont += slot.quantity;
+            }
         }
         return cont;
     }
