@@ -7,19 +7,19 @@ import Inventory from "../objectsAndInventory/inventory.js";
 import StatsBar from "./barUIHandler.js";
 
 // velocidad:
-const RUN_SPEED = 400; // velocidad al correr
-const WALK_SPEED = 120; // velocidad al caminar
+const RUN_SPEED = 650; // velocidad al correr
+const WALK_SPEED = 270; // velocidad al caminar
 
 // estamina:
-const STAMINA = 5; // en segundos
-const EXHAUST_CD = 4; // cooldown para la recuperación de estamina una vez esta llega a 0
-const RECOVERY_CD = 2.5; // cooldown para la recuperación de estamina, para que el jugador no pueda correr infinitamente
+const STAMINA = 5; // segundos que puede correr el jugador (estamina máxima)
+const RECOVERY_CD = 2; // segundos de espera antes de recuperar estamina tras dejar de correr
+const EXHAUST_CD = 4; // segundos de espera si la estamina llegó a 0 (más largo)
 
-//vida:
-const maxLife = 100;
+// vida:
+const maxLife = 100; // vida máxima del jugador
 
-const baseAttack = 15;
-const baseDefense = 15;
+const baseAttack = 15; // ataque base
+const baseDefense = 15; // defensa base
 
 
 export default class Psy extends Phaser.GameObjects.Container {
@@ -58,106 +58,104 @@ export default class Psy extends Phaser.GameObjects.Container {
             }
         })
 
-        this.speed; // velocidad del player
-        this.currentStamina = STAMINA; // estamina restante del jugador
-        this.modCd = RECOVERY_CD; // variable modificable del cooldown
-        this.exCd = 0; // variable del cooldown de estamina una vez llega a 0
+        // variables de movimiento
+        this.moveDir = new Phaser.Math.Vector2(0, 0); // dirección de movimiento del jugador
+        this.speed = WALK_SPEED; // velocidad del player (la inicializamos a la de caminar)
+        this.isRunning = false; // detecta si 
 
+        // estamina:
+        this.currentStamina = STAMINA; // estamina actual del jugador
+        this.recoveryTimer = 0; // segundos que faltan para que empiece a recuperarse la estamina (cooldown)
+        this.isExhausted = false; // true si la estamina llegó a 0 y aún no ha pasado el cooldown largo
+
+        // variables con la vida
         this.maxLife = maxLife;
         this.currentLife = maxLife; //Cuando creamos al jugador su vida es la máxima
 
+        // inventario y UI
         this.inventory.render(this.scene, x + 20, y);
         this.lifeBar = new StatsBar(this.scene, -380, -250, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200); //barra de vida
         this.staminaBar = new StatsBar(this.scene, -380, -200, 200, 50, 0x56f854ff).setScrollFactor(0).setDepth(200); // barra de estamina
 
+        // estadísticas del player
         this.playerAttack = baseAttack;
         this.bonusAttack = 0;
         this.playerDefense = baseDefense;
+
+        // variables de ataque
         this.facingDirection = "right"; //Dirección del último movimiento;
         this.isAttacking = false;
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
-    walkHandler(){
-        // movimiento vertical
-        if (this.up.isDown && !this.inventory.isVisible) { 
-            this.body.setVelocityY(-this.speed);
-            this.facingDirection = "up";
-        }
-        else if (this.down.isDown && !this.inventory.isVisible) { 
-            this.body.setVelocityY(this.speed);
-            this.facingDirection = "down";
-        }
-        else this.body.setVelocityY(0);
+    inputHandler(){
+        const inventoryOpen = this.inventory.isVisible; // detecta si el inventario se abre o no
+        this.moveDir.set(0, 0); // hacemos reset del vector a 0,0
 
-        // movimiento horizontal
-        if (this.right.isDown && !this.inventory.isVisible) { 
-            this.body.setVelocityX(this.speed);
-            this.facingDirection = "right";
+        // si el inventario está abierto, ignora cualquier tipo de input relacionado con moverse
+        if (!inventoryOpen) {
+            // vertical
+            if (this.up.isDown) {
+                this.moveDir.y = -1;
+                this.facingDirection = "up";
+            }
+            else if (this.down.isDown) {
+                this.moveDir.y = 1;
+                this.facingDirection = "down";
+            }
+            // horizontal
+            if (this.right.isDown) {
+                this.moveDir.x = 1;
+                this.facingDirection = "right";
+            }
+            else if (this.left.isDown) {
+                this.moveDir.x = -1;
+                this.facingDirection = "left";
+            }
         }
-        else if(this.left.isDown && !this.inventory.isVisible) { 
-            this.body.setVelocityX(-this.speed);
-            this.facingDirection = "left";
-        }
-        else this.body.setVelocityX(0);
 
-        //if (Phaser.Input.Keyboard.JustDown(this.cursors.space)) {
-        // Shoot once on keydown
-        //}
-        if (this.body.velocity.x == 0 && this.body.velocity.y == 0)
-            return false;
-        else return true;
+        const isMoving = this.moveDir.x !== 0 || this.moveDir.y !== 0; // true si se mueve en alguna de las dos direcciones (x o y), false si no se mueve para nada
+        this.isRunning = isMoving && this.run.isDown && this.currentStamina > 0 && !this.isExhausted; // será true si se cumplen todas las condiciones para q pueda correr
+        this.speed = this.isRunning ? RUN_SPEED : WALK_SPEED; // si isRunning es true, speed será igual a la velocidad de correr
+
+        // normalizamos el vector y aplicamos el .scale() (multiplica el vector por el valor de scale, asiq ya le aplicamos la velocidad directamente y la metemos en el setVelocity)
+        this.moveDir.normalize().scale(this.speed);
+        this.body.setVelocity(this.moveDir.x, this.moveDir.y);
     }
 
-    // método que gestiona la estamina
+    // método para gestionar la stamina del jugador
     staminaManager(dt){
-        const cdStart = Phaser.Input.Keyboard.JustUp(this.run); // comprobamos si se suelta la tecla de correr
-        // cuando termina de correr, empieza este cooldown y mientras sea > 0 la estamina no se recuperará
-        
-        // si se queda sin estamina empieza un cooldown más largo y no puede correr
-        if (this.exCd <= EXHAUST_CD && this.exCd > 0){
-            this.exCd -= dt / 1000; // empezamos el cooldowN
-        } else {
-            // si se suelta la tecla de correr o el cooldown ya está en progreso, entra
-            if ((!this.inventory.isVisible && cdStart) || (this.modCd != RECOVERY_CD && this.modCd > 0)) {
-                //this.speed = WALK_SPEED; // hacemos que deje de correr
-                this.modCd -= dt / 1000; // empezamos el cooldown
-                //console.log("Cooldown: " + this.modCd);
-            }
-            if (this.modCd < 0) this.modCd = RECOVERY_CD; // reset del cooldown
+        const s = dt / 1000; // pasamos dt a segundos
 
-            // manejo de la estamina
-            if (this.run.isDown && this.currentStamina > 0 && this.walkHandler() && !this.inventory.isvisible) { // si esta la tecla pulsada y tiene estamina, corre
-                // si corremos mientras el cooldown está activo, se hace reset
-                if (this.modCd > 0 && this.modCd != RECOVERY_CD) {
-                    this.modCd = RECOVERY_CD - dt;
-                }
-                    // corremos
-                    this.speed = RUN_SPEED;
-                    this.currentStamina -= dt / 1000; // restamos la stamina mientras corremos
+        // comprobamos si el jugador está corriendo
+        if (this.isRunning) {
+            // drenamos la estamina mientras corremos y reiniciamos el cooldown de recuperación
+            this.currentStamina -= s;
+            this.recoveryTimer = RECOVERY_CD;
 
-                // si llega a 0 en este frame, ponemos la walk speed (ya que no vuelve a entrar en este if)
-                if (this.currentStamina < 0) {
-                    
-                    this.speed = WALK_SPEED;
-                    this.exCd = EXHAUST_CD; // cuando llega a 0 empieza el cooldown largo
-                }
+            // si se acaba la stamina empezamos el cooldown de exhausted (cooldown mas largo)
+            if (this.currentStamina <= 0) {
+                this.currentStamina = 0;
+                this.isExhausted = true; // variable que no permite que el jugador corra mientras sea true
+                this.recoveryTimer = EXHAUST_CD; // ponemos el timer al cooldown largo (cuando stamina = 0)
             }
-            else {
-                this.speed = WALK_SPEED;
-                // si la stamina es menor a la máxima y el cooldown entre sprints no está
-                if (this.currentStamina < STAMINA && !(this.modCd > 0 && this.modCd != RECOVERY_CD)) this.currentStamina += dt / 1000;
-            }
-            //console.log("Current stamina: " + this.currentStamina);
         }
+        // si caminamos mientras el cooldown siga en pie, lo vamos restando (se va agotando el cooldown y cuando sea = 0 podremos correr de nuevo)
+        else if (this.recoveryTimer > 0) this.recoveryTimer -= s;
+        else {
+            this.isExhausted = false;
+            // vamos recuperando estamina (para no pasarnos usamos el min entre el maximo y la actual)
+            this.currentStamina = Math.min(STAMINA, this.currentStamina + s);
+        }
+
+        this.staminaBar.updateBar(this.currentStamina, STAMINA);
     }
 
     preUpdate(t, dt){
         // lógica de psy
         this.sprite.preUpdate(t, dt);
 
-        // movimiento del jugador:
-        this.walkHandler();
+        this.inputHandler();
         this.staminaManager(dt);
 
         this.inventory.updatePosition(this.x + 20, this.y);
@@ -167,7 +165,6 @@ export default class Psy extends Phaser.GameObjects.Container {
             this.body.setVelocityY(0);
         }
         
-        this.staminaBar.updateBar(this.currentStamina, STAMINA);
         this.lifeBar.updateBar(this.currentLife, maxLife);
     }
 
@@ -224,7 +221,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         if(this.scene.enemiesGroup) {
             this.scene.physics.add.overlap(attackCollider, this.scene.enemiesGroup, (hitbox, enemy)=>{
                 if(enemy.takeDamage) {
-                    let totalAttack = this.playerAttack + bonusAttack;
+                    let totalAttack = this.playerAttack + this.bonusAttack;
                     enemy.takeDamage(totalAttack);
                 }
             }, null, this);
@@ -236,5 +233,3 @@ export default class Psy extends Phaser.GameObjects.Container {
         });
     }
 }
-
-
