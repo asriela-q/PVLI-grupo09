@@ -1,0 +1,16 @@
+{
+  "tier_WOODEN": {
+    "common": { "probability": 80, "items": ["Stone", "Wood", "Coal"]
+    },
+    "uncommon": { "probability": 20, "items": ["Seeds, Straw"]
+    }
+},
+  "tier_IRON": {
+    "common": { "probability": 50, "items": ["Stone", "Coal"]
+    },
+    "uncommon": { "probability": 35, "items": ["Straw", "Metal", "Fang"]
+    },
+    "rare": { "probability": 15, "items": ["Iron", "Metal Sword"]
+    }
+}
+}
