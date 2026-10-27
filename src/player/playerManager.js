@@ -189,6 +189,7 @@ export default class Psy extends Phaser.GameObjects.Container {
             this.currentLife = 0; //Se evita que tomen valores negativos
             //Si hay que hacer alguna animación/comportamiento de muerte o algo se pone aquí
         }
+        this.lifeBar.updateBar(this.currentLife, this.maxLife);
     }
 
     /*
