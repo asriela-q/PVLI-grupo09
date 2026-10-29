@@ -73,6 +73,8 @@ export default class Load extends Phaser.Scene {
         this.load.image("torch", "../assets/images/placeholders/torch.png");
         this.load.image("iron", "../assets/images/placeholders/iron.jpg");
         this.load.image("stone", "../assets/images/placeholders/stone.jpg");
+        this.load.image("dayWheel", "../assets/images/placeholders/dayTimesWheel.jpg");
+        this.load.image("arrow", "../assets/images/placeholders/Arrow.png");
 
         //Cargar json
         this.load.json("infoItems", "../src/objectsAndInventory/infoItems.json");
