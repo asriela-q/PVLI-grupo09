@@ -11,7 +11,7 @@ export default class Chest extends Phaser.GameObjects.Sprite {
     };*/
 
     constructor(scene, x, y, texture, tier, itemGroup){
-        super(scene, x, y, texture, tier);
+        super(scene, x, y, texture);
         this.scene.add.existing(this); 
 
         this.chestTier = tier; // variable que guarda la tier del constructor
