@@ -75,9 +75,19 @@ export default class Load extends Phaser.Scene {
         this.load.image("stone", "../assets/images/placeholders/stone.jpg");
         this.load.image("dayWheel", "../assets/images/placeholders/dayTimesWheel.jpg");
         this.load.image("arrow", "../assets/images/placeholders/Arrow.png");
+        this.load.image("chest", "../assets/images/placeholders/chest.png");
+        this.load.image("seeds", "../assets/images/placeholders/seeds.png");
+        this.load.image("straw", "../assets/images/placeholders/straw.jpg");
+        this.load.image("an_skin", "../assets/images/placeholders/a_skin.png");
+        this.load.image("fang", "../assets/images/placeholders/fang.jpg");
+        this.load.image("meat", "../assets/images/placeholders/meat.jpg");
+        this.load.image("brick", "../assets/images/placeholders/brick.jpg");
+
 
         //Cargar json
         this.load.json("infoItems", "../src/objectsAndInventory/infoItems.json");
+        this.load.json("infoChest", "../src/mapObjects/infoChest.json");
+
 
         this.load.on('complete', () => {
             progressBar.destroy();

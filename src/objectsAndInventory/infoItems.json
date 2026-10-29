@@ -33,7 +33,7 @@
     },
     "brick" : {
         "name": "Brick", 
-        "texture": "",
+        "texture": "brick",
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
@@ -47,35 +47,35 @@
     },
     "meat" : {
         "name": "Meat", 
-        "texture": "", 
+        "texture": "meat", 
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
     },
     "fang" : {
         "name": "Fang", 
-        "texture": "", 
+        "texture": "fang", 
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
     },
     "animal_skin" : {
         "name": "Animal skin", 
-        "texture": "", 
+        "texture": "an_skin", 
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
     },
     "seeds" : {
         "name": "Seeds", 
-        "texture": "",
+        "texture": "seeds",
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
     },
     "straw" : {
         "name": "Straw", 
-        "texture": "", 
+        "texture": "straw", 
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 

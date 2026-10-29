@@ -5,6 +5,7 @@ import Camera from "../player/camera.js";
 import Craft from "../objectsAndInventory/craft.js";
 import Enemy from "../enemy/enemy.js";
 import Patrol from "../enemy/patrol.js";
+import Chest from "../mapObjects/chest.js";
 
 
 export default class Animation extends Phaser.Scene {
@@ -48,11 +49,13 @@ export default class Animation extends Phaser.Scene {
         hudContenedor.add(this.flecha);
         this.flecha.setAngle(-120);
 
+        // creacion de elementos del juego:
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
         player.setScale(0.7);
         console.log(this.psyInventory);
         let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setOrigin(0, 0).setScale(0.3).setInteractive();
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
+
 
         // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
 
@@ -63,6 +66,10 @@ export default class Animation extends Phaser.Scene {
         this.itemsGroup = this.physics.add.group({
             allowGravity: false
         });
+
+        // hay que definir primero el grupo de los items
+        let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setOrigin(0,0).setScale(0.6).setInteractive();
+        testChest.on("pointerdown", ()=> testChest.getRandomItem());
         
         //Grupo de Phaser para gestionar las físicas de los enemigos
         this.enemiesGroup = this.physics.add.group({

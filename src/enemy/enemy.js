@@ -65,6 +65,7 @@ takeDamage(recDamage)
     this.currentLife-=recDamage*(100/(100+this.defense));
     if(this.currentLife<=0)
     {
+        // TODO: hacer q el enemigo dropee bullshit
         this.currentLife=0
         this.lifeBar.destroy();
         this.lifeBar=null;
