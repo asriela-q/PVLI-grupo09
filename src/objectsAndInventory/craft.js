@@ -1,5 +1,6 @@
 import Inventory from "./inventory.js";
 import RECIPES_LIST from "./recipes.js";
+import ROOMS_LIST from "../objectsAndInventory/rooms.js";
 
 export default class Craft extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, inventory) {
@@ -14,31 +15,7 @@ export default class Craft extends Phaser.GameObjects.Sprite {
 
     // se llama al pulsar la tecla F en la mesa de crafteo
     activateCrafting() {
-        this.checkAvaibleCrafts();
         this.scene.scene.pause("main");
         this.scene.scene.launch("CraftUI", { inventory: this.inventory });
-        console.log("me voy a cortar las venas");
     }
-
-    // craftea la receta
-    craftRecipe() {
-        
-    }
-
-    // se llama al abrir la mesa de crafteo y detecta los crafts disponibles en ese momento
-    checkAvaibleCrafts() {
-        console.log(Object.keys(RECIPES_LIST).length);
-        for(let i = 0; i < Object.keys(RECIPES_LIST).length; i++) {
-            const recipe = RECIPES_LIST.find(r => r.number === i);
-            console.log(recipe);
-            if(this.inventory.checkInventory(recipe.ing1) >= recipe.quant1 &&
-               this.inventory.checkInventory(recipe.ing2) >= recipe.quant2) {
-                recipe.craftable = true;
-            }
-            else {
-                recipe.craftable = false;
-            }
-        }
-    }
-
 }

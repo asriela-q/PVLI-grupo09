@@ -1,4 +1,5 @@
 import RECIPES_LIST from "../objectsAndInventory/recipes.js";
+import ROOMS_LIST from "../objectsAndInventory/rooms.js";
 import Inventory from "../objectsAndInventory/inventory.js";
 import Psy from "../player/playerManager.js";
 
@@ -13,10 +14,19 @@ export default class Animation extends Phaser.Scene {
         this.inventory = data.inventory;
         this.close = this.input.keyboard.addKey("Q");
 
+        this.renderCraftableRecipes();
+    }
+
+    update() {
+        if (Phaser.Input.Keyboard.JustDown(this.close)) this.closeUI();
+    }
+
+    renderCraftableRecipes() {
+        this.checkAvaibleCrafts();
+
         let bg = this.add.image(0, 0, "craftbg").setOrigin(0,0);
         bg.setScale(1);
-        // const iteminfo = ITEM_ENCYCLOPEDIA[itemId];
-        console.log(data.inventory);
+
         let cont = 20;
         console.log(Object.keys(RECIPES_LIST).length);
         for(let i = 0; i < Object.keys(RECIPES_LIST).length; i++) {
@@ -27,7 +37,7 @@ export default class Animation extends Phaser.Scene {
                 if (recipe.craftable) {
                     var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
                     green.setScale(0.4);
-                    green.on("pointerdown", ()=>this.craftRecipe(recipe, data.inventory));
+                    green.on("pointerdown", ()=>this.craftRecipe(recipe, this.inventory));
                 }
                 else {
                     var square = this.add.image(20, cont, "square").setOrigin(0, 0);
@@ -57,8 +67,19 @@ export default class Animation extends Phaser.Scene {
         }
     }
 
-    update() {
-        if (Phaser.Input.Keyboard.JustDown(this.close)) this.closeUI();
+    checkAvaibleCrafts() {
+        console.log(Object.keys(RECIPES_LIST).length);
+        for(let i = 0; i < Object.keys(RECIPES_LIST).length; i++) {
+            const recipe = RECIPES_LIST.find(r => r.number === i);
+            console.log(recipe);
+            if(this.inventory.checkInventory(recipe.ing1) >= recipe.quant1 &&
+               this.inventory.checkInventory(recipe.ing2) >= recipe.quant2) {
+                recipe.craftable = true;
+            }
+            else {
+                recipe.craftable = false;
+            }
+        }
     }
 
     craftRecipe(recipe) {
@@ -71,9 +92,9 @@ export default class Animation extends Phaser.Scene {
             this.inventory.removeItem(recipe.ing2);
             console.log(recipe.ing2 + "removed");
         }
-        this.inventory.addItemToInventory(recipe.object);
-        console.log("polnito muy muy riko");
-        this.closeUI();
+        this.inventory.addItemToInventory(recipe.object)
+        
+        this.renderCraftableRecipes();;
     }
 
     closeUI() {
