@@ -40,11 +40,6 @@ canAttack()
     return true;
 
 }
-IsAlive()
-{
-    if(this.vida>0)return true;
-}
-
 preUpdate(t, dt){
 
     super.preUpdate(t,dt);
@@ -75,8 +70,4 @@ takeDamage(recDamage)
         this.lifeBar.updateBar(this.currentLife, this.maxLife);
     }
 }
-
-
-
-
 }

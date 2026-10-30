@@ -1,5 +1,4 @@
 /*Clase que maneja el comportamineto del enemigo*/
-import Enemy from"../enemy/enemy.js";
 
 //basicamente un enumerador para gestionar el estado del enemigo
 const EnemyState=Object.freeze({
@@ -8,13 +7,14 @@ const EnemyState=Object.freeze({
 
 });
 export default class Patrol {
-    constructor(enemy, distance=500,patrolPoints=[
+    constructor(enemy, detectDistance=100,leaveDistance=300,patrolPoints=[
             { x: 200, y: 300 },
             { x: 500, y: 300 },
             { x: 500, y: 500 },])
     {
         this.enemy=enemy;
-        this.distance=distance;
+        this.detectDistance=detectDistance;
+        this.leaveDistance=leaveDistance;
         this.patrolPoints = patrolPoints;
         this.state = EnemyState.PATROL; 
         this.index=0; //indice para gestionar las posiciones donde debe ir
@@ -40,11 +40,11 @@ export default class Patrol {
    preUpdate(t, dt){
         const player = this.enemy.player;
         const distanceToPlayer = Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, player.x, player.y);
-        if(this.state===EnemyState.PATROL&&distanceToPlayer<=this.distance)
+        if(this.state===EnemyState.PATROL&&distanceToPlayer<=this.detectDistance)
         {
             this.state=EnemyState.CHASE;
             
-        }else if (this.currentState === 'CHASE' && distanceToPlayer > this.distance * 1.5) {
+        }else if (this.state === 'CHASE' && distanceToPlayer > this.leaveDistance) {
 
             this.state = EnemyState.PATROL;
         }
