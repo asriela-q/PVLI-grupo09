@@ -75,6 +75,7 @@ export default class Inventory {
         if (!this.container) {
             this.container = scene.add.container(x, y);
             this.container.setVisible(this.isVisible);
+            this.container.setDepth(1000);
         }
 
         //Sirve para que se actualice mientras se renderiza el inventario
