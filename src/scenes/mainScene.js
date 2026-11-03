@@ -3,8 +3,7 @@ import Inventory from "../objectsAndInventory/inventory.js";
 import Item from "../objectsAndInventory/items.js";
 import Camera from "../player/camera.js";
 import Craft from "../objectsAndInventory/craft.js";
-import Enemy from "../enemy/enemy.js";
-import Patrol from "../enemy/patrol.js";
+import Dog from "../enemy/dog.js";
 import Chest from "../mapObjects/chest.js";
 
 
@@ -51,7 +50,7 @@ export default class Animation extends Phaser.Scene {
 
         // creacion de elementos del juego:
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
-        player.setScale(0.7);
+        player.setScale(0.9);
         console.log(this.psyInventory);
         let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setOrigin(0, 0).setScale(0.3).setInteractive();
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
@@ -59,8 +58,8 @@ export default class Animation extends Phaser.Scene {
 
         // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
 
-        let enemy =new Enemy(this, this.sys.game.canvas.width * 0.7, this.sys.game.canvas.height * 0.7, "enemy",150,20,5,1000,900,player);
-        enemy.setScale(0.5);
+        let enemy =new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, player);
+        enemy.setScale(0.9);
         
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
         this.itemsGroup = this.physics.add.group({
@@ -97,12 +96,11 @@ export default class Animation extends Phaser.Scene {
         this.physics.add.overlap(player, this.itemsGroup, player.collectItem, null, player); //Null: callback 
         //this.physics.add.collider(player,this.enemiesGroup);
         //mira si el jugador ha colisionado con un enemigo y le resta vida al jugador,collider para que los dos no se transpasen
-        this.physics.add.overlap(player, this.enemiesGroup, (player, enemy) => {
-        if (enemy.canAttack()) {
-            player.takeDamage(enemy.damage);
-            }
-        });
-        enemy.status = new Patrol(enemy, 50);
+        // this.physics.add.overlap(player, this.enemiesGroup, (player, enemy) => {
+        // if (enemy.canAttack()) {
+        //     player.takeDamage(enemy.damage);
+        //     }
+        // });
         // this.physics.add.overlap(player, craftingTable, craftingTable.activateCrafting, null, player);  // esto no va uwu
 
         this.capaLuz = this.add.rectangle(0, 0, w / 0.25, h / 0.25, 0xffffff).setAlpha(0);

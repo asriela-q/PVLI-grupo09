@@ -122,6 +122,28 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.moveDir.normalize().scale(this.speed);
         this.body.setVelocity(this.moveDir.x, this.moveDir.y);
     }
+    
+    animationManager()
+    {
+        this.moveDir.normalize().scale(this.speed);
+        // animaciones
+        if (this.moveDir.x !== 0 || this.moveDir.y !== 0) {
+            if (this.facingDirection === "left")       this.sprite.play('psyLeft', true);
+            else if (this.facingDirection === "right") this.sprite.play('psyRight', true);
+            else if (this.facingDirection === "up")    this.sprite.play('psyUp', true);
+            else if (this.facingDirection === "down")  this.sprite.play('psyDown', true);
+        }
+        else {
+        // const idleFrames = { Left: 21, Right: 18, Down: 0, Up: 3 };
+        // const idle={ left: 'psyIdleL', right: 'psyIdleR', down: 'psyIdleD', up: 'psyIdleU'}
+        //  this.sprite.play(idle[this.facingDirection], true);
+         if (this.facingDirection === "left")       this.sprite.play('psyIdleL', true);
+            else if (this.facingDirection === "right") this.sprite.play('psyIdleR', true);
+            else if (this.facingDirection === "up")    this.sprite.play('psyIdleB', true);
+            else if (this.facingDirection === "down")  this.sprite.play('psyIdleF', true);
+        }
+
+    }
 
     // método para gestionar la stamina del jugador
     staminaManager(dt){
@@ -157,13 +179,14 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         this.inputHandler();
         this.staminaManager(dt);
-
+        this.animationManager();
         this.inventory.updatePosition(this.x + 20, this.y);
         if(Phaser.Input.Keyboard.JustDown(this.openInventory)) {
             this.inventory.showInventory();
             this.body.setVelocityX(0);
             this.body.setVelocityY(0);
         }
+
         
         this.lifeBar.updateBar(this.currentLife, maxLife);
     }

@@ -54,6 +54,7 @@ export default class Load extends Phaser.Scene {
         this.load.on('fileprogress', function (file) {
             assetText.setText('Loading asset: ' + file.key);
         });
+        
 
         //Todas las imágenes que queremos cargar
         this.load.image("bg", "./assets/images/placeholders/bg.jpg");
@@ -84,6 +85,18 @@ export default class Load extends Phaser.Scene {
         this.load.image("brick", "./assets/images/placeholders/brick.jpg");
 
 
+        this.load.spritesheet("dog","./assets/images/sprites/perro.png",{
+        
+            frameWidth:192,
+            frameHeight:192
+        });
+
+        this.load.spritesheet("psyS","./assets/images/sprites/catSprite.png",{
+        
+            frameWidth:192,
+            frameHeight:192
+        });
+
         //Cargar json
         this.load.json("infoItems", "./src/objectsAndInventory/infoItems.json");
         this.load.json("infoChest", "./src/mapObjects/infoChest.json");
@@ -101,6 +114,81 @@ export default class Load extends Phaser.Scene {
     }
 
     create() {
-        
+        //anim perro
+        this.anims.create({
+                key:'dogLeft',
+                frames:this.anims.generateFrameNumbers('dog',{start:0,end:4}),
+                frameRate:7,
+                repeat:-1
+            })
+        this.anims.create({
+        key: 'dogRight',
+        frames: this.anims.generateFrameNumbers('dog', { start: 5, end: 9 }),
+        frameRate: 7,
+        repeat: -1
+            });
+        this.anims.create({
+            key:'dogDown',
+            frames:this.anims.generateFrameNumbers('dog',{start:10,end:13}),
+            frameRate:6,
+            repeat:-1
+        })
+
+        this.anims.create({
+            key:'dogUp',
+            frames:this.anims.generateFrameNumbers('dog',{start:15,end:18}),
+            frameRate:6,
+            repeat:-1
+        })
+
+        //anim psy
+        this.anims.create({
+            key:'psyIdleF',
+            frames:this.anims.generateFrameNumbers('psyS',{start:0,end:2}),
+            frameRate:3,
+            repeat:-1
+        })
+        this.anims.create({
+            key:'psyIdleB',
+            frames:this.anims.generateFrameNumbers('psyS',{start:3,end:5}),
+            frameRate:3,
+            repeat:-1
+        })
+        this.anims.create({
+            key:'psyDown',
+            frames:this.anims.generateFrameNumbers('psyS',{start:6,end:8}),
+            frameRate:3,
+            repeat:-1
+        })
+            this.anims.create({
+            key:'psyUp',
+            frames:this.anims.generateFrameNumbers('psyS',{start:9,end:11}),
+            frameRate:3,
+            repeat:-1
+        })
+            this.anims.create({
+            key:'psyRight',
+            frames:this.anims.generateFrameNumbers('psyS',{start:12,end:14}),
+            frameRate:3,
+            repeat:-1
+        })
+            this.anims.create({
+            key:'psyLeft',
+            frames:this.anims.generateFrameNumbers('psyS',{start:15,end:17}),
+            frameRate:3,
+            repeat:-1
+        })
+        this.anims.create({
+            key:'psyIdleR',
+            frames:this.anims.generateFrameNumbers('psyS',{start:18,end:20}),
+            frameRate:3,
+            repeat:-1
+        })
+        this.anims.create({
+            key:'psyIdleL',
+            frames:this.anims.generateFrameNumbers('psyS',{start:21,end:23}),
+            frameRate:3,
+            repeat:-1
+        })
     }
 }

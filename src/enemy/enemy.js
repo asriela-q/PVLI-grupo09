@@ -3,7 +3,7 @@ Clase que maneja toda la lógica de ataque y atributos relacionado con el enemig
 import StatsBar from "../player/barUIHandler.js";
 
 export default class Enemy extends Phaser.GameObjects.Sprite {
-constructor(scene, x, y, texture,vel,damage, defense, life,cooldown=1000,player)
+constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=1000,player)
 {
     super(scene, x, y, texture);
      this.scene.add.existing(this); 
@@ -11,7 +11,7 @@ constructor(scene, x, y, texture,vel,damage, defense, life,cooldown=1000,player)
      this.body.setAllowGravity(false); 
 
     this.patrolVelocity=vel; //velocidad del enemigo
-    this.chaseVelocity=vel+(vel/2)-50;
+    this.chaseVelocity=chaseVel;
     this.damage=damage; //daño que hará el enemigo
     this.defense=defense; //defensa del enemigo
     this.currentLife=life; //vida del enemigo
@@ -40,6 +40,12 @@ canAttack()
     return true;
 
 }
+//método que gestiona el ataque al jugador
+attack()
+{
+    if (!this.canAttack()) return;
+    this.player.takeDamage(this.damage);
+}
 preUpdate(t, dt){
 
     super.preUpdate(t,dt);
@@ -57,7 +63,9 @@ preUpdate(t, dt){
 //método que gestiona el daño que recibe el enemigo
 takeDamage(recDamage)
 {
-    this.currentLife-=recDamage*(100/(100+this.defense));
+    //this.currentLife-=recDamage*(100/(100+this.defense));
+    let totalDamage=recDamage-this.defense;
+    this.currentLife-=totalDamage;
     if(this.currentLife<=0)
     {
         // TODO: hacer q el enemigo dropee bullshit
