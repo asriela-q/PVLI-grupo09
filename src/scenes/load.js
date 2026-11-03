@@ -63,30 +63,30 @@ export default class Load extends Phaser.Scene {
         this.load.image("wood", "./assets/images/placeholders/Wood.jpg");
         this.load.image("bggame", "./assets/images/placeholders/bggame.jpg");
         this.load.image("craft", "./assets/images/placeholders/craft.jpg");
-        this.load.image("coal", "../assets/images/placeholders/coal.jpg");
-        this.load.image("stone_sword", "../assets/images/placeholders/stone_sword.png");
-        this.load.image("craftbg", "../assets/images/placeholders/craftbg.jpg");
-        this.load.image("square", "../assets/images/placeholders/square.jpg");
-        this.load.image("green", "../assets/images/placeholders/verde.jpg");
-        this.load.image("metal", "../assets/images/placeholders/metal.jpg");
-        this.load.image("metal_sword", "../assets/images/placeholders/metal_sword.jpg");
-        this.load.image("torch", "../assets/images/torch.png");
-        this.load.image("iron", "../assets/images/placeholders/iron.jpg");
-        this.load.image("stone", "../assets/images/placeholders/stone.jpg");
-        this.load.image("dayWheel", "../assets/images/placeholders/dayTimesWheel.jpg");
-        this.load.image("arrow", "../assets/images/placeholders/Arrow.png");
-        this.load.image("chest", "../assets/images/placeholders/chest.png");
-        this.load.image("seeds", "../assets/images/placeholders/seeds.png");
-        this.load.image("straw", "../assets/images/placeholders/straw.jpg");
-        this.load.image("an_skin", "../assets/images/placeholders/a_skin.png");
-        this.load.image("fang", "../assets/images/placeholders/fang.jpg");
-        this.load.image("meat", "../assets/images/placeholders/meat.jpg");
-        this.load.image("brick", "../assets/images/placeholders/brick.jpg");
+        this.load.image("coal", "./assets/images/placeholders/coal.jpg");
+        this.load.image("stone_sword", "./assets/images/placeholders/stone_sword.png");
+        this.load.image("craftbg", "./assets/images/placeholders/craftbg.jpg");
+        this.load.image("square", "./assets/images/placeholders/square.jpg");
+        this.load.image("green", "./assets/images/placeholders/verde.jpg");
+        this.load.image("metal", "./assets/images/placeholders/metal.jpg");
+        this.load.image("metal_sword", "./assets/images/placeholders/metal_sword.jpg");
+        this.load.image("torch", "./assets/images/torch.png");
+        this.load.image("iron", "./assets/images/placeholders/iron.jpg");
+        this.load.image("stone", "./assets/images/placeholders/stone.jpg");
+        this.load.image("dayWheel", "./assets/images/placeholders/dayTimesWheel.jpg");
+        this.load.image("arrow", "./assets/images/placeholders/Arrow.png");
+        this.load.image("chest", "./assets/images/placeholders/chest.png");
+        this.load.image("seeds", "./assets/images/placeholders/seeds.png");
+        this.load.image("straw", "./assets/images/placeholders/straw.jpg");
+        this.load.image("an_skin", "./assets/images/placeholders/a_skin.png");
+        this.load.image("fang", "./assets/images/placeholders/fang.jpg");
+        this.load.image("meat", "./assets/images/placeholders/meat.jpg");
+        this.load.image("brick", "./assets/images/placeholders/brick.jpg");
 
 
         //Cargar json
-        this.load.json("infoItems", "../src/objectsAndInventory/infoItems.json");
-        this.load.json("infoChest", "../src/mapObjects/infoChest.json");
+        this.load.json("infoItems", "./src/objectsAndInventory/infoItems.json");
+        this.load.json("infoChest", "./src/mapObjects/infoChest.json");
 
 
         this.load.on('complete', () => {
