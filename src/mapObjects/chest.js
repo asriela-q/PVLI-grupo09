@@ -21,6 +21,11 @@ export default class Chest extends Phaser.GameObjects.Sprite {
 
     }
 
+    // se llama al pulsar la tecla F
+    interact(){
+        this.getRandomItem();
+    }
+
     // método que selecciona un objeto aleatorio (mediante probabilidad) de los posibles a salir
     getRandomItem(){
         // obtenemos la información el json específica de la tier de este cofre
@@ -53,7 +58,7 @@ export default class Chest extends Phaser.GameObjects.Sprite {
     // hace aparecer el objeto seleccionado en getRandomItem()
     spawnItem(item){
         this.group.add(new Item(this.scene, this.x, this.y, this.ITEM_ENCYCLOPEDIA[item].texture, item, this.ITEM_ENCYCLOPEDIA).setScale(0.15));
-        console.log(this.scene + this.x + this.y + this.ITEM_ENCYCLOPEDIA[item].texture + item + this.ITEM_ENCYCLOPEDIA);
+        //console.log(this.scene + this.x + this.y + this.ITEM_ENCYCLOPEDIA[item].texture + item + this.ITEM_ENCYCLOPEDIA);
         this.destroy(this);
     }
 
@@ -64,8 +69,6 @@ export default class Chest extends Phaser.GameObjects.Sprite {
             add += pArray[i].probability;
             if (add == 100) return false;
         }
-
         return true; // si sale del for, add != 100 por lo q devolvemos true
     }
-
 }

@@ -52,10 +52,8 @@ export default class Animation extends Phaser.Scene {
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
         player.setScale(0.9);
         console.log(this.psyInventory);
-        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setOrigin(0, 0).setScale(0.3).setInteractive();
+        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setOrigin(0, 0).setScale(0.3);
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
-
-
         // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
 
         let enemy =new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, player);
@@ -67,7 +65,7 @@ export default class Animation extends Phaser.Scene {
         });
 
         // hay que definir primero el grupo de los items
-        let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setOrigin(0,0).setScale(0.6).setInteractive();
+        let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);
         testChest.on("pointerdown", ()=> testChest.getRandomItem());
         
         //Grupo de Phaser para gestionar las físicas de los enemigos
@@ -75,6 +73,13 @@ export default class Animation extends Phaser.Scene {
             allowGravity: false,
         });
         this.enemiesGroup.add(enemy);
+
+        // grupo con todos los objetos interactuables del juego
+        this.interactGroup = this.physics.add.group({
+            allowGravity: false,
+        });
+        this.interactGroup.add(craftingTable);
+        this.interactGroup.add(testChest);
         
         //coger las dimensiones que ocupa el juego 
         let width = this.sys.game.config.width;

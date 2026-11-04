@@ -3,12 +3,13 @@ Clase que maneja todo lo relacionado con el jugador, desde el movimiento hasta l
 sueño, hambre, estamina, etc.
 */
 
-import Inventory from "../objectsAndInventory/inventory.js";
 import StatsBar from "./barUIHandler.js";
 
 // velocidad:
 const RUN_SPEED = 650; // velocidad al correr
 const WALK_SPEED = 270; // velocidad al caminar
+
+const INTERACT_RANGE = 130; // rango para interactuar con objetos
 
 // estamina:
 const STAMINA = 5; // segundos que puede correr el jugador (estamina máxima)
@@ -52,6 +53,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.right = this.scene.input.keyboard.addKey('D');
         this.run = this.scene.input.keyboard.addKey('SHIFT');
         this.openInventory = this.scene.input.keyboard.addKey('E');
+        this.interactKey = this.scene.input.keyboard.addKey('F');
         this.scene.input.on("pointerdown", (pointer)=>{
             if(pointer.leftButtonDown() && !inventory.isVisible) {
                 this.attack();
@@ -85,6 +87,11 @@ export default class Psy extends Phaser.GameObjects.Container {
         // variables de ataque
         this.facingDirection = "right"; //Dirección del último movimiento;
         this.isAttacking = false;
+
+        // DEBUG BORRAR LUEGO
+        this.rangeCircle = this.scene.add.circle(0, 0, INTERACT_RANGE); // x, y, radio
+        this.rangeCircle.setStrokeStyle(2, 0xff0000); // borde rojo de 2 px
+        this.add(this.rangeCircle); // lo metemos en el contenedor para que siga al jugador
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
@@ -177,22 +184,39 @@ export default class Psy extends Phaser.GameObjects.Container {
         // lógica de psy
         this.sprite.preUpdate(t, dt);
 
+        if (Phaser.Input.Keyboard.JustDown(this.interactKey) && !this.inventory.isVisible)
+            this.checkInteractable();
+
         this.inputHandler();
         this.staminaManager(dt);
         this.animationManager();
         this.inventory.updatePosition(this.x + 20, this.y);
-        if(Phaser.Input.Keyboard.JustDown(this.openInventory)) {
-            this.inventory.showInventory();
-            this.body.setVelocityX(0);
-            this.body.setVelocityY(0);
-        }
-
+        if(Phaser.Input.Keyboard.JustDown(this.openInventory)) this.inventory.showInventory();
         
         this.lifeBar.updateBar(this.currentLife, maxLife);
     }
 
-    create(){
+    checkInteractable(){
+        const objects = this.scene.interactGroup.getChildren();
+        let nearest = null; // guarda que objeto interactuable esta mas cerca del jugador (en el caso de que haya múltiples dentro del rango)
+        let minDist = INTERACT_RANGE; // distancia del objeto mas cercano
 
+        if (objects.length < 1) return; // si no hay objetos return
+
+        for (let i = 0; i < objects.length; i++){
+            if (objects.length == 1 && objects[i].interact) {
+                return objects[i].interact(); // ahorramos tiempo si solo hay un objeto en el rango
+            }
+            // calculamos la distancia entre el jugador y el objeto
+            const newDist = Phaser.Math.Distance.Between(this.x, this.y, objects[i].x, objects[i].y);
+
+            if (newDist < minDist){
+                nearest = objects[i];
+                minDist = newDist; // cambiamos la distancia mínima
+            }
+        }
+
+        if (nearest && nearest.interact) nearest.interact();
     }
 
     collectItem(player, item){ //El atributo del player aunque no se use en el método, a la hora de llamar al método hace falta
