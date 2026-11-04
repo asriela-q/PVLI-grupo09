@@ -9,7 +9,7 @@ import StatsBar from "./barUIHandler.js";
 const RUN_SPEED = 650; // velocidad al correr
 const WALK_SPEED = 270; // velocidad al caminar
 
-const INTERACT_RANGE = 130; // rango para interactuar con objetos
+const INTERACT_RANGE = 160; // rango para interactuar con objetos
 
 // estamina:
 const STAMINA = 5; // segundos que puede correr el jugador (estamina máxima)
@@ -204,9 +204,6 @@ export default class Psy extends Phaser.GameObjects.Container {
         if (objects.length < 1) return; // si no hay objetos return
 
         for (let i = 0; i < objects.length; i++){
-            if (objects.length == 1 && objects[i].interact) {
-                return objects[i].interact(); // ahorramos tiempo si solo hay un objeto en el rango
-            }
             // calculamos la distancia entre el jugador y el objeto
             const newDist = Phaser.Math.Distance.Between(this.x, this.y, objects[i].x, objects[i].y);
 

@@ -52,7 +52,7 @@ export default class Animation extends Phaser.Scene {
         let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
         player.setScale(0.9);
         console.log(this.psyInventory);
-        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setOrigin(0, 0).setScale(0.3);
+        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
         // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
 
