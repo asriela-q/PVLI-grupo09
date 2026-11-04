@@ -13,7 +13,7 @@ const INTERACT_RANGE = 160; // rango para interactuar con objetos
 
 // estamina:
 const STAMINA = 5; // segundos que puede correr el jugador (estamina máxima)
-const RECOVERY_CD = 2; // segundos de espera antes de recuperar estamina tras dejar de correr
+const RECOVERY_CD = 1.5; // segundos de espera antes de recuperar estamina tras dejar de correr
 const EXHAUST_CD = 4; // segundos de espera si la estamina llegó a 0 (más largo)
 
 // vida:
@@ -92,6 +92,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.rangeCircle = this.scene.add.circle(0, 0, INTERACT_RANGE); // x, y, radio
         this.rangeCircle.setStrokeStyle(2, 0xff0000); // borde rojo de 2 px
         this.add(this.rangeCircle); // lo metemos en el contenedor para que siga al jugador
+
+        this.deathStone = undefined; // lápida del jugador
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
@@ -178,6 +180,20 @@ export default class Psy extends Phaser.GameObjects.Container {
         }
 
         this.staminaBar.updateBar(this.currentStamina, STAMINA);
+    }
+
+    // metodo q devuelve si el jugador esta muerto (true) o no
+    isDead(){
+        return this.currentLife <= 0;
+    }
+
+    revive(xBase, yBase){
+        this.currentLife = maxLife; // lo curamos por completo
+        this.currentStamina = STAMINA; // recuperamos toda la stamina
+
+        // ponemos al jugador de nuevo en la base
+        this.x = xBase;
+        this.y = yBase;
     }
 
     preUpdate(t, dt){

@@ -40,6 +40,19 @@ export default class Inventory {
         return false; //No se pudo añadir el objeto de ninguna manera, el inventario está lleno
     }
 
+    // metodo para obtener todos los items del inventario
+    getAllItems(){
+        let items = { };
+        let index = 0; // indice para el array items
+        for (let i = 0; i < this.slots.length; i++){
+            if (this.slots[i] !== null) { 
+                items[index] = this.slots[i];
+                index++;
+            }
+        }
+        return items;
+    }
+
     removeItem(itemId) {
         let removed = true;
         const index = this.slots.findIndex(slot => slot !== null && slot.id === itemId);

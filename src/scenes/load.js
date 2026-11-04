@@ -83,7 +83,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("fang", "./assets/images/placeholders/fang.jpg");
         this.load.image("meat", "./assets/images/placeholders/meat.jpg");
         this.load.image("brick", "./assets/images/placeholders/brick.jpg");
-
+        this.load.image("deathStone", "./assets/images/placehoolders/deathStone.jpg");
 
         this.load.spritesheet("dog","./assets/images/sprites/perro.png",{
         

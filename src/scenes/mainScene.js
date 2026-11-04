@@ -5,6 +5,7 @@ import Camera from "../player/camera.js";
 import Craft from "../objectsAndInventory/craft.js";
 import Dog from "../enemy/dog.js";
 import Chest from "../mapObjects/chest.js";
+import DeathStone from "../player/deathStone.js";
 
 const SPAWN = new Phaser.Math.Vector2(100, 100); // coordenadas de la base (sitio de spawn)
 
@@ -44,14 +45,14 @@ export default class Animation extends Phaser.Scene {
         this.flecha.setAngle(-120);
 
         // creacion de elementos del juego:
-        let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
-        player.setScale(0.9);
+        this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
+        this.player.setScale(0.9);
         console.log(this.psyInventory);
         let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
         // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
 
-        let enemy =new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, player);
+        let enemy =new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player);
         enemy.setScale(0.9);
         
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
@@ -84,7 +85,7 @@ export default class Animation extends Phaser.Scene {
         let w = bggame.width * 2.5;
         let h = bggame.height * 2.5;
         //llamada a la función que organiza todo de la cámara
-        Camera.followPl(this, player, 0.5, 0.5, w, h); 
+        Camera.followPl(this, this.player, 0.5, 0.5, w, h); 
         
         //Creación de objetos
         this.itemsGroup.add(new Item(this, 1000, 1000, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
@@ -93,7 +94,7 @@ export default class Animation extends Phaser.Scene {
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
-        this.physics.add.overlap(player, this.itemsGroup, player.collectItem, null, player); //Null: callback 
+        this.physics.add.overlap(this.player, this.itemsGroup, this.player.collectItem, null, this.player); //Null: callback 
         //this.physics.add.collider(player,this.enemiesGroup);
         //mira si el jugador ha colisionado con un enemigo y le resta vida al jugador,collider para que los dos no se transpasen
         // this.physics.add.overlap(player, this.enemiesGroup, (player, enemy) => {
@@ -116,9 +117,18 @@ export default class Animation extends Phaser.Scene {
             this.capaLuz.y = this.cameras.main.worldView.centerY;
         }
 
-        if (player.isDead()){
-            // var rip = new DeathStone();
+        if (this.player.isDead()){
+            // si ya existía una death stone, la borramos del mapa
+            if (this.player.deathStone != undefined) this.player.deathStone.destroy();
+            
+            // creamos y llenamos la deathStone del jugador
+            this.player.deathStone = new DeathStone(this, this.player.x, this.player.y, "deathStone", this.psyInventory).setScale(0.2);
+            this.player.deathStone.fill();
 
+            // TODO: que aqui aparezca un gui o algo de q se murio el psy :3
+            // ...
+
+            this.player.revive(SPAWN.x, SPAWN.y); // revivimos al jugador
         }
     }
 
