@@ -7,7 +7,7 @@ import Dog from "../enemy/dog.js";
 import Chest from "../mapObjects/chest.js";
 import DeathStone from "../player/deathStone.js";
 
-const SPAWN = new Phaser.Math.Vector2(100, 100); // coordenadas de la base (sitio de spawn)
+const SPAWN = new Phaser.Math.Vector2(300, 300); // coordenadas de la base (sitio de spawn)
 
 export default class Animation extends Phaser.Scene {
 
@@ -122,8 +122,11 @@ export default class Animation extends Phaser.Scene {
             if (this.player.deathStone != undefined) this.player.deathStone.destroy();
             
             // creamos y llenamos la deathStone del jugador
-            this.player.deathStone = new DeathStone(this, this.player.x, this.player.y, "deathStone", this.psyInventory).setScale(0.2);
-            this.player.deathStone.fill();
+            this.player.deathStone = new DeathStone(this, this.player.x, this.player.y, "deathStone", this.psyInventory).setScale(0.3);
+            this.interactGroup.add(this.player.deathStone);
+            this.player.deathStone.fillDeath();
+
+            this.psyInventory.slots.fill(null); // vaciamos el inventario
 
             // TODO: que aqui aparezca un gui o algo de q se murio el psy :3
             // ...

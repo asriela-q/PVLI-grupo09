@@ -41,8 +41,7 @@ export default class Inventory {
     }
 
     // metodo para obtener todos los items del inventario
-    getAllItems(){
-        let items = { };
+    getAllItems(items){
         let index = 0; // indice para el array items
         for (let i = 0; i < this.slots.length; i++){
             if (this.slots[i] !== null) { 
@@ -50,7 +49,6 @@ export default class Inventory {
                 index++;
             }
         }
-        return items;
     }
 
     removeItem(itemId) {
