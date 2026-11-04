@@ -94,6 +94,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.add(this.rangeCircle); // lo metemos en el contenedor para que siga al jugador
 
         this.deathStone = undefined; // lápida del jugador
+        
         this.body.setImmovable(true);//para que no pueda ser empujado 
     }
 
@@ -144,8 +145,6 @@ export default class Psy extends Phaser.GameObjects.Container {
             else this.sprite.play('psyDown', true);
         }
         else {
-        // const idleFrames = { Left: 21, Right: 18, Down: 0, Up: 3 };
-        // const idle={ left: 'psyIdleL', right: 'psyIdleR', down: 'psyIdleD', up: 'psyIdleU'}
          if (this.facingDirection === "left")       this.sprite.play('psyIdleL', true);
             else if (this.facingDirection === "right") this.sprite.play('psyIdleR', true);
             else if (this.facingDirection === "up")    this.sprite.play('psyIdleB', true);
