@@ -10,24 +10,24 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
      this.scene.physics.add.existing(this); 
      this.body.setAllowGravity(false); 
 
-    this.patrolVelocity=vel; //velocidad del enemigo
-    this.chaseVelocity=chaseVel;
-    this.damage=damage; //daño que hará el enemigo
-    this.defense=defense; //defensa del enemigo
-    this.currentLife=life; //vida del enemigo
-    this.maxLife=life;
-    this.player=player;
+    this.patrolVelocity = vel; //velocidad del enemigo
+    this.chaseVelocity = chaseVel;
+    this.damage = damage; //daño que hará el enemigo
+    this.defense = defense; //defensa del enemigo
+    this.currentLife = life; //vida del enemigo
+    this.maxLife = life;
+    this.player = player;
 
     //para manejar tiempo entre ataques
-     this.cooldown=cooldown;
-     this.lastAttack=-cooldown; //inicializado a -cooldown para que el enemigo pueda atacar desde el principio
+     this.cooldown = cooldown;
+    //this.lastAttack=-cooldown; //inicializado a -cooldown para que el enemigo pueda atacar desde el principio
 
      //this.attackRange=80;
 
      this.lifeBar = new StatsBar(this.scene, x, y, 100, 25, 0x56F85400).setDepth(200); //barra de vida
 
      //comportamiento del enemigo, lo iniciamos vacio para decirlo que todavia no haga nada
-     this.status=null;
+     this.status = null;
 }
 
 //método que maneja el cooldown y mirar si puede atacar o no
@@ -52,8 +52,8 @@ preUpdate(t, dt){
 
     if(this.lifeBar)
     {
-        this.lifeBar.x=this.x - this.lifeBar.originalWidth / 2; 
-        this.lifeBar.y=this.y - this.displayHeight / 2 - 10;
+        this.lifeBar.x = this.x - this.lifeBar.originalWidth /2; 
+        this.lifeBar.y = this.y - this.displayHeight /2 - 10;
     }
 
     //si tiene algun comportamiento, lo ejecuta
@@ -64,14 +64,14 @@ preUpdate(t, dt){
 takeDamage(recDamage)
 {
     //this.currentLife-=recDamage*(100/(100+this.defense));
-    let totalDamage=recDamage-this.defense;
-    this.currentLife-=totalDamage;
+    let totalDamage = recDamage - this.defense;
+    this.currentLife -= totalDamage;
     if(this.currentLife<=0)
     {
         // TODO: hacer q el enemigo dropee bullshit
-        this.currentLife=0
+        this.currentLife = 0
         this.lifeBar.destroy();
-        this.lifeBar=null;
+        this.lifeBar = null;
         this.destroy();
     }
     else{

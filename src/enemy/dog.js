@@ -1,22 +1,22 @@
-import Enemy from "../enemy/enemy.js"
-import Patrol from "../enemy/patrol.js"
-
 /*
 Clase del enemigo perro
 Hereda de atributos Enemy y usa Patrol como comportamiento
 */
- 
+
+import Enemy from "../enemy/enemy.js"
+import Patrol from "../enemy/patrol.js"
+
 export default class Dog extends Enemy {
     constructor(scene, x, y, player, patrolPoints)
     {   const texture = 'dog';
         const vel = 200;
-        const chaseVel=400;
+        const chaseVel = 400;
         const damage = 20;
         const defense = 5;
         const life = 500;
         const cooldown = 800;
  
-        super(scene, x, y, texture, vel,chaseVel, damage, defense, life, cooldown, player);
+        super(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown, player);
  
         // Comportamiento
         this.status = new Patrol(this, 200, 400, patrolPoints = [
@@ -45,12 +45,14 @@ export default class Dog extends Enemy {
         }
         else if(y>0)
         {
-             this.play('dogDown', true);
+            this.play('dogDown', true);
         }
-        else if(y<0)
+        else 
         {
-             this.play('dogUp', true);
+            this.play('dogUp', true);
         }
+
+        this.anims.timeScale = this.status.state==='CHASE' ? 1.7:1;
         
     }
 
