@@ -6,6 +6,7 @@ import Craft from "../objectsAndInventory/craft.js";
 import Dog from "../enemy/dog.js";
 import Chest from "../mapObjects/chest.js";
 
+const SPAWN = new Phaser.Math.Vector2(100, 100); // coordenadas de la base (sitio de spawn)
 
 export default class Animation extends Phaser.Scene {
 
@@ -27,23 +28,17 @@ export default class Animation extends Phaser.Scene {
         let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
         bggame.setScale(2.5);
 
-        // 1. Creamos un contenedor en la esquina visible de la pantalla (ya no usamos coordenadas negativas locas)
-        let hudContenedor = this.add.container(-300, -200); 
-        hudContenedor.setScrollFactor(0); // Bloquea todo lo que esté dentro a la pantalla
-        hudContenedor.setDepth(1000);     // Asegura que la noche no lo tape
+        let hudContenedor = this.add.container(-300, -200); // contenedor anclado a la esquina superior de la camara
+        hudContenedor.setScrollFactor(0);
+        hudContenedor.setDepth(1000);
 
-        // 2. Añadimos la rueda centrada en el (0,0) del contenedor
-        let rueda = this.add.image(0, 0, "dayWheel").setOrigin(0.5, 0.5).setScale(0.15);
+        let rueda = this.add.image(0, 0, "dayWheel").setOrigin(0.5, 0.5).setScale(0.15); // rueda para el ciclo de dia
         hudContenedor.add(rueda);
 
-        // 3. Añadimos la flecha. Ponemos el origen en (0.5, 0.5) para que rote sobre su centro natural
-        this.flecha = this.add.image(0, 0, "arrow").setOrigin(0.5, 0.5).setScale(0.25);
+        this.flecha = this.add.image(0, 0, "arrow").setOrigin(0.5, 0.5).setScale(0.25); // creacion de la flecha
         
-        // AJUSTE MANUAL DE PIVOTE: 
-        // Si al rotar ves que la punta se desplaza, mueve estos valores de píxeles (X e Y) 
-        // para "clavar" la base de la flecha exactamente en el centro (0,0) de la rueda:
-        this.flecha.x = 0;   // Prueba sumando o restando píxeles si es necesario (ej: -5 o 10)
-        this.flecha.y = 0;   // Prueba moviendo verticalmente (ej: 15 o -10)
+        this.flecha.x = 0;
+        this.flecha.y = 0;
 
         hudContenedor.add(this.flecha);
         this.flecha.setAngle(-120);
@@ -119,6 +114,11 @@ export default class Animation extends Phaser.Scene {
         if (this.capaLuz) {
             this.capaLuz.x = this.cameras.main.worldView.centerX;
             this.capaLuz.y = this.cameras.main.worldView.centerY;
+        }
+
+        if (player.isDead()){
+            // var rip = new DeathStone();
+
         }
     }
 
