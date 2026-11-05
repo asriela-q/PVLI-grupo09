@@ -6,6 +6,7 @@ import Craft from "../objectsAndInventory/craft.js";
 import Dog from "../enemy/dog.js";
 import Chest from "../mapObjects/chest.js";
 import DeathStone from "../player/deathStone.js";
+import buildSpace from "../building/buildSpace.js";
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); // coordenadas de la base (sitio de spawn)
 
@@ -47,12 +48,8 @@ export default class Animation extends Phaser.Scene {
         // creacion de elementos del juego:
         this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
         this.player.setScale(0.9);
-        console.log(this.psyInventory);
-        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
-        craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
-        // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
 
-        let enemy =new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player);
+        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player);
         enemy.setScale(0.9);
         
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
@@ -74,8 +71,28 @@ export default class Animation extends Phaser.Scene {
         this.interactGroup = this.physics.add.group({
             allowGravity: false,
         });
-        this.interactGroup.add(craftingTable);
         this.interactGroup.add(testChest);
+
+        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
+        craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
+        this.interactGroup.add(craftingTable);
+
+        let contX = 800;
+        let contY = 400;
+        let complete = false;
+        for (let i = 0; i < 6; i++) {
+            let blankSpace = new buildSpace(this, contX, contY, "room_template", this.psyInventory).setScale(0.2);
+            blankSpace.on("pointerdown", () => blankSpace.activateCrafting());
+            if (contX > 1000 && !complete) { 
+                contY += 200;
+                contX = 800;
+                complete = true;
+            }
+            else {
+                contX += 200;
+            }
+            this.interactGroup.add(blankSpace);
+        }
         
         //coger las dimensiones que ocupa el juego 
         let width = this.sys.game.config.width;
@@ -91,6 +108,15 @@ export default class Animation extends Phaser.Scene {
         this.itemsGroup.add(new Item(this, 1000, 1000, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 1055, 1055, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 800, 800, "coal", "coal", ITEM_ENCYCLOPEDIA).setScale(0.15));
+
+        // esto es para cratear una sala y probar brochachos
+        for (let i = 0; i < 10; i++)  {
+            this.itemsGroup.add(new Item(this, 100 * i, 1100, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        }
+        for (let i = 0; i < 5; i++)  {
+            this.itemsGroup.add(new Item(this, 100 * i, 1150, "fabric", "fabric", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        }
+        
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto

@@ -100,5 +100,19 @@
         "stackable": true, 
         "maxStack": 30, 
         "type": "object" 
+    },
+    "fabric" : {
+        "name": "Fabric", 
+        "texture": "fabric",
+        "stackable": true, 
+        "maxStack": 30, 
+        "type": "object" 
+    },
+    "clay" : {
+        "name": "Clay", 
+        "texture": "clay",
+        "stackable": true, 
+        "maxStack": 30, 
+        "type": "object" 
     }
 }
