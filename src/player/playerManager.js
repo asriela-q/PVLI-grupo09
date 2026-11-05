@@ -258,7 +258,6 @@ export default class Psy extends Phaser.GameObjects.Container {
     */
     attack(){
         if(this.isAttacking) return;
-        console.log("Bomboclat");
 
         let posAttackX = this.x, posAttackY = this.y, colliderHeight = 50, colliderWidth = 70; 
 
