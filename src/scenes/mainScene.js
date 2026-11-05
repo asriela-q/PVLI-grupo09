@@ -3,10 +3,12 @@ import Inventory from "../objectsAndInventory/inventory.js";
 import Item from "../objectsAndInventory/items.js";
 import Camera from "../player/camera.js";
 import Craft from "../objectsAndInventory/craft.js";
-import Enemy from "../enemy/enemy.js";
-import Patrol from "../enemy/patrol.js";
+import Dog from "../enemy/dog.js";
 import Chest from "../mapObjects/chest.js";
+import DeathStone from "../player/deathStone.js";
+import buildSpace from "../building/buildSpace.js";
 
+const SPAWN = new Phaser.Math.Vector2(300, 300); // coordenadas de la base (sitio de spawn)
 
 export default class Animation extends Phaser.Scene {
 
@@ -28,39 +30,27 @@ export default class Animation extends Phaser.Scene {
         let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
         bggame.setScale(2.5);
 
-        // 1. Creamos un contenedor en la esquina visible de la pantalla (ya no usamos coordenadas negativas locas)
-        let hudContenedor = this.add.container(-300, -200); 
-        hudContenedor.setScrollFactor(0); // Bloquea todo lo que esté dentro a la pantalla
-        hudContenedor.setDepth(1000);     // Asegura que la noche no lo tape
+        let hudContenedor = this.add.container(-300, -200); // contenedor anclado a la esquina superior de la camara
+        hudContenedor.setScrollFactor(0);
+        hudContenedor.setDepth(1000);
 
-        // 2. Añadimos la rueda centrada en el (0,0) del contenedor
-        let rueda = this.add.image(0, 0, "dayWheel").setOrigin(0.5, 0.5).setScale(0.15);
+        let rueda = this.add.image(0, 0, "dayWheel").setOrigin(0.5, 0.5).setScale(0.15); // rueda para el ciclo de dia
         hudContenedor.add(rueda);
 
-        // 3. Añadimos la flecha. Ponemos el origen en (0.5, 0.5) para que rote sobre su centro natural
-        this.flecha = this.add.image(0, 0, "arrow").setOrigin(0.5, 0.5).setScale(0.25);
+        this.flecha = this.add.image(0, 0, "arrow").setOrigin(0.5, 0.5).setScale(0.25); // creacion de la flecha
         
-        // AJUSTE MANUAL DE PIVOTE: 
-        // Si al rotar ves que la punta se desplaza, mueve estos valores de píxeles (X e Y) 
-        // para "clavar" la base de la flecha exactamente en el centro (0,0) de la rueda:
-        this.flecha.x = 0;   // Prueba sumando o restando píxeles si es necesario (ej: -5 o 10)
-        this.flecha.y = 0;   // Prueba moviendo verticalmente (ej: 15 o -10)
+        this.flecha.x = 0;
+        this.flecha.y = 0;
 
         hudContenedor.add(this.flecha);
         this.flecha.setAngle(-120);
 
         // creacion de elementos del juego:
-        let player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
-        player.setScale(0.7);
-        console.log(this.psyInventory);
-        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setOrigin(0, 0).setScale(0.3).setInteractive();
-        craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
+        this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
+        this.player.setScale(0.9);
 
-
-        // let craftingTable = new Craft(this, 0, this.sys.game.canvas.height * 0.5, "craft", this.psyInventory).setInteractive();
-
-        let enemy =new Enemy(this, this.sys.game.canvas.width * 0.7, this.sys.game.canvas.height * 0.7, "enemy",150,20,5,1000,900,player);
-        enemy.setScale(0.5);
+        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player);
+        enemy.setScale(0.9);
         
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
         this.itemsGroup = this.physics.add.group({
@@ -68,7 +58,7 @@ export default class Animation extends Phaser.Scene {
         });
 
         // hay que definir primero el grupo de los items
-        let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setOrigin(0,0).setScale(0.6).setInteractive();
+        let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);
         testChest.on("pointerdown", ()=> testChest.getRandomItem());
         
         //Grupo de Phaser para gestionar las físicas de los enemigos
@@ -76,6 +66,33 @@ export default class Animation extends Phaser.Scene {
             allowGravity: false,
         });
         this.enemiesGroup.add(enemy);
+
+        // grupo con todos los objetos interactuables del juego
+        this.interactGroup = this.physics.add.group({
+            allowGravity: false,
+        });
+        this.interactGroup.add(testChest);
+
+        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
+        craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
+        this.interactGroup.add(craftingTable);
+
+        let contX = 800;
+        let contY = 400;
+        let complete = false;
+        for (let i = 0; i < 6; i++) {
+            let blankSpace = new buildSpace(this, contX, contY, "room_template", this.psyInventory).setScale(0.2);
+            blankSpace.on("pointerdown", () => blankSpace.activateCrafting());
+            if (contX > 1000 && !complete) { 
+                contY += 200;
+                contX = 800;
+                complete = true;
+            }
+            else {
+                contX += 200;
+            }
+            this.interactGroup.add(blankSpace);
+        }
         
         //coger las dimensiones que ocupa el juego 
         let width = this.sys.game.config.width;
@@ -85,24 +102,32 @@ export default class Animation extends Phaser.Scene {
         let w = bggame.width * 2.5;
         let h = bggame.height * 2.5;
         //llamada a la función que organiza todo de la cámara
-        Camera.followPl(this, player, 0.5, 0.5, w, h); 
+        Camera.followPl(this, this.player, 0.5, 0.5, w, h); 
         
         //Creación de objetos
         this.itemsGroup.add(new Item(this, 1000, 1000, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 1055, 1055, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 800, 800, "coal", "coal", ITEM_ENCYCLOPEDIA).setScale(0.15));
 
+        // esto es para cratear una sala y probar brochachos
+        for (let i = 0; i < 10; i++)  {
+            this.itemsGroup.add(new Item(this, 100 * i, 1100, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        }
+        for (let i = 0; i < 5; i++)  {
+            this.itemsGroup.add(new Item(this, 100 * i, 1150, "fabric", "fabric", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        }
+        
+
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
-        this.physics.add.overlap(player, this.itemsGroup, player.collectItem, null, player); //Null: callback 
+        this.physics.add.overlap(this.player, this.itemsGroup, this.player.collectItem, null, this.player); //Null: callback 
         //this.physics.add.collider(player,this.enemiesGroup);
         //mira si el jugador ha colisionado con un enemigo y le resta vida al jugador,collider para que los dos no se transpasen
-        this.physics.add.overlap(player, this.enemiesGroup, (player, enemy) => {
-        if (enemy.canAttack()) {
-            player.takeDamage(enemy.damage);
-            }
-        });
-        enemy.status = new Patrol(enemy, 50);
+        // this.physics.add.overlap(player, this.enemiesGroup, (player, enemy) => {
+        // if (enemy.canAttack()) {
+        //     player.takeDamage(enemy.damage);
+        //     }
+        // });
         // this.physics.add.overlap(player, craftingTable, craftingTable.activateCrafting, null, player);  // esto no va uwu
 
         this.capaLuz = this.add.rectangle(0, 0, w / 0.25, h / 0.25, 0xffffff).setAlpha(0);
@@ -116,6 +141,23 @@ export default class Animation extends Phaser.Scene {
         if (this.capaLuz) {
             this.capaLuz.x = this.cameras.main.worldView.centerX;
             this.capaLuz.y = this.cameras.main.worldView.centerY;
+        }
+
+        if (this.player.isDead()){
+            // si ya existía una death stone, la borramos del mapa
+            if (this.player.deathStone != undefined) this.player.deathStone.destroy();
+            
+            // creamos y llenamos la deathStone del jugador
+            this.player.deathStone = new DeathStone(this, this.player.x, this.player.y, "deathStone", this.psyInventory).setScale(0.3);
+            this.interactGroup.add(this.player.deathStone);
+            this.player.deathStone.fillDeath();
+
+            this.psyInventory.slots.fill(null); // vaciamos el inventario
+
+            // TODO: que aqui aparezca un gui o algo de q se murio el psy :3
+            // ...
+
+            this.player.revive(SPAWN.x, SPAWN.y); // revivimos al jugador
         }
     }
 

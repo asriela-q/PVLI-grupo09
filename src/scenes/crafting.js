@@ -1,7 +1,5 @@
 import RECIPES_LIST from "../objectsAndInventory/recipes.js";
-import ROOMS_LIST from "../objectsAndInventory/rooms.js";
-import Inventory from "../objectsAndInventory/inventory.js";
-import Psy from "../player/playerManager.js";
+import ROOMS_LIST from "../building/rooms.js";
 
 export default class Animation extends Phaser.Scene {
 
@@ -14,7 +12,12 @@ export default class Animation extends Phaser.Scene {
         this.inventory = data.inventory;
         this.close = this.input.keyboard.addKey("Q");
 
-        this.renderCraftableRecipes();
+        if(data.craft) {
+            this.renderCraftableRecipes();
+        }
+        else {
+            this.renderCraftableRooms(data.buildSpace);
+        }
     }
 
     update() {
@@ -37,7 +40,7 @@ export default class Animation extends Phaser.Scene {
                 if (recipe.craftable) {
                     var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
                     green.setScale(0.4);
-                    green.on("pointerdown", ()=>this.craftRecipe(recipe, this.inventory));
+                    green.on("pointerdown", ()=>this.craftRecipe(recipe, false));
                 }
                 else {
                     var square = this.add.image(20, cont, "square").setOrigin(0, 0);
@@ -82,7 +85,66 @@ export default class Animation extends Phaser.Scene {
         }
     }
 
-    craftRecipe(recipe) {
+    renderCraftableRooms(buildSpace) {
+        this.checkAvaibleRooms();
+
+        let bg = this.add.image(0, 0, "roombg").setOrigin(0,0);
+        bg.setScale(1.2);
+
+        let cont = 20;
+        console.log(Object.keys(ROOMS_LIST).length);
+        for(let i = 0; i < Object.keys(ROOMS_LIST).length; i++) {
+            const room = ROOMS_LIST.find(r => r.number === i);
+            console.log(room);
+            if(room.unlocked) {
+                // se renderiza el cuadrado de la receta
+                if (room.craftable) {
+                    var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
+                    green.setScale(0.4);
+                    green.on("pointerdown", ()=>this.craftRecipe(room, true, buildSpace));
+                }
+                else {
+                    var square = this.add.image(20, cont, "square").setOrigin(0, 0);
+                    square.setScale(0.4);
+                }
+
+                // se renderiza la imagen del objeto de la receta
+                let object = this.add.image(25, cont + 5, room.room).setOrigin(0, 0);
+                object.setScale(0.1);
+
+                // se renderizan los objetos necesarios para la receta
+                // nota: esto esta floperisimo pero genuinamente no se como hacerlo de otra manera pq con un array no me lee el dato no se por que
+                console.log(room.numIngredients);
+                console.log(room.ing1);
+                let ingredient1 = this.add.image(125, cont + 5, room.ing1).setOrigin(0, 0);
+                ingredient1.setScale(0.1);
+                console.log(room.ing2);
+                let ingredient2 = this.add.image(225, cont + 5, room.ing2).setOrigin(0, 0);
+                ingredient2.setScale(0.1);
+                // if(room.numIngredients > 2) {
+                //     let ingredient3 = this.add.image(325, cont + 5, room.ing3).setOrigin(0, 0);
+                //     ingredient3.setScale(0.1);
+                // }
+
+                cont = cont + 170;
+            }
+        }
+    }
+
+    checkAvaibleRooms() {
+        for(let i = 0; i < Object.keys(ROOMS_LIST).length; i++) {
+            const room = ROOMS_LIST.find(r => r.number === i);
+            if(this.inventory.checkInventory(room.ing1) >= room.quant1 &&
+               this.inventory.checkInventory(room.ing2) >= room.quant2) {
+                room.craftable = true;
+            }
+            else {
+                room.craftable = false;
+            }
+        }
+    }
+
+    craftRecipe(recipe, isRoom, buildSpace) {
         console.log("entra en craft recipe");
         for(let i = 0; i < recipe.quant1; i++) {
             this.inventory.removeItem(recipe.ing1);
@@ -92,9 +154,14 @@ export default class Animation extends Phaser.Scene {
             this.inventory.removeItem(recipe.ing2);
             console.log(recipe.ing2 + "removed");
         }
-        this.inventory.addItemToInventory(recipe.object)
-        
-        this.renderCraftableRecipes();;
+        if (isRoom) {
+            buildSpace.changeTexture(recipe.room);
+            this.closeUI();
+        }
+        else {
+            this.inventory.addItemToInventory(recipe.object)
+            this.renderCraftableRecipes();
+        }
     }
 
     closeUI() {

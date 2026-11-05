@@ -3,16 +3,17 @@ Clase que maneja todo lo relacionado con el jugador, desde el movimiento hasta l
 sueño, hambre, estamina, etc.
 */
 
-import Inventory from "../objectsAndInventory/inventory.js";
 import StatsBar from "./barUIHandler.js";
 
 // velocidad:
 const RUN_SPEED = 650; // velocidad al correr
 const WALK_SPEED = 270; // velocidad al caminar
 
+const INTERACT_RANGE = 160; // rango para interactuar con objetos
+
 // estamina:
 const STAMINA = 5; // segundos que puede correr el jugador (estamina máxima)
-const RECOVERY_CD = 2; // segundos de espera antes de recuperar estamina tras dejar de correr
+const RECOVERY_CD = 1.5; // segundos de espera antes de recuperar estamina tras dejar de correr
 const EXHAUST_CD = 4; // segundos de espera si la estamina llegó a 0 (más largo)
 
 // vida:
@@ -52,6 +53,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.right = this.scene.input.keyboard.addKey('D');
         this.run = this.scene.input.keyboard.addKey('SHIFT');
         this.openInventory = this.scene.input.keyboard.addKey('E');
+        this.interactKey = this.scene.input.keyboard.addKey('F');
         this.scene.input.on("pointerdown", (pointer)=>{
             if(pointer.leftButtonDown() && !inventory.isVisible) {
                 this.attack();
@@ -85,6 +87,15 @@ export default class Psy extends Phaser.GameObjects.Container {
         // variables de ataque
         this.facingDirection = "right"; //Dirección del último movimiento;
         this.isAttacking = false;
+
+        // DEBUG BORRAR LUEGO
+        this.rangeCircle = this.scene.add.circle(0, 0, INTERACT_RANGE); // x, y, radio
+        this.rangeCircle.setStrokeStyle(2, 0xff0000); // borde rojo de 2 px
+        this.add(this.rangeCircle); // lo metemos en el contenedor para que siga al jugador
+
+        this.deathStone = undefined; // lápida del jugador
+        
+        this.body.setImmovable(true);//para que no pueda ser empujado 
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
@@ -122,6 +133,26 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.moveDir.normalize().scale(this.speed);
         this.body.setVelocity(this.moveDir.x, this.moveDir.y);
     }
+    
+    animationManager()
+    {
+        this.moveDir.normalize().scale(this.speed);
+        // animaciones
+        if (this.moveDir.x !== 0 || this.moveDir.y !== 0) {
+            if (this.facingDirection === "left")       this.sprite.play('psyLeft', true);
+            else if (this.facingDirection === "right") this.sprite.play('psyRight', true);
+            else if (this.facingDirection === "up")    this.sprite.play('psyUp', true);
+            else this.sprite.play('psyDown', true);
+        }
+        else {
+         if (this.facingDirection === "left")       this.sprite.play('psyIdleL', true);
+            else if (this.facingDirection === "right") this.sprite.play('psyIdleR', true);
+            else if (this.facingDirection === "up")    this.sprite.play('psyIdleB', true);
+            else this.sprite.play('psyIdleF', true);
+        }
+         this.sprite.anims.timeScale = this.isRunning ? 2:1;
+
+    }
 
     // método para gestionar la stamina del jugador
     staminaManager(dt){
@@ -151,25 +182,54 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.staminaBar.updateBar(this.currentStamina, STAMINA);
     }
 
+    // metodo q devuelve si el jugador esta muerto (true) o no
+    isDead(){
+        return this.currentLife <= 0;
+    }
+
+    revive(xBase, yBase){
+        this.currentLife = maxLife; // lo curamos por completo
+        this.currentStamina = STAMINA; // recuperamos toda la stamina
+
+        // ponemos al jugador de nuevo en la base
+        this.x = xBase;
+        this.y = yBase;
+    }
+
     preUpdate(t, dt){
         // lógica de psy
         this.sprite.preUpdate(t, dt);
 
+        if (Phaser.Input.Keyboard.JustDown(this.interactKey) && !this.inventory.isVisible)
+            this.checkInteractable();
+
         this.inputHandler();
         this.staminaManager(dt);
-
+        this.animationManager();
         this.inventory.updatePosition(this.x + 20, this.y);
-        if(Phaser.Input.Keyboard.JustDown(this.openInventory)) {
-            this.inventory.showInventory();
-            this.body.setVelocityX(0);
-            this.body.setVelocityY(0);
-        }
+        if(Phaser.Input.Keyboard.JustDown(this.openInventory)) this.inventory.showInventory();
         
         this.lifeBar.updateBar(this.currentLife, maxLife);
     }
 
-    create(){
+    checkInteractable(){
+        const objects = this.scene.interactGroup.getChildren();
+        let nearest = null; // guarda que objeto interactuable esta mas cerca del jugador (en el caso de que haya múltiples dentro del rango)
+        let minDist = INTERACT_RANGE; // distancia del objeto mas cercano
 
+        if (objects.length < 1) return; // si no hay objetos return
+
+        for (let i = 0; i < objects.length; i++){
+            // calculamos la distancia entre el jugador y el objeto
+            const newDist = Phaser.Math.Distance.Between(this.x, this.y, objects[i].x, objects[i].y);
+
+            if (newDist < minDist){
+                nearest = objects[i];
+                minDist = newDist; // cambiamos la distancia mínima
+            }
+        }
+
+        if (nearest && nearest.interact) nearest.interact();
     }
 
     collectItem(player, item){ //El atributo del player aunque no se use en el método, a la hora de llamar al método hace falta
@@ -198,7 +258,6 @@ export default class Psy extends Phaser.GameObjects.Container {
     */
     attack(){
         if(this.isAttacking) return;
-        console.log("Bomboclat");
 
         let posAttackX = this.x, posAttackY = this.y, colliderHeight = 50, colliderWidth = 70; 
 
