@@ -8,7 +8,7 @@ import Chest from "../mapObjects/chest.js";
 import DeathStone from "../player/deathStone.js";
 import buildSpace from "../building/buildSpace.js";
 
-const SPAWN = new Phaser.Math.Vector2(300, 300); // coordenadas de la base (sitio de spawn)
+const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
 
 export default class Animation extends Phaser.Scene {
 
@@ -19,7 +19,6 @@ export default class Animation extends Phaser.Scene {
 
     // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
     preload() {
-        
     }
 
     // create - método de las escenas que se llama una vez la escena está instanciada
