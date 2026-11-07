@@ -68,6 +68,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("craft", "./assets/images/placeholders/craft.jpg");
         this.load.image("room_template", "./assets/images/placeholders/room_template.jpg");
         this.load.image("chest", "./assets/images/placeholders/chest.png");
+        this.load.image("mercadona", "./assets/images/placeholders/mercadona.jpg")
 
         // interfaz de crafting (tanto objetos como salas)
         this.load.image("craftbg", "./assets/images/placeholders/craftbg.jpg");
@@ -120,7 +121,7 @@ export default class Load extends Phaser.Scene {
         //Cargar json
         this.load.json("infoItems", "./src/objectsAndInventory/infoItems.json");
         this.load.json("infoChest", "./src/mapObjects/infoChest.json");
-
+        this.load.json("infoProducts", "./src/mapObjects/infoProducts.json");
 
         this.load.on('complete', () => {
             progressBar.destroy();

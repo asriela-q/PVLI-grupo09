@@ -99,7 +99,7 @@ export default class Inventory {
         const slotSize = 100; //Tamaño en píxeles de cada cuadrícula del inventario     
         const separation = 5; //Separación entre cuadrados      
 
-        for(let i = 0; i < this.slots.length; i++) {
+        for (let i = 0; i < this.slots.length; i++) {
             //Guardamos cada objeto
             let item = this.slots[i];
 

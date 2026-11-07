@@ -1,0 +1,6 @@
+{
+    "common": { "probability": 80, "items": ["stone", "wood", "coal"]
+    },
+    "uncommon": { "probability": 20, "items": ["seeds", "straw"]
+    }
+}

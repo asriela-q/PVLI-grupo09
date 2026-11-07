@@ -7,6 +7,7 @@ import Dog from "../enemy/dog.js";
 import Chest from "../mapObjects/chest.js";
 import DeathStone from "../player/deathStone.js";
 import buildSpace from "../building/buildSpace.js";
+import Mercadona from "../mapObjects/mercadona.js";
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
 
@@ -15,6 +16,9 @@ export default class Animation extends Phaser.Scene {
     constructor() {
         super ({key: "main"}); // nombre de la escena
         this.psyInventory = new Inventory();
+        this.dayCounter = 0;
+        this.mercadona;
+        this.freezeScene = false;
     }
 
     // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
@@ -42,7 +46,7 @@ export default class Animation extends Phaser.Scene {
         this.flecha.y = 0;
 
         hudContenedor.add(this.flecha);
-        this.flecha.setAngle(-120);
+        this.flecha.setAngle(-135);
 
         // creacion de elementos del juego:
         this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
@@ -76,6 +80,9 @@ export default class Animation extends Phaser.Scene {
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
         this.interactGroup.add(craftingTable);
 
+        this.mercadona = new Mercadona(this, 1500, 200, "mercadona").setScale(0.3);
+        this.interactGroup.add(this.mercadona);
+
         let contX = 800;
         let contY = 400;
         let complete = false;
@@ -97,11 +104,10 @@ export default class Animation extends Phaser.Scene {
         let width = this.sys.game.config.width;
         let height = this.sys.game.config.height;
 
-        //He tenido que cambiar lo de la cámara porque sino no me iba no sé que pasa me voy a suicidar
         let w = bggame.width * 2.5;
         let h = bggame.height * 2.5;
         //llamada a la función que organiza todo de la cámara
-        Camera.followPl(this, this.player, 0.5, 0.5, w, h); 
+        Camera.followPl(this, this.player, 0.5, 0.5, w, h); //Ajusta la cámara a la imagen de fondo
         
         //Creación de objetos
         this.itemsGroup.add(new Item(this, 1000, 1000, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
@@ -142,6 +148,10 @@ export default class Animation extends Phaser.Scene {
             this.capaLuz.y = this.cameras.main.worldView.centerY;
         }
 
+        if(!this.freezeScene && this.flecha) {
+            this.flecha.angle += 0.15;
+        }
+
         if (this.player.isDead()){
             // si ya existía una death stone, la borramos del mapa
             if (this.player.deathStone != undefined) this.player.deathStone.destroy();
@@ -167,16 +177,30 @@ export default class Animation extends Phaser.Scene {
         const colorDia = Phaser.Display.Color.HexStringToColor('#ffffff');      
         const colorTarde = Phaser.Display.Color.HexStringToColor('#e67e22');    
         const colorNoche = Phaser.Display.Color.HexStringToColor('#0a1128');    
-        this.tweens.chain({
+        this.metodoCicloDia = this.tweens.chain({
         targets: this.capaLuz,
         tweens: [
+                //Dia
+                {
+                    alpha: 0, 
+                    duration: 5000,
+                    onUpdate: (tween) => {
+                        let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorNoche, colorDia, 100, tween.progress * 100);
+                        this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b));
+                    }
+                },
+                {
+                    alpha: 0,
+                    duration: 5000, 
+                    onStart: () => {
+                        this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorDia.r, colorDia.g, colorDia.b));
+                    }
+                    
+                },
                 //Tarde
                 {
                     alpha: 0.4, 
                     duration: 5000,
-                    onStart: () => {
-                        this.tweens.add({ targets: this.flecha, angle: 0, duration: 5000 }); //De -90° a 0°
-                    },
                     onUpdate: (tween) => {
                         let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorDia, colorTarde, 100, tween.progress * 100);
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b)); 
@@ -185,7 +209,7 @@ export default class Animation extends Phaser.Scene {
                 //Transición de colores
                 {
                     alpha: 0.4,
-                    duration: 3000, 
+                    duration: 5000, 
                     onStart: () => {
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorTarde.r, colorTarde.g, colorTarde.b));
                     }
@@ -194,9 +218,6 @@ export default class Animation extends Phaser.Scene {
                 {
                     alpha: 0.5, 
                     duration: 5000,
-                    onStart: () => {
-                        this.tweens.add({ targets: this.flecha, angle: 135, duration: 5000 });
-                    },
                     onUpdate: (tween) => {
                         let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorTarde, colorNoche, 100, tween.progress * 100);
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b));
@@ -205,38 +226,14 @@ export default class Animation extends Phaser.Scene {
                 //Transición de colores
                 {
                     alpha: 0.8,
-                    duration: 6000, // Reemplaza al 'hold' inestable
-                    onStart: () => {
-                        this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorNoche.r, colorNoche.g, colorNoche.b));
-                    }
-                },
-                //Dia
-                {
-                    alpha: 0, 
                     duration: 5000,
                     onStart: () => {
-                        this.tweens.add({ targets: this.flecha, angle: 235, duration: 5000 });
-                    },
-                    onUpdate: (tween) => {
-                        let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorNoche, colorDia, 100, tween.progress * 100);
-                        this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b));
-                    }
-                },
-                {
-                    alpha: 0,
-                    duration: 8000, 
-                    onStart: () => {
-                        this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorDia.r, colorDia.g, colorDia.b));
-                        this.tweens.add({ 
-                            targets: this.flecha, 
-                            angle: -120, 
-                            duration: 8000,
-                            onComplete: () => {
-                                this.flecha.angle = -90; 
-                            }
-                        });
+                        this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorNoche.r, colorNoche.g, colorNoche.b));
                     },
                     onComplete: () => {
+                        this.dayCounter++;
+                        console.log(this.dayCounter);
+                        if (this.dayCounter % 3 === 0) this.mercadona.refreshProducts();
                         this.cicloDia();
                     }
                 }

@@ -235,7 +235,6 @@ export default class Psy extends Phaser.GameObjects.Container {
     collectItem(player, item){ //El atributo del player aunque no se use en el método, a la hora de llamar al método hace falta
         const collected = this.inventory.addItemToInventory(item.itemId);
         if(collected) { //Si se ha podido recolectar el objeto
-            console.log("objeto recogido");
             item.destroy(); //Si el jugador recoge el objeto se destruye del mapa
         }
     }
