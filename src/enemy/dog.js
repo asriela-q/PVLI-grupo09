@@ -7,7 +7,7 @@ import Enemy from "../enemy/enemy.js"
 import Patrol from "../enemy/patrol.js"
 
 export default class Dog extends Enemy {
-    constructor(scene, x, y, player, patrolPoints)
+    constructor(scene, x, y, player, itemGroup, patrolPoints)
     {   const texture = 'dog';
         const vel = 200;
         const chaseVel = 400;
@@ -15,7 +15,7 @@ export default class Dog extends Enemy {
         const defense = 5;
         const life = 500;
         const cooldown = 800;
- 
+
         super(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown, player);
  
         // Comportamiento
@@ -27,7 +27,9 @@ export default class Dog extends Enemy {
         ]);
  
         this.scene.physics.add.collider(this, this.player, () => this.attack());
- 
+        this.key = "dog"; // tipo de enemigo para el drop de items
+        this.group = itemGroup; // grupo de fisicas de los items
+
     }
     preUpdate(t, dt)
     {
@@ -52,7 +54,7 @@ export default class Dog extends Enemy {
             this.play('dogUp', true);
         }
 
-        this.anims.timeScale = this.status.state==='CHASE' ? 1.7:1;
+        this.anims.timeScale = this.status.state === 'CHASE' ? 1.7 : 1;
         
     }
 
