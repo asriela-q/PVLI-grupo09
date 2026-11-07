@@ -1,0 +1,12 @@
+{
+    "dog": {
+        "animal_skin": {"probability": 15 },
+        "fang": {"probability": 20 },
+        "meat": {"probability": 60 }
+    },
+    "ghost": {
+        "ghost_sword": {"probability": 5 },
+        "fabric": {"probability": 20 }
+    }
+
+}

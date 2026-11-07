@@ -19,6 +19,9 @@ export default class Chest extends Phaser.GameObjects.Sprite {
         this.ITEM_ENCYCLOPEDIA = scene.cache.json.get("infoItems");
         this.group = itemGroup;
 
+        // variables q controlan el rango de items q pden salir del cofre (a excepcion de las armas/armaduras y key items)
+        this.minItems = 2; // mínimo de items q pden salir de el cofre
+        this.maxItems = 5; // maximo de items q salen del cofre
     }
 
     // se llama al pulsar la tecla F
@@ -57,7 +60,15 @@ export default class Chest extends Phaser.GameObjects.Sprite {
 
     // hace aparecer el objeto seleccionado en getRandomItem()
     spawnItem(item){
-        this.group.add(new Item(this.scene, this.x, this.y, this.ITEM_ENCYCLOPEDIA[item].texture, item, this.ITEM_ENCYCLOPEDIA).setScale(0.15));
+        let nItems = 1; // valor para los items q son armas/armaduras/key items cualquier cosa menos un resource vamos
+        if (this.ITEM_ENCYCLOPEDIA[item].type == "resource"){
+            const r = Math.random() * (this.maxItems - this.minItems + 1) + this.minItems; // num entre minItems y maxItems + 1
+            nItems = Math.floor(r); // cogemos el entero redondeando hacia abajo
+        }
+
+        for (let i = 0; i < nItems; i++)
+            this.group.add(new Item(this.scene, this.x, this.y, this.ITEM_ENCYCLOPEDIA[item].texture, item, this.ITEM_ENCYCLOPEDIA).setScale(0.15));
+        
         //console.log(this.scene + this.x + this.y + this.ITEM_ENCYCLOPEDIA[item].texture + item + this.ITEM_ENCYCLOPEDIA);
         this.destroy(this);
     }

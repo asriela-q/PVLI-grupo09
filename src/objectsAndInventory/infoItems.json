@@ -92,27 +92,27 @@
         "texture": "metal",
         "stackable": true, 
         "maxStack": 30, 
-        "type": "object" 
+        "type": "resource" 
     },
     "iron" : {
         "name": "Iron", 
         "texture": "iron",
         "stackable": true, 
         "maxStack": 30, 
-        "type": "object" 
+        "type": "resource" 
     },
     "fabric" : {
         "name": "Fabric", 
         "texture": "fabric",
         "stackable": true, 
         "maxStack": 30, 
-        "type": "object" 
+        "type": "resource" 
     },
     "clay" : {
         "name": "Clay", 
         "texture": "clay",
         "stackable": true, 
         "maxStack": 30, 
-        "type": "object" 
+        "type": "resource" 
     }
 }

@@ -122,6 +122,7 @@ export default class Load extends Phaser.Scene {
         this.load.json("infoItems", "./src/objectsAndInventory/infoItems.json");
         this.load.json("infoChest", "./src/mapObjects/infoChest.json");
         this.load.json("infoProducts", "./src/mapObjects/infoProducts.json");
+        this.load.json("enemyDrops", "./src/enemy/enemyDrops.json");
 
         this.load.on('complete', () => {
             progressBar.destroy();

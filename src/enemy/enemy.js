@@ -1,6 +1,7 @@
 /*
 Clase que maneja toda la lógica de ataque y atributos relacionado con el enemigo*/
 import StatsBar from "../player/barUIHandler.js";
+import Item from "../objectsAndInventory/items.js";
 
 export default class Enemy extends Phaser.GameObjects.Sprite {
 constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=1000,player)
@@ -28,54 +29,74 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
 
      //comportamiento del enemigo, lo iniciamos vacio para decirlo que todavia no haga nada
      this.status = null;
+
+     this.itemDrops = scene.cache.json.get("enemyDrops"); // json con los drops de los enemigos
 }
 
-//método que maneja el cooldown y mirar si puede atacar o no
-canAttack()
-{
-    const now = this.scene.time.now
-    if(now-this.lastAttack<this.cooldown){
-        return false;}
-    this.lastAttack = now;
-    return true;
-
-}
-//método que gestiona el ataque al jugador
-attack()
-{
-    if (!this.canAttack()) return;
-    this.player.takeDamage(this.damage);
-}
-preUpdate(t, dt){
-
-    super.preUpdate(t,dt);
-
-    if(this.lifeBar)
+    //método que maneja el cooldown y mirar si puede atacar o no
+    canAttack()
     {
-        this.lifeBar.x = this.x - this.lifeBar.originalWidth /2; 
-        this.lifeBar.y = this.y - this.displayHeight /2 - 10;
+        const now = this.scene.time.now
+        if(now-this.lastAttack<this.cooldown){
+            return false;}
+        this.lastAttack = now;
+        return true;
+
     }
 
-    //si tiene algun comportamiento, lo ejecuta
-    if (this.status) this.status.preUpdate(t, dt);
-}
-
-//método que gestiona el daño que recibe el enemigo
-takeDamage(recDamage)
-{
-    //this.currentLife-=recDamage*(100/(100+this.defense));
-    let totalDamage = recDamage - this.defense;
-    this.currentLife -= totalDamage;
-    if(this.currentLife<=0)
+    //método que gestiona el ataque al jugador
+    attack()
     {
-        // TODO: hacer q el enemigo dropee bullshit
-        this.currentLife = 0
-        this.lifeBar.destroy();
-        this.lifeBar = null;
-        this.destroy();
+        if (!this.canAttack()) return;
+        this.player.takeDamage(this.damage);
     }
-    else{
-        this.lifeBar.updateBar(this.currentLife, this.maxLife);
+    preUpdate(t, dt){
+
+        super.preUpdate(t,dt);
+
+        if(this.lifeBar)
+        {
+            this.lifeBar.x = this.x - this.lifeBar.originalWidth /2; 
+            this.lifeBar.y = this.y - this.displayHeight /2 - 10;
+        }
+
+        //si tiene algun comportamiento, lo ejecuta
+        if (this.status) this.status.preUpdate(t, dt);
     }
-}
+
+    //método que gestiona el daño que recibe el enemigo
+    takeDamage(recDamage)
+    {
+        //this.currentLife-=recDamage*(100/(100+this.defense));
+        let totalDamage = recDamage - this.defense;
+        this.currentLife -= totalDamage;
+        if(this.currentLife<=0)
+        {
+            // TODO: hacer q el enemigo dropee bullshit
+            this.currentLife = 0
+            this.lifeBar.destroy();
+            this.lifeBar = null;
+            this.destroy();
+        }
+        else{
+            this.lifeBar.updateBar(this.currentLife, this.maxLife);
+        }
+    }
+
+    // método para la gestión de dropear items
+    dropItems(key){
+
+
+        // array con el enemigo
+        const enemyData = this.itemDrops[key];
+        console.log(key);
+
+        if (!enemyData){
+            console.warn(key + " isn't in the json list");
+        }
+
+        
+
+    }
+
 }
