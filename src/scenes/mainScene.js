@@ -8,6 +8,7 @@ import Chest from "../mapObjects/chest.js";
 import DeathStone from "../player/deathStone.js";
 import buildSpace from "../building/buildSpace.js";
 import Mercadona from "../mapObjects/mercadona.js";
+import statHandler from "../player/statHandler.js";
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
 
@@ -51,6 +52,10 @@ export default class Animation extends Phaser.Scene {
         // creacion de elementos del juego:
         this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
         this.player.setScale(0.9);
+
+
+        //quitar
+        this.stats =new statHandler(this,this.player);
 
         let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player);
         enemy.setScale(0.9);
@@ -107,7 +112,8 @@ export default class Animation extends Phaser.Scene {
         let w = bggame.width * 2.5;
         let h = bggame.height * 2.5;
         //llamada a la función que organiza todo de la cámara
-        Camera.followPl(this, this.player, 0.5, 0.5, w, h); //Ajusta la cámara a la imagen de fondo
+        this.cam=new Camera(this,this.player,1,0.5,w,h);
+        this.cam.followPl();
         
         //Creación de objetos
         this.itemsGroup.add(new Item(this, 1000, 1000, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
@@ -142,7 +148,7 @@ export default class Animation extends Phaser.Scene {
         this.cicloDia();
     }
 
-    update() {
+    update(t,dt) {
         if (this.capaLuz) {
             this.capaLuz.x = this.cameras.main.worldView.centerX;
             this.capaLuz.y = this.cameras.main.worldView.centerY;
@@ -151,6 +157,7 @@ export default class Animation extends Phaser.Scene {
         if(!this.freezeScene && this.flecha) {
             this.flecha.angle += 0.15;
         }
+        this.stats.preUpdate(t,dt);
 
         if (this.player.isDead()){
             // si ya existía una death stone, la borramos del mapa
@@ -167,6 +174,7 @@ export default class Animation extends Phaser.Scene {
             // ...
 
             this.player.revive(SPAWN.x, SPAWN.y); // revivimos al jugador
+
         }
     }
 

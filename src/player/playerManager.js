@@ -4,6 +4,7 @@ sueño, hambre, estamina, etc.
 */
 
 import StatsBar from "./barUIHandler.js";
+import Camera from "./camera.js";
 
 // velocidad:
 const RUN_SPEED = 650; // velocidad al correr
@@ -96,6 +97,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.deathStone = undefined; // lápida del jugador
         
         this.body.setImmovable(true);//para que no pueda ser empujado 
+        this.cam=Camera;
+        
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
@@ -209,7 +212,12 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.inventory.updatePosition(this.x + 20, this.y);
         if(Phaser.Input.Keyboard.JustDown(this.openInventory)) this.inventory.showInventory();
         
+        const cam=this.scene.cameras.main;
         this.lifeBar.updateBar(this.currentLife, maxLife);
+        if(this.currentLife<=maxLife/3)
+        {
+            this.scene.cam.flash(dt);
+        }
     }
 
     checkInteractable(){
@@ -249,6 +257,7 @@ export default class Psy extends Phaser.GameObjects.Container {
             //Si hay que hacer alguna animación/comportamiento de muerte o algo se pone aquí
         }
         this.lifeBar.updateBar(this.currentLife, this.maxLife);
+      
     }
 
     /*
