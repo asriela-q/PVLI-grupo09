@@ -50,20 +50,18 @@ export default class Animation extends Phaser.Scene {
         this.flecha.setAngle(-135);
 
         // creacion de elementos del juego:
-        this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory);
-        this.player.setScale(0.9);
+        this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setScale(0.9);
 
 
         //quitar
         this.stats =new statHandler(this,this.player);
 
-        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player);
-        enemy.setScale(0.9);
-        
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
         this.itemsGroup = this.physics.add.group({
             allowGravity: false
         });
+
+        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.9);
 
         // hay que definir primero el grupo de los items
         let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);

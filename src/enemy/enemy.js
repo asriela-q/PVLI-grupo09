@@ -7,9 +7,9 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
 constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=1000,player)
 {
     super(scene, x, y, texture);
-     this.scene.add.existing(this); 
-     this.scene.physics.add.existing(this); 
-     this.body.setAllowGravity(false); 
+     this.scene.add.existing(this);
+     this.scene.physics.add.existing(this);
+     this.body.setAllowGravity(false);
 
     this.patrolVelocity = vel; //velocidad del enemigo
     this.chaseVelocity = chaseVel;
@@ -18,6 +18,8 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
     this.currentLife = life; //vida del enemigo
     this.maxLife = life;
     this.player = player;
+    this.key = null;
+    this.group = null; // grupo de fisicas de los objetos
 
     //para manejar tiempo entre ataques
      this.cooldown = cooldown;
@@ -31,6 +33,11 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
      this.status = null;
 
      this.itemDrops = scene.cache.json.get("enemyDrops"); // json con los drops de los enemigos
+     this.ITEM_ENCYCLOPEDIA = scene.cache.json.get("infoItems");
+
+     this.minRange = 1; // cantidad minima de items
+     this.maxRange = 3; // cantidad maxima de items
+
 }
 
     //método que maneja el cooldown y mirar si puede atacar o no
@@ -50,6 +57,7 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
         if (!this.canAttack()) return;
         this.player.takeDamage(this.damage);
     }
+
     preUpdate(t, dt){
 
         super.preUpdate(t,dt);
@@ -76,6 +84,7 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
             this.currentLife = 0
             this.lifeBar.destroy();
             this.lifeBar = null;
+            this.dropItems();
             this.destroy();
         }
         else{
@@ -84,19 +93,34 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
     }
 
     // método para la gestión de dropear items
-    dropItems(key){
+    dropItems(){
+        const enemyData = this.itemDrops[this.key];
+        console.log(this.key);
+        let dataArray = Object.keys(enemyData); // array para poder utilizar la propiedad length pq los json son una mierda y me sale undefined nmo puedo mas, lo q hace el keys es coger los nombres de los objetos dentro del enemigo (los nombres de los items)
 
-
-        // array con el enemigo
-        const enemyData = this.itemDrops[key];
-        console.log(key);
-
-        if (!enemyData){
-            console.warn(key + " isn't in the json list");
+        let rng = Math.random() * 100;
+        for (let i = 0; i < dataArray.length; i++){
+            let n = dataArray[i]; // guarda el nombre del objeto para poder buscarlo en el json
+            if (rng < enemyData[n].probability) {
+                this.itemSpawner(dataArray[i]);
+            }
         }
 
-        
+    }
 
+    // metodo auxiliar para spawnear los items y una cantidad rtandom
+    itemSpawner(data){
+        if (!this.ITEM_ENCYCLOPEDIA[data]) console.log("olaolaolaolaola fea y gorda");
+
+        let nItems = 1; // valor para los items q son armas/armaduras/key items cualquier cosa menos un resource vamos
+        if (this.ITEM_ENCYCLOPEDIA[data].type == "resource"){
+            const r = Math.random() * (this.maxRange - this.minRange + 1) + this.minRange; // num entre minRange y maxRange + 1
+            nItems = Math.floor(r); // cogemos el entero redondeando hacia abajo
+        }
+
+        for (let i = 0; i < nItems; i++)
+            this.group.add(new Item(this.scene, this.x, this.y, this.ITEM_ENCYCLOPEDIA[data].texture, data, this.ITEM_ENCYCLOPEDIA).setScale(0.15));
+        return true;
     }
 
 }
