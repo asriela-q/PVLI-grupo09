@@ -112,6 +112,10 @@ export default class Load extends Phaser.Scene {
         //UI
         this.load.image("vida", "./assets/images/placeholders/vida.png");
         this.load.image("stamina", "./assets/images/placeholders/staminabarra.png");
+        this.load.image("hunger", "./assets/images/placeholders/hunger.png");
+        this.load.image("higiene", "./assets/images/placeholders/higiene.png");
+        this.load.image("sueño", "./assets/images/placeholders/sueño.png");
+
 
         // personajes y enemigos
         this.load.image("enemy", "./assets/images/placeholders/enemigo.png");

@@ -31,9 +31,12 @@ export default class statHandler
         this.scene=scene;
         
         this.hungerBar = new StatBar(this.scene, 1170, 300, 30,200, 0xE67E22,true).setScrollFactor(0).setDepth(200); //barra de hunger
-        this.hygienetBar = new StatBar(this.scene, 1140, 300, 30, 200, 0x0000ff,true).setScrollFactor(0).setDepth(200); //barra de higiene
-        this.sleepynessBar = new StatBar(this.scene, 1110, 300, 30, 200, 0x808080,true).setScrollFactor(0).setDepth(200); //barra de sueño
-      
+            scene.add.image(1170, 55, "hunger").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(3);
+        this.hygienetBar = new StatBar(this.scene, 1140, 300, 30, 200, 0x5b94e0,true).setScrollFactor(0).setDepth(200); //barra de higiene
+            scene.add.image(1140, 55, "higiene").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(3);
+
+        this.sleepynessBar = new StatBar(this.scene, 1110, 300, 30, 200, 0x908f9a,true).setScrollFactor(0).setDepth(200); //barra de sueño
+            scene.add.image(1110, 55, "sueño").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(3);
         }
         
         preUpdate(t, dt){
