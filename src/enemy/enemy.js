@@ -23,10 +23,7 @@ constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=100
 
     //para manejar tiempo entre ataques
      this.cooldown = cooldown;
-    //this.lastAttack=-cooldown; //inicializado a -cooldown para que el enemigo pueda atacar desde el principio
-
-     //this.attackRange=80;
-
+  
      this.lifeBar = new StatsBar(this.scene, x, y, 100, 25, 0x56F85400).setDepth(200); //barra de vida
 
      //comportamiento del enemigo, lo iniciamos vacio para decirlo que todavia no haga nada

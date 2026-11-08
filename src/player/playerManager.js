@@ -77,8 +77,10 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         // inventario y UI
         this.inventory.render(this.scene, x + 20, y);
-        this.lifeBar = new StatsBar(this.scene, -215, -250, 200, 50, 0x56F85400).setScrollFactor(0).setDepth(200); //barra de vida
-        this.staminaBar = new StatsBar(this.scene, -215, -200, 200, 50, 0x56f854ff).setScrollFactor(0).setDepth(200); // barra de estamina
+        this.lifeBar = new StatsBar(this.scene, -170, -250, 310, 50, 0xc14f4f).setScrollFactor(0).setDepth(200); //barra de vida
+        scene.add.image(-230, -260, "vida").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(0.5);
+        this.staminaBar = new StatsBar(this.scene, -170, -180, 310, 50, 0xe5c57e).setScrollFactor(0).setDepth(200); // barra de estamina
+        scene.add.image(-230, -195, "stamina").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(0.5);
 
         // estadísticas del player
         this.playerAttack = baseAttack;

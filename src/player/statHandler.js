@@ -8,8 +8,8 @@ const hygiene=100;
 const sleepyness=100;
 
 //para controlar como de rapido o lento se quite
-const hungerRate=20;
-const sleepRate=5;
+const hungerRate=2;
+const sleepRate=2;
 const hygieneRate=2;
 const hpLossRate=2; 
 

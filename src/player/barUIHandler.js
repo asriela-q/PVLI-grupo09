@@ -23,5 +23,6 @@ export default class StatsBar extends Phaser.GameObjects.Rectangle{
         this.setSize(this.originalWidth * size, this.height);
         else 
         this.setSize(this.originalWidth, this.originalHeight* size);
+    
     }
 }
