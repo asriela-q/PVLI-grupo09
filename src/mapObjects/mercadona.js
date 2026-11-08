@@ -12,6 +12,8 @@ export default class Mercadona extends Phaser.GameObjects.Sprite{
         this.close = this.scene.input.keyboard.addKey("Q");
 
         this.productosAExhibir = [];
+        this.interactiveProducts = [];
+        this.yaHaComprado = false;
         this.refreshProducts();
     }
 
@@ -58,8 +60,9 @@ export default class Mercadona extends Phaser.GameObjects.Sprite{
     }
 
     refreshProducts() {
-    this.productosAExhibir = [];
-    while (this.productosAExhibir.length < 2) {
+        this.yaHaComprado = false;
+        this.productosAExhibir = [];
+        while (this.productosAExhibir.length < 2) {
             const itemSeleccionado = this.getRandomItems();
             if (itemSeleccionado) {
                 if (!this.productosAExhibir.includes(itemSeleccionado)) {
@@ -75,12 +78,26 @@ export default class Mercadona extends Phaser.GameObjects.Sprite{
         this.container.removeAll(true);
         this.scene.metodoCicloDia.pause();
         this.scene.freezeScene = true;
+        this.interactiveProducts = [];
 
+        if(!this.ITEM_ENCYCLOPEDIA) this.ITEM_ENCYCLOPEDIA = this.scene.cache.json.get("infoItems");
+        if(!this.productInfo) this.productInfo = this.scene.cache.json.get("infoProducts");
+
+        let diasRestantes = 3 - (this.scene.dayCounter % 3);
+        
         const xPos = (this.scene.sys.game.config.width - 800) / 2;
         const yPos = (this.scene.sys.game.config.height - 500) / 2;
 
         const bg = this.scene.add.rectangle(xPos, yPos, 800, 500, 0x000000, 1).setOrigin(0).setAlpha(0.5).setScrollFactor(0);
         this.container.add(bg);
+
+        let textoContador = this.scene.add.text(
+            xPos + 400, 
+            yPos + 40, 
+            `Next products will come in ${diasRestantes} ${diasRestantes === 1 ? 'day' : 'days'}`, 
+            { font: "35px Arial", fill: "#ffffff" }
+        ).setOrigin(0.5).setScrollFactor(0);
+        this.container.add(textoContador);
        
         for (let i = 0; i < this.productosAExhibir.length; i++)
         {
@@ -91,6 +108,14 @@ export default class Mercadona extends Phaser.GameObjects.Sprite{
             if (this.ITEM_ENCYCLOPEDIA && this.ITEM_ENCYCLOPEDIA[itemId]) {
                 let itemImage = this.scene.add.image(productoX, productoY, this.ITEM_ENCYCLOPEDIA[itemId].texture).setScale(0.25).setScrollFactor(0);
                 this.container.add(itemImage);
+                itemImage.setInteractive();
+                this.interactiveProducts.push(itemImage);
+                itemImage.on("pointerdown", () => {
+                    if (!this.yaHaComprado) {
+                        this.buy(itemId);
+                        console.log("Producto comprado");
+                    }
+                });
             }
         }
 
@@ -105,6 +130,25 @@ export default class Mercadona extends Phaser.GameObjects.Sprite{
             this.scene.metodoCicloDia.resume();
             this.scene.freezeScene = false;
             this.scene.physics.world.resume(); 
+        }
+    }
+
+    /*
+    Método que añade el objeto comprado al inventario
+    */
+    buy(itemId) {
+        const playerInventory = this.scene.psyInventory;
+        if (playerInventory) {
+            if (playerInventory.addItemToInventory(itemId)) {
+                this.yaHaComprado = true;
+                for (let i = 0; i < this.interactiveProducts.length; i++) {
+                    this.interactiveProducts[i].disableInteractive().setAlpha(0.5);
+                }
+                this.interactiveProducts = [];
+            }
+            else {
+                this.textoAviso.setText("Your inventory is full");
+            }
         }
     }
 }

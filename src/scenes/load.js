@@ -96,6 +96,11 @@ export default class Load extends Phaser.Scene {
         this.load.image("metal_sword", "./assets/images/placeholders/metal_sword.png");
         this.load.image("torch", "./assets/images/sprites/torch.png");
 
+        //Objetos consumibles (comida)
+        this.load.image("apple", "./assets/images/placeholders/apple.jpg");
+        this.load.image("cereal", "./assets/images/placeholders/cereal.jpg");
+        this.load.image("pineapple", "./assets/images/placeholders/pineapple.png");
+
         // habitaciones
         this.load.image("kitchen", "./assets/images/placeholders/kitchen.jpg");
         this.load.image("bedroom", "./assets/images/placeholders/bedroom.jpg");

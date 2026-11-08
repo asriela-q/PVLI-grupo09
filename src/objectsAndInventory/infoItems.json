@@ -73,6 +73,27 @@
         "maxStack": 30, 
         "type": "resource" 
     },
+    "apple" : {
+        "name": "Apple", 
+        "texture": "apple",
+        "stackable": true, 
+        "maxStack": 15, 
+        "type": "resource" 
+    },
+    "cereal" : {
+        "name": "Cereal", 
+        "texture": "cereal",
+        "stackable": true, 
+        "maxStack": 15, 
+        "type": "resource" 
+    },
+    "pineapple" : {
+        "name": "Pineapple", 
+        "texture": "pineapple",
+        "stackable": true, 
+        "maxStack": 15, 
+        "type": "resource" 
+    },
     "straw" : {
         "name": "Straw", 
         "texture": "straw", 

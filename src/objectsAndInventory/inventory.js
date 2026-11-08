@@ -19,8 +19,8 @@ export default class Inventory {
     */
     addItemToInventory(itemId) {
         if (!this.ITEM_ENCYCLOPEDIA) {
-        console.error("La enciclopedia de items no está cargada");
-        return false;
+            console.error("La enciclopedia de items no está cargada");
+            return false;
         }
 
         const iteminfo = this.ITEM_ENCYCLOPEDIA[itemId]; //La enciclopedia contiene la información de los stacks y el id del objeto

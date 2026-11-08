@@ -153,7 +153,7 @@ export default class Animation extends Phaser.Scene {
         }
 
         if(!this.freezeScene && this.flecha) {
-            this.flecha.angle += 0.15;
+            this.flecha.angle += 0.2;
         }
         this.stats.preUpdate(t,dt);
 
