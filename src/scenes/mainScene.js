@@ -22,6 +22,7 @@ export default class Animation extends Phaser.Scene {
         this.dayCounter = 1;
         this.mercadona;
         this.freezeScene = false;
+        this.doubleDropChance = 0;
     }
 
     // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
@@ -200,7 +201,10 @@ export default class Animation extends Phaser.Scene {
                 {
                     alpha: 0, 
                     duration: 5000,
-                    onStart: () => { this.actualizarFantasmas(false); },
+                    onStart: () => { 
+                        this.actualizarFantasmas(false); 
+                        this.doubleDropChance = 0.5;
+                    },
                     onUpdate: (tween) => {
                         let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorNoche, colorDia, 100, tween.progress * 100);
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b));
@@ -218,6 +222,7 @@ export default class Animation extends Phaser.Scene {
                 {
                     alpha: 0.4, 
                     duration: 5000,
+                    onStart: () => { this.doubleDropChance = 0},
                     onUpdate: (tween) => {
                         let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorDia, colorTarde, 100, tween.progress * 100);
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b)); 

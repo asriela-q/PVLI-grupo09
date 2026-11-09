@@ -31,12 +31,15 @@ export default class rockBlock extends Phaser.GameObjects.Sprite {
     dropStone() {
         let ITEM_ENCYCLOPEDIA = this.scene.cache.json.get("infoItems");
 
-        const cantidadDrops = Phaser.Math.Between(1, 3);
+        let cantidadDrops = Phaser.Math.Between(1, 3);
+        if (this.scene.doubleDropChance > 0 && Math.random() < this.scene.doubleDropChance) {
+            cantidadDrops *= 2;
+        }
 
         for (let i = 0; i < cantidadDrops; i++) {
             //Esto es para que las piedras no aparezcan todas juntas cuando se dropean
-            let offsetX = Phaser.Math.Between(-20, 20);
-            let offsetY = Phaser.Math.Between(-20, 20);
+            let offsetX = Phaser.Math.Between(-50, 50);
+            let offsetY = Phaser.Math.Between(-50, 50);
 
             let droppedStone = new Item(this.scene, this.x + offsetX, this.y + offsetY, this.itemDropId, this.itemDropId, ITEM_ENCYCLOPEDIA).setScale(0.15);
 
