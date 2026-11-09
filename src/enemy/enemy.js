@@ -4,7 +4,7 @@ import StatsBar from "../player/barUIHandler.js";
 import Item from "../objectsAndInventory/items.js";
 
 export default class Enemy extends Phaser.GameObjects.Sprite {
-constructor(scene, x, y, texture,vel,chaseVel,damage, defense, life,cooldown=1000,player)
+constructor(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown=1000, player)
 {
     super(scene, x, y, texture);
      this.scene.add.existing(this);

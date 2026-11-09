@@ -4,6 +4,7 @@ import Item from "../objectsAndInventory/items.js";
 import Camera from "../player/camera.js";
 import Craft from "../objectsAndInventory/craft.js";
 import Dog from "../enemy/dog.js";
+import Ghost from "../enemy/ghost.js";
 import Chest from "../mapObjects/chest.js";
 import DeathStone from "../player/deathStone.js";
 import buildSpace from "../building/buildSpace.js";
@@ -17,7 +18,7 @@ export default class Animation extends Phaser.Scene {
     constructor() {
         super ({key: "main"}); // nombre de la escena
         this.psyInventory = new Inventory();
-        this.dayCounter = 0;
+        this.dayCounter = 1;
         this.mercadona;
         this.freezeScene = false;
     }
@@ -52,7 +53,6 @@ export default class Animation extends Phaser.Scene {
         // creacion de elementos del juego:
         this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setScale(0.9);
 
-
         //quitar
         this.stats =new statHandler(this,this.player);
 
@@ -62,6 +62,7 @@ export default class Animation extends Phaser.Scene {
         });
 
         let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.9);
+        let enemy2 = new Ghost(this, this.sys.game.canvas.width, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.4);
 
         // hay que definir primero el grupo de los items
         let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);
@@ -72,6 +73,7 @@ export default class Animation extends Phaser.Scene {
             allowGravity: false,
         });
         this.enemiesGroup.add(enemy);
+        this.enemiesGroup.add(enemy2);
 
         // grupo con todos los objetos interactuables del juego
         this.interactGroup = this.physics.add.group({
@@ -110,7 +112,7 @@ export default class Animation extends Phaser.Scene {
         let w = bggame.width * 2.5;
         let h = bggame.height * 2.5;
         //llamada a la función que organiza todo de la cámara
-        this.cam=new Camera(this,this.player,1,0.5,w,h);
+        this.cam = new Camera(this, this.player, 1, 0.5, w, h);
         this.cam.followPl();
         
         //Creación de objetos
@@ -190,6 +192,7 @@ export default class Animation extends Phaser.Scene {
                 {
                     alpha: 0, 
                     duration: 5000,
+                    onStart: () => { this.actualizarFantasmas(false); },
                     onUpdate: (tween) => {
                         let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorNoche, colorDia, 100, tween.progress * 100);
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b));
@@ -224,12 +227,12 @@ export default class Animation extends Phaser.Scene {
                 {
                     alpha: 0.5, 
                     duration: 5000,
+                    onStart: () => { this.actualizarFantasmas(true); },
                     onUpdate: (tween) => {
                         let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorTarde, colorNoche, 100, tween.progress * 100);
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorInterpolado.r, colorInterpolado.g, colorInterpolado.b));
                     }
                 },
-                //Transición de colores
                 {
                     alpha: 0.8,
                     duration: 5000,
@@ -238,12 +241,25 @@ export default class Animation extends Phaser.Scene {
                     },
                     onComplete: () => {
                         this.dayCounter++;
-                        console.log(this.dayCounter);
                         if (this.dayCounter % 3 === 0) this.mercadona.refreshProducts();
                         this.cicloDia();
                     }
                 }
             ]
+        });
+    }
+
+    actualizarFantasmas(visibles) {
+    const fantasmas = this.enemiesGroup.getChildren().filter(enemy => enemy.key === "ghost");
+    fantasmas.forEach(fantasma => {
+        fantasma.setActive(visibles).setVisible(visibles);
+        
+        if (fantasma.body) {
+            fantasma.body.enable = visibles;
+        }
+        if(fantasma.lifeBar) {
+            fantasma.lifeBar.setVisible(visibles);
+        }
         });
     }
 }

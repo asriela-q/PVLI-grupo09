@@ -119,6 +119,7 @@ export default class Load extends Phaser.Scene {
 
         // personajes y enemigos
         this.load.image("enemy", "./assets/images/placeholders/enemigo.png");
+        this.load.image("ghost", "./assets/images/placeholders/ghost.png");
 
         this.load.spritesheet("dog","./assets/images/sprites/perro.png",{
             frameWidth:192,
