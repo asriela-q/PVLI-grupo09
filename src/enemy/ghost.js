@@ -34,6 +34,22 @@ export default class Ghost extends Enemy {
         const y = this.body.velocity.y;
         
         //TODO: animación del fantasma
+        
+        if(Math.abs(x) > Math.abs(y))
+        {
+            if(x>0)
+            this.play('ghostRight', true);
+            else 
+            this.play('ghostLeft', true);
+        }
+        else if(y > 0)
+        {
+            this.play('ghostDown', true);
+        }
+        else 
+        {
+            this.play('ghostUp', true);
+        }
 
         this.anims.timeScale = this.status.state === 'CHASE' ? 1.7 : 1;
         

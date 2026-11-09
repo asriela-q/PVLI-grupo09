@@ -7,7 +7,7 @@ import StatsBar from "./barUIHandler.js";
 import Camera from "./camera.js";
 
 // velocidad:
-const RUN_SPEED = 650; // velocidad al correr
+export const RUN_SPEED = 650; // velocidad al correr
 const WALK_SPEED = 270; // velocidad al caminar
 
 const INTERACT_RANGE = 160; // rango para interactuar con objetos
@@ -21,7 +21,7 @@ const EXHAUST_CD = 4; // segundos de espera si la estamina llegó a 0 (más larg
 const maxLife = 100; // vida máxima del jugador
 
 const baseAttack = 15; // ataque base
-const baseDefense = 15; // defensa base
+export const baseDefense = 15; // defensa base
 
 
 export default class Psy extends Phaser.GameObjects.Container {
@@ -71,6 +71,9 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.moveDir = new Phaser.Math.Vector2(0, 0); // dirección de movimiento del jugador
         this.speed = WALK_SPEED; // velocidad del player (la inicializamos a la de caminar)
         this.isRunning = false; // detecta si 
+
+        this.runSpeed=RUN_SPEED;
+        this.walkSpeed=WALK_SPEED;
 
         // estamina:
         this.currentStamina = STAMINA; // estamina actual del jugador
@@ -137,7 +140,7 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         const isMoving = this.moveDir.x !== 0 || this.moveDir.y !== 0; // true si se mueve en alguna de las dos direcciones (x o y), false si no se mueve para nada
         this.isRunning = isMoving && this.run.isDown && this.currentStamina > 0 && !this.isExhausted; // será true si se cumplen todas las condiciones para q pueda correr
-        this.speed = this.isRunning ? RUN_SPEED : WALK_SPEED; // si isRunning es true, speed será igual a la velocidad de correr
+        this.speed = this.isRunning ? this.runSpeed : this.walkSpeed; // si isRunning es true, speed será igual a la velocidad de correr
 
         // normalizamos el vector y aplicamos el .scale() (multiplica el vector por el valor de scale, asiq ya le aplicamos la velocidad directamente y la metemos en el setVelocity)
         this.moveDir.normalize().scale(this.speed);
@@ -219,7 +222,6 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.inventory.updatePosition(this.x + 20, this.y);
         if(Phaser.Input.Keyboard.JustDown(this.openInventory)) this.inventory.showInventory();
         
-        const cam=this.scene.cameras.main;
         this.lifeBar.updateBar(this.currentLife, maxLife);
         if(this.currentLife<=maxLife/3)
         {
@@ -261,6 +263,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         if(this.currentLife <= 0)
         {
             this.currentLife = 0; //Se evita que tomen valores negativos
+            this.inventory.unblockInventory();
+
             //Si hay que hacer alguna animación/comportamiento de muerte o algo se pone aquí
         }
         this.lifeBar.updateBar(this.currentLife, this.maxLife);

@@ -64,7 +64,7 @@ export default class Animation extends Phaser.Scene {
         });
 
         let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.9);
-        let enemy2 = new Ghost(this, this.sys.game.canvas.width, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.4);
+        let enemy2 = new Ghost(this, this.sys.game.canvas.width, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.6);
 
         // hay que definir primero el grupo de los items
         let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);

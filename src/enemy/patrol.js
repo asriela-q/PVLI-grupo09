@@ -23,7 +23,6 @@ export default class Patrol {
     //método que gestiona el movimiento de perseguir el jugador
     chasePlayer(player) {
         this.enemy.scene.physics.moveToObject(this.enemy, player, this.enemy.chaseVelocity);
-
     }
 
     //método que gestiona eñ movimiento de patrullar del enemigo
@@ -41,7 +40,7 @@ export default class Patrol {
    preUpdate(t, dt){
         const player = this.enemy.player;
         const distanceToPlayer = Phaser.Math.Distance.Between(this.enemy.x, this.enemy.y, player.x, player.y);
-        if(this.state === EnemyState.PATROL&&distanceToPlayer <= this.detectDistance)
+        if(this.state === EnemyState.PATROL && distanceToPlayer <= this.detectDistance)
         {
             console.log("persigue psy");
             this.state=EnemyState.CHASE;

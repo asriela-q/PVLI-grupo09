@@ -92,6 +92,9 @@ export default class Load extends Phaser.Scene {
         this.load.image("fabric", "./assets/images/placeholders/fabric.jpg");
         this.load.image("stoneBlock", "./assets/images/placeholders/stoneBlock.jpg");
 
+                this.load.image("tick", "./assets/images/placeholders/pulga.png");
+
+
         // herramientas
         this.load.image("stone_sword", "./assets/images/placeholders/stone_sword.png");
         this.load.image("metal_sword", "./assets/images/placeholders/metal_sword.png");
@@ -121,11 +124,15 @@ export default class Load extends Phaser.Scene {
 
         // personajes y enemigos
         this.load.image("enemy", "./assets/images/placeholders/enemigo.png");
-        this.load.image("ghost", "./assets/images/placeholders/ghost.png");
 
         this.load.spritesheet("dog","./assets/images/sprites/perro.png",{
             frameWidth:192,
             frameHeight:192
+        });
+
+        this.load.spritesheet("ghost","./assets/images/sprites/characters/fantasma.png",{
+            frameWidth:224,
+            frameHeight:224
         });
 
         this.load.spritesheet("psyS","./assets/images/sprites/catSprite.png",{ 
@@ -177,6 +184,34 @@ export default class Load extends Phaser.Scene {
             frameRate:6,
             repeat:-1
         })
+
+        this.anims.create({
+            key:'ghostDown',
+            frames:this.anims.generateFrameNumbers('ghost',{start:0,end:2}),
+            frameRate:6,
+            repeat:-1
+        })
+        this.anims.create({
+            key:'ghostUp',
+            frames:this.anims.generateFrameNumbers('ghost',{start:3,end:5}),
+            frameRate:6,
+            repeat:-1
+        })
+        this.anims.create({
+        key: 'ghostRight',
+        frames: this.anims.generateFrameNumbers('ghost', { start:6, end: 8 }),
+        frameRate: 7,
+        repeat: -1
+            });
+
+        this.anims.create({
+            key:'ghostLeft',
+            frames:this.anims.generateFrameNumbers('ghost',{start:9,end:11}),
+            frameRate:7,
+            repeat:-1
+            })
+
+
 
         //anim psy
         this.anims.create({

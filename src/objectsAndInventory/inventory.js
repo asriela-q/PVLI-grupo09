@@ -8,10 +8,11 @@ export default class Inventory {
         this.slots = Array(conterSlots).fill(null); //Cuando el slot de inventario está null es que no hay objetos almacenados en él
         this.ITEM_ENCYCLOPEDIA = ITEM_ENCYCLOPEDIA;
         this.player = null;
+        this.blockedSlots = Array(conterSlots).fill(false); //false bloqueado //true libre
     }
 
     findEmptySlot() { //Encuentra el primer slot vacío
-        return this.slots.findIndex(slot => slot === null); //findIndex: función de javascript que busca el índice del array, si no lo encuentra devuelve -1
+        return this.slots.findIndex((slot,i) => slot === null&&!this.blockedSlots[i]); //findIndex: función de javascript que busca el índice del array, si no lo encuentra devuelve -1
     }
 
     /*
@@ -41,6 +42,28 @@ export default class Inventory {
         return false; //No se pudo añadir el objeto de ninguna manera, el inventario está lleno
     }
 
+    blockInventory()
+    {
+        //recorre slots y mira si hay objeto o no, si no lo hay, se marca ese slot como libre,añadiendolo al array
+        const freeSlot =[];
+        for(let i = 0;i<this.slots.length;i++)
+        {
+             if(this.slots[i] === null&&!this.blockedSlots[i])freeSlot.push(i);
+        }
+        //coge una posicion random que este libre y lo bloquea
+        const rng = freeSlot[Math.floor(Math.random()*freeSlot.length)];
+        this.blockedSlots[rng] = true;
+        
+    }
+
+    unblockInventory()
+    {
+        for(let i = 0;i<this.blockedSlots.length;i++)
+        {
+            if(this.blockedSlots[i])this.blockedSlots[i] = false;
+        }
+    }
+
     // metodo para obtener todos los items del inventario
     getAllItems(items){
         let index = 0; // indice para el array items
@@ -53,16 +76,16 @@ export default class Inventory {
     }
 
     removeItem(itemId) {
-        let removed = true;
-        const index = this.slots.findIndex(slot => slot !== null && slot.id === itemId);
-        if (index !== -1) {
-            this.slots[index].quantity -= 1;
+        let removed= true;
+        const index= this.slots.findIndex(slot => slot!==null && slot.id===itemId);
+        if (index!==-1) {
+            this.slots[index].quantity-=1;
             if (this.slots[index].quantity <= 0) {
-                this.slots[index] = null;
+                this.slots[index]=null;
             }
         }
         else {
-            removed = false;
+            removed= false;
         }
         return removed;
     }
@@ -101,7 +124,9 @@ export default class Inventory {
         const slotSize = 100; //Tamaño en píxeles de cada cuadrícula del inventario     
         const separation = 5; //Separación entre cuadrados      
 
+        
         for (let i = 0; i < this.slots.length; i++) {
+            const bloqueado = this.blockedSlots[i];
             //Guardamos cada objeto
             let item = this.slots[i];
 
@@ -111,7 +136,8 @@ export default class Inventory {
             let posX = separation + col * (slotSize + separation);
             let posY = separation + row * (slotSize + separation);
 
-            const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize, 0xffffff, 1).setOrigin(0);
+            const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize,bloqueado? 0x555555:0xffffff, 1).setOrigin(0);
+            slotVisual.setInteractive();
             this.container.add(slotVisual); 
             //Si el item existe indicamos su imagen y cantidad
             if (item !== null) {
@@ -134,6 +160,12 @@ export default class Inventory {
                     ).setOrigin(1, 1);
                     this.container.add(textoCantidad);
                 }
+            }
+            if(bloqueado)
+            {
+                const pulga = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, 'tick');
+                pulga.setDisplaySize(slotSize * 0.8, slotSize * 0.8); 
+                this.container.add(pulga);
             }
         }
     }
