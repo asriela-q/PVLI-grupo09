@@ -10,6 +10,7 @@ import DeathStone from "../player/deathStone.js";
 import buildSpace from "../building/buildSpace.js";
 import Mercadona from "../mapObjects/mercadona.js";
 import statHandler from "../player/statHandler.js";
+import stoneBlock from "../mapObjects/rockBlock.js";
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
 
@@ -81,6 +82,12 @@ export default class Animation extends Phaser.Scene {
         });
         this.interactGroup.add(testChest);
 
+        let rocks = new stoneBlock(this, 600, 600, "stoneBlock", this.itemsGroup);
+        this.stoneGroup = this.physics.add.group({
+            allowGravity: false,
+        });
+        this.stoneGroup.add(rocks);
+
         let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
         this.interactGroup.add(craftingTable);
@@ -127,7 +134,8 @@ export default class Animation extends Phaser.Scene {
         for (let i = 0; i < 5; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1150, "fabric", "fabric", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
-        
+        this.itemsGroup.add(new Item(this, 100, 1150, "pick", "pick", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        this.itemsGroup.add(new Item(this, 130, 1150, "stone_sword", "stone_sword", ITEM_ENCYCLOPEDIA).setScale(0.15));
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto

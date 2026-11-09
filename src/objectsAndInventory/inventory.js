@@ -7,6 +7,7 @@ export default class Inventory {
     constructor(conterSlots = 16, ITEM_ENCYCLOPEDIA) {
         this.slots = Array(conterSlots).fill(null); //Cuando el slot de inventario está null es que no hay objetos almacenados en él
         this.ITEM_ENCYCLOPEDIA = ITEM_ENCYCLOPEDIA;
+        this.player = null;
     }
 
     findEmptySlot() { //Encuentra el primer slot vacío
@@ -77,11 +78,12 @@ export default class Inventory {
         return cont;
     }
 
-    render(scene, x, y) {
+    render(scene, x, y, player) {
         //Guardar datos iniciales
         this.currentScene = scene;
         this.currentX = x;
         this.currentY = y;
+        this.player = player;
 
         if (!this.container) {
             this.container = scene.add.container(x, y);
@@ -114,8 +116,14 @@ export default class Inventory {
             //Si el item existe indicamos su imagen y cantidad
             if (item !== null) {
                 const itemIcono = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, item.id);
-                itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8);
+                itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8).setInteractive();
                 this.container.add(itemIcono);
+
+                itemIcono.on("pointerdown", () => {
+                    if (this.player) {
+                        this.player.equipItemFromInventory(item.id)
+                    }
+                });
 
                 if (item.quantity >= 1) {
                     const textoCantidad = scene.add.text(
@@ -137,7 +145,7 @@ export default class Inventory {
             
             // Si el jugador lo abre, volvemos a generar el render con los items actuales (actualizar básicamente)
             if (this.isVisible && this.currentScene) {
-                this.render(this.currentScene, this.currentX, this.currentY);
+                this.render(this.currentScene, this.currentX, this.currentY, this.player);
             }
         }
     }

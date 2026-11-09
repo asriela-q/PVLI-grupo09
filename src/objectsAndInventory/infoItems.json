@@ -24,9 +24,22 @@
         "stackable": false,
         "type": "weapon"
     },
+    "pick" : {
+        "name": "Pick",
+        "texture": "pick",
+        "stackable": false,
+        "type": "pick"
+    },
     "stone" : {
         "name": "Stone", 
         "texture": "stone", 
+        "stackable": true, 
+        "maxStack": 30, 
+        "type": "resource" 
+    },
+    "stoneBlock" : {
+        "name": "Stone block", 
+        "texture": "stoneBlock", 
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 

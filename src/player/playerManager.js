@@ -34,13 +34,18 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.add(this.sprite);
         this.inventory = inventory;
 
-        this.weapon = this.scene.add.sprite(20, 0, "stone_sword"); 
-        this.weapon.setOrigin(0.5, 0.5).setScale(0.5, 0.5); //Pivote del arma con respecto al jugador
-        this.add(this.weapon);
+        this.equipedItem = this.scene.add.sprite(20, 0, undefined); 
+        this.equipedItem.setOrigin(0.5, 0.5).setScale(0.5, 0.5); //Pivote del arma con respecto al jugador
+        this.add(this.equipedItem);
+        
 
         this.scene.add.existing(this); // Nos añadimos a la escena para ser mostrados
         this.scene.physics.add.existing(this); // Le añadimos físicas al jugador
         this.body.setAllowGravity(false); // Así el jugador no cae por la gravidad de la física
+
+        //Qué lleva el jugador en la mano
+        this.equippedItem = null;
+        this.updateEquipedItem(); //Al principio no llevará nada
 
         this.cursors = this.scene.input.keyboard.createCursorKeys(); // Añadimos las flechas al input
 
@@ -57,7 +62,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.interactKey = this.scene.input.keyboard.addKey('F');
         this.scene.input.on("pointerdown", (pointer)=>{
             if(pointer.leftButtonDown() && !inventory.isVisible) {
-                this.attack();
+                if (this.equippedItem && this.equippedItem.type === "pick") this.picar();
+                else if(this.equippedItem === null || this.equippedItem.type === "weapon") this.attack();
             }
         })
 
@@ -76,7 +82,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.currentLife = maxLife; //Cuando creamos al jugador su vida es la máxima
 
         // inventario y UI
-        this.inventory.render(this.scene, x + 20, y);
+        this.inventory.render(this.scene, x + 20, y, this);
         this.lifeBar = new StatsBar(this.scene, -170, -250, 310, 50, 0xc14f4f).setScrollFactor(0).setDepth(200); //barra de vida
         scene.add.image(-230, -260, "vida").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(0.5);
         this.staminaBar = new StatsBar(this.scene, -170, -180, 310, 50, 0xe5c57e).setScrollFactor(0).setDepth(200); // barra de estamina
@@ -87,9 +93,9 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.bonusAttack = 0;
         this.playerDefense = baseDefense;
 
-        // variables de ataque
+        // variables de acción
         this.facingDirection = "right"; //Dirección del último movimiento;
-        this.isAttacking = false;
+        this.isPerformingAction = false;
 
         // DEBUG BORRAR LUEGO
         this.rangeCircle = this.scene.add.circle(0, 0, INTERACT_RANGE); // x, y, radio
@@ -100,7 +106,6 @@ export default class Psy extends Phaser.GameObjects.Container {
         
         this.body.setImmovable(true);//para que no pueda ser empujado 
         this.cam=Camera;
-        
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
@@ -267,7 +272,7 @@ export default class Psy extends Phaser.GameObjects.Container {
     Este método también manejará la animación de ataque cuando exista
     */
     attack(){
-        if(this.isAttacking) return;
+        if (this.isPerformingAction) return;
 
         let posAttackX = this.x, posAttackY = this.y, colliderHeight = 50, colliderWidth = 70; 
 
@@ -282,24 +287,87 @@ export default class Psy extends Phaser.GameObjects.Container {
             posAttackY = this.y + 50;
         }
 
-        //Creamos el collider del arma
-        let attackCollider = this.scene.add.zone(posAttackX, posAttackY, colliderWidth, colliderHeight);
-        this.scene.physics.add.existing(attackCollider);
-        attackCollider.body.setAllowGravity(false);
+        if (!this.equippedItem || this.equippedItem.type === "weapon") {
+            this.isPerformingAction = true;
+            //Creamos el collider del arma
+            let attackCollider = this.scene.add.zone(posAttackX, posAttackY, colliderWidth, colliderHeight);
+            this.scene.physics.add.existing(attackCollider);
+            attackCollider.body.setAllowGravity(false);
 
-        //Si hay un enemigo con la capacidad de ser atacado le resta vida
-        if(this.scene.enemiesGroup) {
-            this.scene.physics.add.overlap(attackCollider, this.scene.enemiesGroup, (hitbox, enemy)=>{
-                if(enemy.takeDamage) {
-                    let totalAttack = this.playerAttack + this.bonusAttack;
-                    enemy.takeDamage(totalAttack);
-                }
-            }, null, this);
+            //Si hay un enemigo con la capacidad de ser atacado le resta vida
+            if(this.scene.enemiesGroup) {
+                this.scene.physics.add.overlap(attackCollider, this.scene.enemiesGroup, (hitbox, enemy)=>{
+                    if(enemy.takeDamage) {
+                        let totalAttack = this.playerAttack + this.bonusAttack; //TODO: variar el bonus attack en función de qué arma esté equipada
+                        enemy.takeDamage(totalAttack);
+                    }
+                }, null, this);
+            }
+
+            //El collider desaparece después de un cooldown
+            this.scene.time.delayedCall(150, () => {
+                attackCollider.destroy();
+                this.isPerformingAction = false;
+            });
+        }
+    }
+
+    picar(){
+        if (this.isPerformingAction) return;
+
+        let posColliderX = this.x, posColliderY = this.y, colliderHeight = 50, colliderWidth = 70; 
+
+        //Miramos la última dirección del jugador y colocamos el collider en función de ello
+        if (this.facingDirection === 'right') {
+            posColliderX = this.x + 50;
+        } else if (this.facingDirection === 'left') {
+            posColliderX = this.x - 50;
+        } else if (this.facingDirection === 'up') {
+            posColliderY = this.y - 50;
+        } else if (this.facingDirection === 'down') {
+            posColliderY = this.y + 50;
         }
 
-        //El collider desaparece después de un cooldown
-        this.scene.time.delayedCall(150, () => {
-            attackCollider.destroy();
-        });
+        if(this.equippedItem.type === "pick") {
+            this.isPerformingAction = true;
+            let pickZone = this.scene.add.zone(posColliderX, posColliderY, colliderWidth, colliderHeight);
+            this.scene.physics.add.existing(pickZone);
+            pickZone.body.setAllowGravity(false);
+            if (this.scene.stoneGroup) {
+                this.scene.physics.add.overlap(pickZone, this.scene.stoneGroup, (hitbox, rockBlock) => { rockBlock.mine();}, null, this);
+            }
+        
+            this.scene.time.delayedCall(150, () => {
+                pickZone.destroy();
+                this.isPerformingAction = false;
+            });
+        }
+        
+    }
+
+    updateEquipedItem() {
+        if (this.equippedItem && this.scene.textures.exists(this.equippedItem.id)) {
+            this.equipedItem.setTexture(this.equippedItem.id);
+            this.equipedItem.setVisible(true);
+        } 
+        else {
+            this.equipedItem.setVisible(false);
+        }
+    }
+
+    equipItemFromInventory(itemId) {
+        const itemInfo = this.inventory.ITEM_ENCYCLOPEDIA[itemId];
+        if (itemInfo && (itemInfo.type === "weapon" || itemInfo.type === "pick")) {
+        //Guardamos el id y su tipo para saber qué puede hacer después
+        this.equippedItem = {
+            id: itemId,
+            type: itemInfo.type
+        };} 
+        else {
+            this.equippedItem = null; //Desequipa si seleccionas algo que no es una herramienta
+        }
+    
+        console.log(itemInfo);
+        this.updateEquipedItem();
     }
 }

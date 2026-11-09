@@ -40,7 +40,7 @@ export default class statHandler
         }
         
         preUpdate(t, dt){
-            console.log(this.hunger);
+            //console.log(this.hunger);
 
             const s = dt / 1000; // pasamos dt a segundos
             if(this.hunger>0)
