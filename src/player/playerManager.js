@@ -201,6 +201,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.currentLife = maxLife; // lo curamos por completo
         this.currentStamina = STAMINA; // recuperamos toda la stamina
 
+        this.equippedItem = null;
+        this.updateEquipedItem();
         // ponemos al jugador de nuevo en la base
         this.x = xBase;
         this.y = yBase;
