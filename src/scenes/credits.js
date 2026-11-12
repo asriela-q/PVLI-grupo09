@@ -50,9 +50,11 @@ export default class credits extends Phaser.Scene {
         this.input.keyboard.once('keydown-Q', () => this.volver());
         this.input.once('pointerdown', () => this.volver());
 
+        // esto es el texto de "Q to leave" (cuando pongamos un fondo serio hay que ver que se vea pq con la mierda que he puesto yo no se ve yo memeo)
         this.add.text(width - 10, height - 10, 'Q to leave', {
+            fontFamily: 'Arial',
             fontSize: '14px',
-            color: '#888888'
+            color: '#000000'
         }).setOrigin(1, 1);
     }
 
