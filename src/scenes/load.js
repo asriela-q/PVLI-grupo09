@@ -56,9 +56,12 @@ export default class Load extends Phaser.Scene {
         });
         
         // TODAS LAS IMAGENES A CARGAR
-        // backgrounds / interfaz
+        // backgrounds
         this.load.image("bg", "./assets/images/placeholders/bg.jpg");
         this.load.image("bggame", "./assets/images/placeholders/bggame.jpg");
+        this.load.image("creditsbg", "./assets/images/placeholders/creditsbg.jpg");
+
+        // interfaz
         this.load.image("button", "./assets/images/placeholders/button.png");
         this.load.image("dayWheel", "./assets/images/placeholders/dayTimesWheel.jpg");
         this.load.image("arrow", "./assets/images/placeholders/Arrow.png");

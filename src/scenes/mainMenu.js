@@ -21,6 +21,10 @@ export default class Animation extends Phaser.Scene {
         let loadButton = this.add.image(200, 300, "button").setOrigin(0 ,0).setInteractive();
         loadButton.setScale(0.5);
         loadButton.on("pointerdown", () => this.scene.start("main", { saved: true }));
+
+        let creditsButton = this.add.image(200, 500, "button").setOrigin(0 ,0).setInteractive();
+        creditsButton.setScale(0.5);
+        creditsButton.on("pointerdown", () => this.scene.start("credits"));
     }
 
 }
