@@ -164,7 +164,8 @@ export default class Animation extends Phaser.Scene {
                 this.player.y = save.player.y;
                 this.player.currentLife = save.player.life;
                 this.player.currentStamina = save.player.stamina;
-                this.psyInventory = save.inventory;
+                this.psyInventory.slots = save.inventory.slots;
+                this.psyInventory.blockedSlots = save.inventory.blockedSlots;
             }
         }
 
@@ -302,7 +303,10 @@ export default class Animation extends Phaser.Scene {
                 stamina: this.player.currentStamina,
                 life: this.player.currentLife
             },
-            inventory: this.psyInventory,
+            inventory: {
+                slots: this.psyInventory.slots,
+                blockedSlots: this.psyInventory.blockedSlots
+            }
         };
         saveProgress(estado);
     }
