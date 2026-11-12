@@ -156,6 +156,7 @@ export default class Animation extends Phaser.Scene {
         }
         if (isRoom) {
             buildSpace.changeTexture(recipe.room);
+            buildSpace.setInteractive(false);
             this.closeUI();
         }
         else {

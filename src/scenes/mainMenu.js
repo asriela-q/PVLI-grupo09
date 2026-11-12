@@ -14,9 +14,13 @@ export default class Animation extends Phaser.Scene {
         let bg = this.add.image(300, 300, "bg"); // cargamos la imagen en el juego
         bg.setScale(0.38);
 
-        let startButton = this.add.image(200, 200, "button").setOrigin(0 ,0).setInteractive();
+        let startButton = this.add.image(200, 100, "button").setOrigin(0 ,0).setInteractive();
         startButton.setScale(0.5);
-        startButton.on("pointerdown", ()=>this.scene.start("main"));
+        startButton.on("pointerdown", ()=>this.scene.start("main"), { saved: false });
+
+        let loadButton = this.add.image(200, 300, "button").setOrigin(0 ,0).setInteractive();
+        loadButton.setScale(0.5);
+        loadButton.on("pointerdown", ()=>this.scene.start("main"), { saved: true });
     }
 
 }

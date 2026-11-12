@@ -60,6 +60,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.run = this.scene.input.keyboard.addKey('SHIFT');
         this.openInventory = this.scene.input.keyboard.addKey('E');
         this.interactKey = this.scene.input.keyboard.addKey('F');
+        this.saveKey = this.scene.input.keyboard.addKey('G');
         this.scene.input.on("pointerdown", (pointer)=>{
             if(pointer.leftButtonDown() && !inventory.isVisible) {
                 if (this.equippedItem && this.equippedItem.type === "pick") this.picar();
@@ -223,6 +224,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.animationManager();
         this.inventory.updatePosition(this.x + 20, this.y);
         if(Phaser.Input.Keyboard.JustDown(this.openInventory)) this.inventory.showInventory();
+        if(Phaser.Input.Keyboard.JustDown(this.saveKey)) this.scene.saveGame();
         
         this.lifeBar.updateBar(this.currentLife, maxLife);
         if(this.currentLife<=maxLife/3)

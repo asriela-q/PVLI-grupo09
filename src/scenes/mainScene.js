@@ -11,6 +11,7 @@ import buildSpace from "../building/buildSpace.js";
 import Mercadona from "../mapObjects/mercadona.js";
 import statHandler from "../player/statHandler.js";
 import stoneBlock from "../mapObjects/rockBlock.js";
+import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
 
@@ -27,6 +28,11 @@ export default class Animation extends Phaser.Scene {
 
     // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
     preload() {
+    }
+
+    init(data) {
+        if (data.saved) this.savedGame = true;
+        else this.savedGame = false;
     }
 
     // create - método de las escenas que se llama una vez la escena está instanciada
@@ -149,6 +155,18 @@ export default class Animation extends Phaser.Scene {
         //     }
         // });
         // this.physics.add.overlap(player, craftingTable, craftingTable.activateCrafting, null, player);  // esto no va uwu
+
+        // aqui se ve si hay partida guardada o no
+        if (this.savedGame) {
+            const save = loadProgress();
+            if (save) {
+                this.player.x = save.player.x;
+                this.player.y = save.player.y;
+                this.player.currentLife = save.player.life;
+                this.player.currentStamina = save.player.stamina;
+                this.psyInventory = save.inventory;
+            }
+        }
 
         this.capaLuz = this.add.rectangle(0, 0, w / 0.25, h / 0.25, 0xffffff).setAlpha(0);
         this.capaLuz.setScrollFactor(0);
@@ -274,5 +292,18 @@ export default class Animation extends Phaser.Scene {
             fantasma.lifeBar.setVisible(visibles);
         }
         });
+    }
+
+    saveGame() {
+        const estado = {
+            player: {
+                x: this.player.x,
+                y: this.player.y,
+                stamina: this.player.currentStamina,
+                life: this.player.currentLife
+            },
+            inventory: this.psyInventory,
+        };
+        saveProgress(estado);
     }
 }
