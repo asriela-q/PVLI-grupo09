@@ -10,25 +10,64 @@
         "name": "Stone sword",
         "texture": "stone_sword",
         "stackable": false,
-        "type": "weapon"
+        "type": "weapon",
+        "maxDurability": 30
     },
     "metal_sword" : {
         "name": "Metal sword",
         "texture": "metal_sword", 
         "stackable": false,
-        "type": "weapon"
+        "type": "weapon",
+        "maxDurability": 60
     },
     "ghost_sword" : {
         "name": "Ghost sword",
         "texture": "",
         "stackable": false,
-        "type": "weapon"
+        "type": "weapon",
+        "maxDurability": 200
     },
-    "pick" : {
-        "name": "Pick",
-        "texture": "pick",
+    "stone_pick" : {
+        "name": "Stone pick",
+        "texture": "stone_pick",
         "stackable": false,
-        "type": "pick"
+        "type": "pick",
+        "maxDurability": 30
+    },
+    "iron_pick" : {
+        "name": "Iron pick",
+        "texture": "iron_pick",
+        "stackable": false,
+        "type": "pick",
+        "maxDurability": 60
+    },
+    "stone_axe" : {
+        "name": "Stone axe",
+        "texture": "stone_axe",
+        "stackable": false,
+        "type": "axe",
+        "maxDurability": 30
+    },
+    "iron_axe" : {
+        "name": "Iron axe",
+        "texture": "iron_axe",
+        "stackable": false,
+        "type": "axe",
+        "maxDurability": 60
+    },
+    "stone_shovel" : {
+        "name": "Stone shovel",
+        "texture": "stone_shovel",
+        "stackable": false,
+        "type": "shovel",
+        "maxDurability": 30
+    },
+    "iron_shovel" : {
+        "name": "Iron shovel",
+        "texture": "iron_shovel",
+        "stackable": false,
+        "type": "shovel",
+        "maxDurability": 60
     },
     "stone" : {
         "name": "Stone", 
@@ -40,6 +79,48 @@
     "stoneBlock" : {
         "name": "Stone block", 
         "texture": "stoneBlock", 
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "ironBlock" : {
+        "name": "Iron block", 
+        "texture": "ironBlock", 
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "iceBlock" : {
+        "name": "Ice block", 
+        "texture": "iceBlock", 
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "tree" : {
+        "name": "Tree", 
+        "texture": "tree", 
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "rubble" : {
+        "name": "Rubble", 
+        "texture": "tree", 
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "cottonPlant" : {
+        "name": "Cotton plant", 
+        "texture": "cottonPlant", 
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "plant" : {
+        "name": "Plant", 
+        "texture": "plant", 
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "cotton" : {
+        "name": "Cotton", 
+        "texture": "cotton",
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
@@ -47,6 +128,13 @@
     "brick" : {
         "name": "Brick", 
         "texture": "brick",
+        "stackable": true, 
+        "maxStack": 30, 
+        "type": "resource" 
+    },
+    "ice" : {
+        "name": "Ice", 
+        "texture": "ice",
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
@@ -74,7 +162,7 @@
     },
     "animal_skin" : {
         "name": "Animal skin", 
-        "texture": "an_skin", 
+        "texture": "animal_skin", 
         "stackable": true, 
         "maxStack": 30, 
         "type": "resource" 
@@ -147,6 +235,42 @@
         "texture": "clay",
         "stackable": true, 
         "maxStack": 30, 
+        "type": "resource" 
+    },
+    "pillow" : {
+        "name": "Pillow", 
+        "texture": "pillow",
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "pan" : {
+        "name": "Pan", 
+        "texture": "pan",
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "bathtub" : {
+        "name": "Bathtub", 
+        "texture": "bathtub",
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "ceramic" : {
+        "name": "Ceramic", 
+        "texture": "ceramic",
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "storageChest" : {
+        "name": "Storage chest", 
+        "texture": "storageChest",
+        "stackable": false, 
+        "type": "resource" 
+    },
+    "bucket" : {
+        "name": "Bucket", 
+        "texture": "bucket",
+        "stackable": false, 
         "type": "resource" 
     }
 }

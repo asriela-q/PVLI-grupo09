@@ -63,8 +63,12 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.saveKey = this.scene.input.keyboard.addKey('G');
         this.scene.input.on("pointerdown", (pointer)=>{
             if(pointer.leftButtonDown() && !inventory.isVisible) {
-                if (this.equippedItem && this.equippedItem.type === "pick") this.picar();
-                else if(this.equippedItem === null || this.equippedItem.type === "weapon") this.attack();
+                if (this.equippedItem && (this.equippedItem.type === "pick" || this.equippedItem.type === "axe" || this.equippedItem.type === "shovel")) {
+                    this.performAction(); 
+                } 
+                else if(this.equippedItem === null || this.equippedItem.type === "weapon") {
+                    this.attack();
+                }
             }
         })
 
@@ -297,6 +301,7 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         if (!this.equippedItem || this.equippedItem.type === "weapon") {
             this.isPerformingAction = true;
+            let haGolpeado = false;
             //Creamos el collider del arma
             let attackCollider = this.scene.add.zone(posAttackX, posAttackY, colliderWidth, colliderHeight);
             this.scene.physics.add.existing(attackCollider);
@@ -308,6 +313,10 @@ export default class Psy extends Phaser.GameObjects.Container {
                     if(enemy.takeDamage) {
                         let totalAttack = this.playerAttack + this.bonusAttack; //TODO: variar el bonus attack en función de qué arma esté equipada
                         enemy.takeDamage(totalAttack);
+                        if (!haGolpeado && this.equippedItem) {
+                            haGolpeado = true; 
+                            this.useTool();
+                        }
                     }
                 }, null, this);
             }
@@ -320,7 +329,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         }
     }
 
-    picar(){
+    performAction(){
         if (this.isPerformingAction) return;
 
         let posColliderX = this.x, posColliderY = this.y, colliderHeight = 50, colliderWidth = 70; 
@@ -336,21 +345,29 @@ export default class Psy extends Phaser.GameObjects.Container {
             posColliderY = this.y + 50;
         }
 
-        if(this.equippedItem.type === "pick") {
-            this.isPerformingAction = true;
-            let pickZone = this.scene.add.zone(posColliderX, posColliderY, colliderWidth, colliderHeight);
-            this.scene.physics.add.existing(pickZone);
-            pickZone.body.setAllowGravity(false);
-            if (this.scene.stoneGroup) {
-                this.scene.physics.add.overlap(pickZone, this.scene.stoneGroup, (hitbox, rockBlock) => { rockBlock.mine();}, null, this);
-            }
-        
-            this.scene.time.delayedCall(150, () => {
-                pickZone.destroy();
-                this.isPerformingAction = false;
-            });
+        this.isPerformingAction = true;
+        let haGolpeado = false; //Bandera para gastar solo 1 punto de durabilidad por golpe
+
+        let toolZone = this.scene.add.zone(posColliderX, posColliderY, colliderWidth, colliderHeight);
+        this.scene.physics.add.existing(toolZone);
+        toolZone.body.setAllowGravity(false);
+
+        if (this.scene.resourcesGroup) {
+            this.scene.physics.add.overlap(toolZone, this.scene.resourcesGroup, (hitbox, resource) => { 
+                // Comprueba si el recurso acepta esa herramienta y le resta vida
+                if (resource.hit && resource.hit(this.equippedItem.type)) {
+                    if (!haGolpeado) {
+                        haGolpeado = true;
+                        this.useTool();
+                    }
+                }
+            }, null, this);
         }
-        
+
+        this.scene.time.delayedCall(150, () => {
+            toolZone.destroy();
+            this.isPerformingAction = false;
+        });
     }
 
     updateEquipedItem() {
@@ -363,13 +380,14 @@ export default class Psy extends Phaser.GameObjects.Container {
         }
     }
 
-    equipItemFromInventory(itemId) {
+    equipItemFromInventory(itemId, slotIndex) {
         const itemInfo = this.inventory.ITEM_ENCYCLOPEDIA[itemId];
-        if (itemInfo && (itemInfo.type === "weapon" || itemInfo.type === "pick")) {
+        if (itemInfo && (itemInfo.type === "weapon" || itemInfo.type === "pick" || itemInfo.type === "shovel" || itemInfo.type === "axe")) {
         //Guardamos el id y su tipo para saber qué puede hacer después
         this.equippedItem = {
             id: itemId,
-            type: itemInfo.type
+            type: itemInfo.type,
+            slotIndex : slotIndex
         };} 
         else {
             this.equippedItem = null; //Desequipa si seleccionas algo que no es una herramienta
@@ -377,5 +395,18 @@ export default class Psy extends Phaser.GameObjects.Container {
     
         console.log(itemInfo);
         this.updateEquipedItem();
+    }
+
+    /*
+    Método que comprueba si la herramienta se rompe o no
+    */
+    useTool(){
+        console.log("Datos de la herramienta equipada:", this.equippedItem, this.inventory.slots[this.equippedItem?.slotIndex]);
+        if (!this.equippedItem || this.equippedItem.slotIndex === undefined) return;
+        let isBroken = this.inventory.decreaseDurability(this.equippedItem.slotIndex);
+        if (isBroken) {
+            this.equippedItem = null; 
+            this.updateEquipedItem();
+        }
     }
 }

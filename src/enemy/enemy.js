@@ -74,6 +74,7 @@ constructor(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown
     {
         //this.currentLife-=recDamage*(100/(100+this.defense));
         let totalDamage = recDamage - this.defense;
+        totalDamage = Math.max(1, totalDamage);
         this.currentLife -= totalDamage;
         if(this.currentLife<=0)
         {

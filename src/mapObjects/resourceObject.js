@@ -1,18 +1,19 @@
 import Item from "../objectsAndInventory/items.js"
 
-export default class rockBlock extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, itemGroup){
+export default class resourceObject extends Phaser.GameObjects.Sprite {
+    constructor(scene, x, y, texture, itemGroup, requiredTool, itemDropId, hits = 3){
         super(scene, x, y, texture);
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
 
         this.group = itemGroup;
-        this.itemDropId = "stone";
-        this.hits = 3;
+        this.itemDropId = itemDropId;
+        this.requiredTool = requiredTool;
+        this.hits = hits;
     }
 
-    mine() {
-        if (this.hits <= 0 || !this.active) return;
+    hit(toolType) {
+        if (toolType !== this.requiredTool || this.hits <= 0 || !this.active) return;
         this.hits--;
         if (this.body) {
             this.body.enable = false;
@@ -24,11 +25,13 @@ export default class rockBlock extends Phaser.GameObjects.Sprite {
             });
         }
         else {
-            this.dropStone();
+            this.dropItem();
         }
+
+        return true;
     }
 
-    dropStone() {
+    dropItem() {
         let ITEM_ENCYCLOPEDIA = this.scene.cache.json.get("infoItems");
 
         let cantidadDrops = Phaser.Math.Between(1, 3);
@@ -38,12 +41,12 @@ export default class rockBlock extends Phaser.GameObjects.Sprite {
 
         for (let i = 0; i < cantidadDrops; i++) {
             //Esto es para que las piedras no aparezcan todas juntas cuando se dropean
-            let offsetX = Phaser.Math.Between(-50, 50);
-            let offsetY = Phaser.Math.Between(-50, 50);
+            let offsetX = Phaser.Math.Between(-100, 100);
+            let offsetY = Phaser.Math.Between(-100, 100);
 
-            let droppedStone = new Item(this.scene, this.x + offsetX, this.y + offsetY, this.itemDropId, this.itemDropId, ITEM_ENCYCLOPEDIA).setScale(0.15);
+            let droppedItem = new Item(this.scene, this.x + offsetX, this.y + offsetY, this.itemDropId, this.itemDropId, ITEM_ENCYCLOPEDIA).setScale(0.15);
 
-            this.group.add(droppedStone);
+            this.group.add(droppedItem);
         }
 
         this.destroy();

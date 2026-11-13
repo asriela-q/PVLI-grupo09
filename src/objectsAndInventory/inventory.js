@@ -35,11 +35,27 @@ export default class Inventory {
 
         const emptySlot = this.findEmptySlot();
         if(emptySlot !== -1) { //Se ha encontrado un slot vacío
-            this.slots[emptySlot] = {id: itemId, quantity: 1};
+            let newItem = {id: itemId, quantity: 1};
+            if(iteminfo.maxDurability) {
+                newItem.durability = iteminfo.maxDurability;
+            }
+            this.slots[emptySlot] = newItem;
             return true;
         }
 
         return false; //No se pudo añadir el objeto de ninguna manera, el inventario está lleno
+    }
+
+    decreaseDurability(slotIndex){
+        const slot = this.slots[slotIndex];
+        if (!slot || slot.durability === undefined) return false; //Si devuelve false es que la herramienta no debe destruirse
+        slot.durability -= 1;
+        console.log(slot.durability);
+        if (slot.durability <= 0) {
+            this.slots[slotIndex] = null; //La herramienta se ha destruido    
+            return true;
+        }
+        return false;
     }
 
     blockInventory()
@@ -136,7 +152,7 @@ export default class Inventory {
             let posX = separation + col * (slotSize + separation);
             let posY = separation + row * (slotSize + separation);
 
-            const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize,bloqueado? 0x555555:0xffffff, 1).setOrigin(0);
+            const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize, bloqueado? 0x555555:0xffffff, 1).setOrigin(0);
             slotVisual.setInteractive();
             this.container.add(slotVisual); 
             //Si el item existe indicamos su imagen y cantidad
@@ -147,7 +163,7 @@ export default class Inventory {
 
                 itemIcono.on("pointerdown", () => {
                     if (this.player) {
-                        this.player.equipItemFromInventory(item.id)
+                        this.player.equipItemFromInventory(item.id, i)
                     }
                 });
 
@@ -161,7 +177,8 @@ export default class Inventory {
                     this.container.add(textoCantidad);
                 }
             }
-            if(bloqueado)
+
+            if (bloqueado)
             {
                 const pulga = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, 'tick');
                 pulga.setDisplaySize(slotSize * 0.8, slotSize * 0.8); 

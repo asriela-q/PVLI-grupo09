@@ -80,29 +80,29 @@ export default class Load extends Phaser.Scene {
         this.load.image("green", "./assets/images/placeholders/verde.jpg");
 
         // objetos
-        this.load.image("coal", "./assets/images/placeholders/coal.png");
+        this.load.image("coal", "./assets/images/sprites/Materials/coal.png");
         this.load.image("wood", "./assets/images/placeholders/Wood.jpg");
-        this.load.image("metal", "./assets/images/placeholders/metal.png");
-        this.load.image("iron", "./assets/images/placeholders/iron.png");
-        this.load.image("stone", "./assets/images/placeholders/stone.png");
-        this.load.image("seeds", "./assets/images/placeholders/seeds.png");
-        this.load.image("straw", "./assets/images/placeholders/straw.png");
-        this.load.image("an_skin", "./assets/images/placeholders/a_skin.png");
-        this.load.image("fang", "./assets/images/placeholders/fang.jpg");
+        this.load.image("metal", "./assets/images/sprites/Materials/metal.png");
+        this.load.image("iron", "./assets/images/sprites/Materials/iron.png");
+        this.load.image("stone", "./assets/images/sprites/Materials/stone.png");
+        this.load.image("seeds", "./assets/images/sprites/Materials/seeds.png");
+        this.load.image("straw", "./assets/images/sprites/Materials/straw.png");
+        this.load.image("an_skin", "./assets/images/placeholders/an_skin.png");
+        this.load.image("fang", "./assets/images/sprites/Materials/fang.png");
         this.load.image("meat", "./assets/images/placeholders/meat.jpg");
-        this.load.image("brick", "./assets/images/placeholders/brick.jpg");
+        this.load.image("brick", "./assets/images/sprites/Materials/brick.png");
         this.load.image("clay", "./assets/images/placeholders/clay.jpg");
         this.load.image("fabric", "./assets/images/placeholders/fabric.jpg");
         this.load.image("stoneBlock", "./assets/images/placeholders/stoneBlock.jpg");
 
-                this.load.image("tick", "./assets/images/placeholders/pulga.png");
+        this.load.image("tick", "./assets/images/placeholders/pulga.png");
 
 
         // herramientas
         this.load.image("stone_sword", "./assets/images/placeholders/stone_sword.png");
         this.load.image("metal_sword", "./assets/images/placeholders/metal_sword.png");
         this.load.image("torch", "./assets/images/sprites/torch.png");
-        this.load.image("pick", "./assets/images/placeholders/pick.jpg");
+        this.load.image("stone_pick", "./assets/images/placeholders/pick.jpg");
 
         //Objetos consumibles (comida)
         this.load.image("apple", "./assets/images/placeholders/apple.jpg");
@@ -118,11 +118,11 @@ export default class Load extends Phaser.Scene {
         this.load.image("armory", "./assets/images/placeholders/armory.jpg");
 
         //UI
-        this.load.image("vida", "./assets/images/placeholders/vida.png");
-        this.load.image("stamina", "./assets/images/placeholders/staminabarra.png");
-        this.load.image("hunger", "./assets/images/placeholders/hunger.png");
-        this.load.image("higiene", "./assets/images/placeholders/higiene.png");
-        this.load.image("sueño", "./assets/images/placeholders/sueño.png");
+        this.load.image("vida", "./assets/images/sprites/Materials/vida.png");
+        this.load.image("stamina", "./assets/images/sprites/Materials/staminabarra.png");
+        this.load.image("hunger", "./assets/images/sprites/Materials/hunger.png");
+        this.load.image("higiene", "./assets/images/sprites/Materials/higiene.png");
+        this.load.image("sueño", "./assets/images/sprites/Materials/sueño.png");
 
 
         // personajes y enemigos
