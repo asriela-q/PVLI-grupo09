@@ -37,6 +37,16 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
+        const fullscreenButton = this.add.image(1500, 1000, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.15).setDepth(9999);
+
+        fullscreenButton.on('pointerdown', () => {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            } else {
+                this.scale.startFullscreen();
+            }
+        });
+
         let ITEM_ENCYCLOPEDIA = this.cache.json.get("infoItems");
         this.psyInventory.ITEM_ENCYCLOPEDIA = ITEM_ENCYCLOPEDIA;
 
@@ -89,7 +99,7 @@ export default class Animation extends Phaser.Scene {
         });
         this.interactGroup.add(testChest);
 
-        
+
         this.resourcesGroup = this.physics.add.group({
             allowGravity: false,
         });

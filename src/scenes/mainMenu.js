@@ -25,6 +25,16 @@ export default class Animation extends Phaser.Scene {
         let creditsButton = this.add.image(200, 425, "button").setOrigin(0 ,0).setInteractive();
         creditsButton.setScale(0.5);
         creditsButton.on("pointerdown", () => this.scene.start("credits"));
+
+        const fullscreenButton = this.add.image(730, 500, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.1);
+
+        fullscreenButton.on('pointerdown', () => {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            } else {
+                this.scale.startFullscreen();
+            }
+        });
     }
 
 }

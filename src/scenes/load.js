@@ -123,6 +123,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("hunger", "./assets/images/sprites/Materials/hunger.png");
         this.load.image("higiene", "./assets/images/sprites/Materials/higiene.png");
         this.load.image("sueño", "./assets/images/sprites/Materials/sueño.png");
+        this.load.image("fullscreen", "./assets/images/placeholders/fullscreen.jpg");
 
 
         // personajes y enemigos
@@ -213,7 +214,6 @@ export default class Load extends Phaser.Scene {
             frameRate:7,
             repeat:-1
             })
-
 
 
         //anim psy

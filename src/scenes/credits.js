@@ -56,6 +56,16 @@ export default class credits extends Phaser.Scene {
             fontSize: '14px',
             color: '#000000'
         }).setOrigin(1, 1);
+
+        const fullscreenButton = this.add.image(730, 500, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.1);
+
+        fullscreenButton.on('pointerdown', () => {
+            if (this.scale.isFullscreen) {
+                this.scale.stopFullscreen();
+            } else {
+                this.scale.startFullscreen();
+            }
+        });
     }
 
     volver() {

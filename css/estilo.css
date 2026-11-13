@@ -32,3 +32,16 @@ body{
 .titulo {
   padding-left: 15px;
 }
+
+#gameScreen {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto; 
+}
+
+#gameScreen:fullscreen,
+#gameScreen:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
