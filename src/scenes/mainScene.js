@@ -38,6 +38,8 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
+        this.input.mouse.disableContextMenu(); //Para quitar lo que sale por defecto al hacer click derecho
+
         const fullscreenButton = this.add.image(1000, 700, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.15).setDepth(9999).setScrollFactor(0);
         fullscreenButton.on('pointerdown', () => {
             if (this.scale.isFullscreen) {

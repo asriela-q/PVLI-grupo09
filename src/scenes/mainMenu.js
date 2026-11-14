@@ -11,6 +11,7 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
+        this.input.mouse.disableContextMenu();
         let bg = this.add.image(300, 300, "bg"); // cargamos la imagen en el juego
         bg.setScale(0.38);
 

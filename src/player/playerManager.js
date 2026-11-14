@@ -70,6 +70,10 @@ export default class Psy extends Phaser.GameObjects.Container {
                     this.attack();
                 }
             }
+            else if (pointer.rightButtonDown() && !inventory.isVisible) {
+                this.equippedItem = null;
+                this.updateEquipedItem();
+            }
         })
 
         // variables de movimiento
