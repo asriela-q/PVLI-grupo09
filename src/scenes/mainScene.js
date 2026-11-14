@@ -11,6 +11,7 @@ import buildSpace from "../building/buildSpace.js";
 import Mercadona from "../mapObjects/mercadona.js";
 import statHandler from "../player/statHandler.js";
 import stoneBlock from "../mapObjects/stoneBlock.js";
+import Tree from "../mapObjects/tree.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
@@ -37,8 +38,7 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
-        const fullscreenButton = this.add.image(1500, 1000, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.15).setDepth(9999);
-
+        const fullscreenButton = this.add.image(1000, 700, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.15).setDepth(9999).setScrollFactor(0);
         fullscreenButton.on('pointerdown', () => {
             if (this.scale.isFullscreen) {
                 this.scale.stopFullscreen();
@@ -99,12 +99,12 @@ export default class Animation extends Phaser.Scene {
         });
         this.interactGroup.add(testChest);
 
-
         this.resourcesGroup = this.physics.add.group({
             allowGravity: false,
         });
         let rocks = new stoneBlock(this, 600, 600, "stoneBlock", this.itemsGroup);
-        this.resourcesGroup.add(rocks);
+        let tree = new Tree(this, 600, 800, "tree", this.itemsGroup);
+        this.resourcesGroup.add(rocks).add(tree);
 
         let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
         craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
@@ -154,6 +154,7 @@ export default class Animation extends Phaser.Scene {
         }
         this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 130, 1150, "stone_sword", "stone_sword", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        this.itemsGroup.add(new Item(this, 130, 1150, "iron_axe", "iron_axe", ITEM_ENCYCLOPEDIA).setScale(0.15));
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
@@ -284,7 +285,10 @@ export default class Animation extends Phaser.Scene {
                     },
                     onComplete: () => {
                         this.dayCounter++;
-                        if (this.dayCounter % 3 === 0) this.mercadona.refreshProducts();
+                        if (this.dayCounter % 3 === 0) {
+                            this.mercadona.refreshProducts();
+                            this.actualizarRecursos();
+                        }
                         this.cicloDia();
                     }
                 }
@@ -303,6 +307,14 @@ export default class Animation extends Phaser.Scene {
         if(fantasma.lifeBar) {
             fantasma.lifeBar.setVisible(visibles);
         }
+        });
+    }
+
+    actualizarRecursos() {
+        this.resourcesGroup.getChildren().forEach(recurso => {
+            if (!recurso.active) {
+                recurso.respawn();
+            }
         });
     }
 

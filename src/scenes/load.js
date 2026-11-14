@@ -94,7 +94,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("clay", "./assets/images/placeholders/clay.jpg");
         this.load.image("fabric", "./assets/images/placeholders/fabric.jpg");
         this.load.image("stoneBlock", "./assets/images/placeholders/stoneBlock.jpg");
-
+        this.load.image("tree", "./assets/images/placeholders/tree.png");
         this.load.image("tick", "./assets/images/placeholders/pulga.png");
 
 
@@ -103,6 +103,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("metal_sword", "./assets/images/placeholders/metal_sword.png");
         this.load.image("torch", "./assets/images/sprites/torch.png");
         this.load.image("stone_pick", "./assets/images/placeholders/pick.jpg");
+        this.load.image("iron_axe", "./assets/images/placeholders/axe.jpg");
 
         //Objetos consumibles (comida)
         this.load.image("apple", "./assets/images/placeholders/apple.jpg");

@@ -1,3 +1,7 @@
+/* 
+Clase padre que sirve como base para todos los objetos de los cuales conseguir materias primas
+*/
+
 import Item from "../objectsAndInventory/items.js"
 
 export default class resourceObject extends Phaser.GameObjects.Sprite {
@@ -9,6 +13,7 @@ export default class resourceObject extends Phaser.GameObjects.Sprite {
         this.group = itemGroup;
         this.itemDropId = itemDropId;
         this.requiredTool = requiredTool;
+        this.maxHits = hits;
         this.hits = hits;
     }
 
@@ -49,6 +54,17 @@ export default class resourceObject extends Phaser.GameObjects.Sprite {
             this.group.add(droppedItem);
         }
 
-        this.destroy();
+        this.setActive(false).setVisible(false);
+        if (this.body) {
+            this.body.enable = false;
+        }
+    }
+
+    respawn(){
+        this.hits = this.maxHits;
+        this.setActive(true).setVisible(true);
+        if (this.body) {
+            this.body.enable = true;
+        }
     }
 }

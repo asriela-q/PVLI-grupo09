@@ -401,7 +401,6 @@ export default class Psy extends Phaser.GameObjects.Container {
     Método que comprueba si la herramienta se rompe o no
     */
     useTool(){
-        console.log("Datos de la herramienta equipada:", this.equippedItem, this.inventory.slots[this.equippedItem?.slotIndex]);
         if (!this.equippedItem || this.equippedItem.slotIndex === undefined) return;
         let isBroken = this.inventory.decreaseDurability(this.equippedItem.slotIndex);
         if (isBroken) {
