@@ -129,12 +129,22 @@ export default class Inventory {
             this.container.setVisible(this.isVisible);
             this.container.setDepth(1000);
         }
+        this.renderInventory(scene, this.container, player);
+    }
 
+    renderCraft(scene, x, y) {
+        const container = scene.add.container(x, y);
+        container.setDepth(1000);
+        this.renderInventory(scene, container, null);
+        return container;
+    }
+
+    renderInventory(scene, container, player) {
         //Sirve para que se actualice mientras se renderiza el inventario
-        this.container.removeAll(true);
+        container.removeAll(true);
 
         const bg = scene.add.rectangle(0, 0, 425, 425, 0x000000, 1).setOrigin(0);
-        this.container.add(bg);
+        container.add(bg);
 
         const totalCols = 4; //Columnas totales, luego esto se usa para calcular las filas   
         const slotSize = 100; //Tamaño en píxeles de cada cuadrícula del inventario     
@@ -154,16 +164,18 @@ export default class Inventory {
 
             const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize, bloqueado? 0x555555:0xffffff, 1).setOrigin(0);
             slotVisual.setInteractive();
-            this.container.add(slotVisual); 
+            container.add(slotVisual); 
             //Si el item existe indicamos su imagen y cantidad
             if (item !== null) {
                 const itemIcono = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, item.id);
                 itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8).setInteractive();
-                this.container.add(itemIcono);
+                container.add(itemIcono);
 
                 itemIcono.on("pointerdown", () => {
-                    if (this.player) {
-                        this.player.equipItemFromInventory(item.id, i)
+                    if (player !== undefined) {
+                        if (player) {
+                            player.equipItemFromInventory(item.id)
+                        }
                     }
                 });
 
@@ -174,7 +186,7 @@ export default class Inventory {
                         item.quantity.toString(), 
                         { font: '20px Arial', fill: '#000000' }
                     ).setOrigin(1, 1);
-                    this.container.add(textoCantidad);
+                    container.add(textoCantidad);
                 }
             }
 
@@ -182,7 +194,7 @@ export default class Inventory {
             {
                 const pulga = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, 'tick');
                 pulga.setDisplaySize(slotSize * 0.8, slotSize * 0.8); 
-                this.container.add(pulga);
+                container.add(pulga);
             }
         }
     }

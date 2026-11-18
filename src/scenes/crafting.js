@@ -79,6 +79,8 @@ export default class Animation extends Phaser.Scene {
                 cont = cont + 170;
             }
         }
+        if (this.invContainer) this.invContainer.destroy();
+        this.invContainer = this.inventory.renderCraft(this, 325, 25);
     }
 
     checkAvaibleCrafts() {
