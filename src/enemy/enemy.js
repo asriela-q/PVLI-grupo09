@@ -83,7 +83,10 @@ constructor(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown
             this.lifeBar.destroy();
             this.lifeBar = null;
             this.dropItems();
-            this.destroy();
+            this.setActive(false).setVisible(false);
+            if (this.body) {
+                this.body.enable = false;
+            }
         }
         else{
             this.lifeBar.updateBar(this.currentLife, this.maxLife);
@@ -119,6 +122,13 @@ constructor(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown
         for (let i = 0; i < nItems; i++)
             this.group.add(new Item(this.scene, this.x, this.y, this.ITEM_ENCYCLOPEDIA[data].texture, data, this.ITEM_ENCYCLOPEDIA).setScale(0.15));
         return true;
+    }
+
+    respawn(){
+        this.setActive(true).setVisible(true);
+        if (this.body) {
+            this.body.enable = true;
+        }
     }
 
 }

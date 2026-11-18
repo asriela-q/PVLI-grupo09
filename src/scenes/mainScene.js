@@ -74,15 +74,12 @@ export default class Animation extends Phaser.Scene {
         this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setScale(0.9);
 
         //quitar
-        this.stats =new statHandler(this,this.player);
+        this.stats = new statHandler(this,this.player);
 
         //Grupo de Phaser para gestionar las físicas de todos los objetos al mismo tiempo
         this.itemsGroup = this.physics.add.group({
             allowGravity: false
         });
-
-        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.9);
-        let enemy2 = new Ghost(this, this.sys.game.canvas.width, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.6);
 
         // hay que definir primero el grupo de los items
         let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);
@@ -92,6 +89,8 @@ export default class Animation extends Phaser.Scene {
         this.enemiesGroup = this.physics.add.group({
             allowGravity: false,
         });
+        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.9);
+        let enemy2 = new Ghost(this, this.sys.game.canvas.width, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.6);
         this.enemiesGroup.add(enemy);
         this.enemiesGroup.add(enemy2);
 
@@ -291,6 +290,7 @@ export default class Animation extends Phaser.Scene {
                             this.mercadona.refreshProducts();
                             this.actualizarRecursos();
                         }
+                        this.actualizarEnemigos();
                         this.cicloDia();
                     }
                 }
@@ -316,6 +316,14 @@ export default class Animation extends Phaser.Scene {
         this.resourcesGroup.getChildren().forEach(recurso => {
             if (!recurso.active) {
                 recurso.respawn();
+            }
+        });
+    }
+
+    actualizarEnemigos() {
+        this.enemiesGroup.getChildren().forEach(enemy => {
+            if (!enemy.active) {
+                enemy.respawn();
             }
         });
     }
