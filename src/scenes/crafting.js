@@ -142,6 +142,8 @@ export default class Animation extends Phaser.Scene {
                 cont = cont + 170;
             }
         }
+        if (this.invContainer) this.invContainer.destroy();
+        this.invContainer = this.inventory.renderCraft(this, 325, 25);
     }
 
     checkAvaibleRooms() {
@@ -158,24 +160,26 @@ export default class Animation extends Phaser.Scene {
     }
 
     craftRecipe(recipe, isRoom, buildSpace) {
-        console.log("entra en craft recipe");
-        for(let i = 0; i < recipe.quant1; i++) {
-            this.inventory.removeItem(recipe.ing1);
-            console.log(recipe.ing1 + "removed");
+        if (recipe.craftable) {
+            for(let i = 0; i < recipe.quant1; i++) {
+                this.inventory.removeItem(recipe.ing1);
+                console.log(recipe.ing1 + "removed");
+            }
+            for(let i = 0; i < recipe.quant2; i++) {
+                this.inventory.removeItem(recipe.ing2);
+                console.log(recipe.ing2 + "removed");
+            }
+            if (isRoom) {
+                buildSpace.changeTexture(recipe.room);
+                buildSpace.setInteractive(false);
+                this.closeUI();
+            }
+            else {
+                this.inventory.addItemToInventory(recipe.object)
+                this.renderCraftableRecipes();
+            }
         }
-        for(let i = 0; i < recipe.quant2; i++) {
-            this.inventory.removeItem(recipe.ing2);
-            console.log(recipe.ing2 + "removed");
-        }
-        if (isRoom) {
-            buildSpace.changeTexture(recipe.room);
-            buildSpace.setInteractive(false);
-            this.closeUI();
-        }
-        else {
-            this.inventory.addItemToInventory(recipe.object)
-            this.renderCraftableRecipes();
-        }
+        
     }
 
     closeUI() {
