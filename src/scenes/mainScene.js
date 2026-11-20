@@ -13,6 +13,7 @@ import statHandler from "../player/statHandler.js";
 import stoneBlock from "../mapObjects/stoneBlock.js";
 import Tree from "../mapObjects/tree.js";
 import Kitchen from "../building/rooms/kitchen.js";
+import Bedroom from "../building/rooms/bedroom.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
@@ -348,6 +349,7 @@ export default class Animation extends Phaser.Scene {
         saveProgress(estado);
     }
 
+    // crea las habitaciones (se llama desde el buildspace justo antes de que se destruya)
     createRoom(room, posX, posY) {
         if (room === "kitchen") {
             console.log("nya");
@@ -356,7 +358,10 @@ export default class Animation extends Phaser.Scene {
             this.interactGroup.add(kitchen);
         }
         else if (room === "bedroom") {
-            // continuar lmao
+            console.log("kawaii");
+            let bedroom = new Bedroom(this, posX, posY, "bedroom", this.stats).setScale(0.3);
+            bedroom.on("pointerdown", () => bedroom.activateCooking());
+            this.interactGroup.add(bedroom);
         }
         
     }

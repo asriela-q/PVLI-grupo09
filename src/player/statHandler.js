@@ -108,4 +108,8 @@ export default class statHandler
         this.scene.scene.pause("main");
         this.scene.scene.launch("stats", { stats: this, player: this.Player });
     }  
+
+    resetSleepyness() {
+        this.sleepyness = sleepyness;
+    }
 }

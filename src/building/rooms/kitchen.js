@@ -1,5 +1,3 @@
-// import resourceObject from "./resourceObject.js";
-
 export default class Kitchen extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, inventory) {
         super(scene, x, y, texture);
