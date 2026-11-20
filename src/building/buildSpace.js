@@ -16,10 +16,16 @@ export default class buildSpace extends Phaser.GameObjects.Sprite {
 
     activateCrafting() {
         this.scene.scene.pause("main");
-        this.scene.scene.launch("CraftUI", { inventory: this.inventory, craft: false, buildSpace: this });
+        this.scene.scene.launch("CraftUI", { inventory: this.inventory, craft: 1, buildSpace: this });
     }
 
     changeTexture(texture) {
         this.setTexture(texture);
+    }
+
+    delete(roomToCreate) {
+        this.scene.createRoom(roomToCreate, this.x, this.y);
+        console.log("se creo " + roomToCreate);
+        this.destroy();
     }
 }

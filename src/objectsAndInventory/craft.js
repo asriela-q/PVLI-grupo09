@@ -14,6 +14,6 @@ export default class Craft extends Phaser.GameObjects.Sprite {
 
     activateCrafting() {
         this.scene.scene.pause("main");
-        this.scene.scene.launch("CraftUI", { inventory: this.inventory, craft: true });
+        this.scene.scene.launch("CraftUI", { inventory: this.inventory, craft: 0 });
     }
 }

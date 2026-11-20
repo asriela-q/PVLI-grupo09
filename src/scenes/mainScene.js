@@ -12,6 +12,7 @@ import Mercadona from "../mapObjects/mercadona.js";
 import statHandler from "../player/statHandler.js";
 import stoneBlock from "../mapObjects/stoneBlock.js";
 import Tree from "../mapObjects/tree.js";
+import Kitchen from "../building/rooms/kitchen.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
@@ -147,11 +148,14 @@ export default class Animation extends Phaser.Scene {
         this.itemsGroup.add(new Item(this, 800, 800, "coal", "coal", ITEM_ENCYCLOPEDIA).setScale(0.15));
 
         // esto es para cratear una sala y probar brochachos
-        for (let i = 0; i < 10; i++)  {
+        for (let i = 0; i < 20; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1100, "wood", "wood", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
         for (let i = 0; i < 5; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1150, "fabric", "fabric", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        }
+        for (let i = 0; i < 6; i++)  {
+            this.itemsGroup.add(new Item(this, 100 * i, 1200, "metal", "metal", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
         this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 130, 1150, "stone_sword", "stone_sword", ITEM_ENCYCLOPEDIA).setScale(0.15));
@@ -342,5 +346,18 @@ export default class Animation extends Phaser.Scene {
             }
         };
         saveProgress(estado);
+    }
+
+    createRoom(room, posX, posY) {
+        if (room === "kitchen") {
+            console.log("nya");
+            let kitchen = new Kitchen(this, posX, posY, "kitchen", this.psyInventory).setScale(0.3);
+            kitchen.on("pointerdown", () => kitchen.activateCooking());
+            this.interactGroup.add(kitchen);
+        }
+        else if (room === "bedroom") {
+            // continuar lmao
+        }
+        
     }
 }

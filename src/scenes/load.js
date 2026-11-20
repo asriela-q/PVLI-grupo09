@@ -76,6 +76,7 @@ export default class Load extends Phaser.Scene {
         // interfaz de crafting (tanto objetos como salas)
         this.load.image("craftbg", "./assets/images/placeholders/craftbg.jpg");
         this.load.image("roombg", "./assets/images/placeholders/roombg.jpg");
+        this.load.image("cookingbg", "./assets/images/placeholders/cookingbg.jpg");
         this.load.image("square", "./assets/images/placeholders/square.jpg");
         this.load.image("green", "./assets/images/placeholders/verde.jpg");
 
@@ -105,10 +106,16 @@ export default class Load extends Phaser.Scene {
         this.load.image("stone_pick", "./assets/images/placeholders/pick.jpg");
         this.load.image("iron_axe", "./assets/images/placeholders/axe.jpg");
 
-        //Objetos consumibles (comida)
+        // ingredientes (comida)
         this.load.image("apple", "./assets/images/placeholders/apple.jpg");
         this.load.image("cereal", "./assets/images/placeholders/cereal.jpg");
         this.load.image("pineapple", "./assets/images/placeholders/pineapple.png");
+        this.load.image("candy", "./assets/images/placeholders/candy.jpg");
+        this.load.image("pepper", "./assets/images/placeholders/pepper.jpg");
+
+        // platos (comida)
+        this.load.image("caramelized_apple", "./assets/images/placeholders/caramelized_apple.jpg");
+        this.load.image("bistec", "./assets/images/placeholders/bistec.jpg");
 
         // habitaciones
         this.load.image("kitchen", "./assets/images/placeholders/kitchen.jpg");

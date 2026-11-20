@@ -1,5 +1,6 @@
 import RECIPES_LIST from "../objectsAndInventory/recipes.js";
 import ROOMS_LIST from "../building/rooms.js";
+import COOKING_LIST from "../objectsAndInventory/cooking.js";
 
 export default class Animation extends Phaser.Scene {
 
@@ -23,11 +24,14 @@ export default class Animation extends Phaser.Scene {
         this.inventory = data.inventory;
         this.close = this.input.keyboard.addKey("Q");
 
-        if(data.craft) {
+        if(data.craft == 0) {
             this.renderCraftableRecipes();
         }
-        else {
+        else if (data.craft == 1) {
             this.renderCraftableRooms(data.buildSpace);
+        }
+        else {
+            this.renderCraftableCookingRecipes();
         }
     }
 
@@ -159,6 +163,67 @@ export default class Animation extends Phaser.Scene {
         }
     }
 
+    renderCraftableCookingRecipes() {
+        this.checkAvaibleCookingRecipes();
+
+        let bg = this.add.image(0, 0, "cookingbg").setOrigin(0,0);
+        bg.setScale(1.2);
+
+        let cont = 20;  // ESTO ESTA SIN CAMBIAR
+        console.log(Object.keys(COOKING_LIST).length);
+        for(let i = 0; i < Object.keys(COOKING_LIST).length; i++) {
+            const recipe = COOKING_LIST.find(r => r.number === i);
+            console.log(recipe);
+            if(recipe.unlocked) {
+                // se renderiza el cuadrado de la receta
+                if (recipe.craftable) {
+                    var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
+                    green.setScale(0.4);
+                    green.on("pointerdown", ()=>this.craftRecipe(recipe, false));
+                }
+                else {
+                    var square = this.add.image(20, cont, "square").setOrigin(0, 0);
+                    square.setScale(0.4);
+                }
+
+                // se renderiza la imagen del objeto de la receta
+                let object = this.add.image(25, cont + 5, recipe.object).setOrigin(0, 0);
+                object.setScale(0.1);
+
+                // se renderizan los objetos necesarios para la receta
+                // nota: esto esta floperisimo pero genuinamente no se como hacerlo de otra manera pq con un array no me lee el dato no se por que
+                console.log(recipe.numIngredients);
+                console.log(recipe.ing1);
+                let ingredient1 = this.add.image(125, cont + 5, recipe.ing1).setOrigin(0, 0);
+                ingredient1.setScale(0.1);
+                console.log(recipe.ing2);
+                let ingredient2 = this.add.image(225, cont + 5, recipe.ing2).setOrigin(0, 0);
+                ingredient2.setScale(0.1);
+                // if(recipe.numIngredients > 2) {
+                //     let ingredient3 = this.add.image(325, cont + 5, recipe.ing3).setOrigin(0, 0);
+                //     ingredient3.setScale(0.1);
+                // }
+
+                cont = cont + 170;
+            }
+        }
+        if (this.invContainer) this.invContainer.destroy();
+        this.invContainer = this.inventory.renderCraft(this, 325, 25);
+    }
+
+    checkAvaibleCookingRecipes() {
+        for(let i = 0; i < Object.keys(COOKING_LIST).length; i++) {
+            const recipe = COOKING_LIST.find(r => r.number === i);
+            if(this.inventory.checkInventory(recipe.ing1) >= recipe.quant1 &&
+               this.inventory.checkInventory(recipe.ing2) >= recipe.quant2) {
+                recipe.craftable = true;
+            }
+            else {
+                recipe.craftable = false;
+            }
+        }
+    }
+
     craftRecipe(recipe, isRoom, buildSpace) {
         if (recipe.craftable) {
             for(let i = 0; i < recipe.quant1; i++) {
@@ -170,8 +235,7 @@ export default class Animation extends Phaser.Scene {
                 console.log(recipe.ing2 + "removed");
             }
             if (isRoom) {
-                buildSpace.changeTexture(recipe.room);
-                buildSpace.setInteractive(false);
+                buildSpace.delete(recipe.room);
                 this.closeUI();
             }
             else {
