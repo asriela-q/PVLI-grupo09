@@ -5,7 +5,6 @@ sueño, hambre, estamina, etc.
 
 import StatsBar from "./barUIHandler.js";
 import Camera from "./camera.js";
-
 // velocidad:
 export const RUN_SPEED = 650; // velocidad al correr
 const WALK_SPEED = 270; // velocidad al caminar
@@ -61,6 +60,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.openInventory = this.scene.input.keyboard.addKey('E');
         this.interactKey = this.scene.input.keyboard.addKey('F');
         this.saveKey = this.scene.input.keyboard.addKey('G');
+        this.statKey = this.scene.input.keyboard.addKey('TAB');
+
         this.scene.input.on("pointerdown", (pointer)=>{
             if(pointer.leftButtonDown() && !inventory.isVisible) {
                 if (this.equippedItem && (this.equippedItem.type === "pick" || this.equippedItem.type === "axe" || this.equippedItem.type === "shovel")) {
@@ -233,6 +234,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.inventory.updatePosition(this.x + 20, this.y);
         if(Phaser.Input.Keyboard.JustDown(this.openInventory)) this.inventory.showInventory();
         if(Phaser.Input.Keyboard.JustDown(this.saveKey)) this.scene.saveGame();
+        if(Phaser.Input.Keyboard.JustDown(this.statKey)) this.scene.stats.openPanel(); 
         
         this.lifeBar.updateBar(this.currentLife, maxLife);
         if(this.currentLife<=maxLife/3)
@@ -276,7 +278,6 @@ export default class Psy extends Phaser.GameObjects.Container {
         {
             this.currentLife = 0; //Se evita que tomen valores negativos
             this.inventory.unblockInventory();
-
             //Si hay que hacer alguna animación/comportamiento de muerte o algo se pone aquí
         }
         this.lifeBar.updateBar(this.currentLife, this.maxLife);
