@@ -27,7 +27,7 @@ var ROOMS_LIST = [
     },
     {  
         room: 'bedroom',
-        number: 2, 
+        number: 4,  //EN VERDAD ES 2
         unlocked: true,
         activeLevel: 0,
         craftable: false,
@@ -53,9 +53,9 @@ var ROOMS_LIST = [
     },
     {  
         room: 'storage_room',
-        number: 4,
+        number: 2, //EN VERDAD ES 4
         unlocked: true,
-        activeLevel: 0,
+        activeLevel: 0, 
         craftable: false,
         numIngredients: 2,
         ing1: 'wood',

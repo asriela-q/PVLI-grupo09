@@ -172,11 +172,10 @@ export default class Inventory {
                 container.add(itemIcono);
 
                 itemIcono.on("pointerdown", () => {
-                    if (player !== undefined) {
-                        if (player) {
-                            player.equipItemFromInventory(item.id)
-                        }
+                    if (player) {
+                        player.equipItemFromInventory(item.id);
                     }
+                    
                 });
 
                 if (item.quantity >= 1) {
