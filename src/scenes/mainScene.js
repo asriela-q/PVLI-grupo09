@@ -14,6 +14,8 @@ import stoneBlock from "../mapObjects/stoneBlock.js";
 import Tree from "../mapObjects/tree.js";
 import Kitchen from "../building/rooms/kitchen.js";
 import Bedroom from "../building/rooms/bedroom.js";
+import StorageRoom from "../building/rooms/storageRoom.js";
+import StorageChest from "../building/storageChest.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
@@ -27,10 +29,6 @@ export default class Animation extends Phaser.Scene {
         this.mercadona;
         this.freezeScene = false;
         this.doubleDropChance = 0;
-    }
-
-    // preload - método de las escenas donde se pueden cargar los recursos que necesitaremos
-    preload() {
     }
 
     init(data) {
@@ -154,6 +152,9 @@ export default class Animation extends Phaser.Scene {
         }
         for (let i = 0; i < 5; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1150, "fabric", "fabric", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        }
+        for (let i = 0; i < 15; i++)  {
+            this.itemsGroup.add(new Item(this, 100 * i, 1150, "stone", "stone", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
         for (let i = 0; i < 6; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1200, "metal", "metal", ITEM_ENCYCLOPEDIA).setScale(0.15));
@@ -362,6 +363,11 @@ export default class Animation extends Phaser.Scene {
             let bedroom = new Bedroom(this, posX, posY, "bedroom", this.stats).setScale(0.3);
             bedroom.on("pointerdown", () => bedroom.activateCooking());
             this.interactGroup.add(bedroom);
+        }
+        else if (room == "storage_room") {
+            this.chestStorage = new StorageRoom(6, this.psyInventory.ITEM_ENCYCLOPEDIA);
+            const storagChest = new StorageChest(this, posX, posY, "storageChestClosed", this.psyInventory, this.chestStorage);
+            this.interactGroup.add(storagChest);
         }
         
     }

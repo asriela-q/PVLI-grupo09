@@ -79,6 +79,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("cookingbg", "./assets/images/placeholders/cookingbg.jpg");
         this.load.image("square", "./assets/images/placeholders/square.jpg");
         this.load.image("green", "./assets/images/placeholders/verde.jpg");
+        this.load.image("storageRoomBg", "./assets/images/placeholders/storageRoomBg.jpg")
 
         // objetos
         this.load.image("coal", "./assets/images/sprites/Materials/coal.png");

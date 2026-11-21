@@ -1,30 +1,24 @@
-export default class storageRoom {
+import Inventory from "../../objectsAndInventory/inventory.js"
+
+export default class storageRoom extends Inventory {
     constructor(conterSlots = 6, ITEM_ENCYCLOPEDIA) {
+        super(conterSlots, ITEM_ENCYCLOPEDIA);
         this.maxSlots = conterSlots;
-        this.slots = Array(conterSlots).fill(null); //Cuando el slot de inventario está null es que no hay objetos almacenados en él
-        this.ITEM_ENCYCLOPEDIA = ITEM_ENCYCLOPEDIA;
-        this.player = null;
         this.level = 1;
-        this.isVisible = false;
     }
 
-    findEmptySlot() { //Encuentra el primer slot vacío
-        return this.slots.findIndex((slot,i) => slot === null&&!this.blockedSlots[i]); //findIndex: función de javascript que busca el índice del array, si no lo encuentra devuelve -1
-    }
-
-    addItemFromInventory(inventorySlotIndex){
-        if(!this.player || this.player.inventory) return;
+    addItemFromInventory(inventorySlotIndex, inv){
+        if(!this.player || !this.player.inventory) return;
         
-        const inventory = this.player.inventory;
-        const item = inventory.slots[inventorySlotIndex];
-        const itemInfo = this.ITEM_ENCYCLOPEDIA[item];
+        const invItem = inv.slots[inventorySlotIndex];
+        const itemInfo = this.ITEM_ENCYCLOPEDIA[invItem.id];
 
         const maxStack = itemInfo.stackable ? (itemInfo.maxStack || 30) : 1;
         let remaining = invItem.quantity;
 
         // El item es apilable
         if (itemInfo.stackable) {
-            for (let i = 0; i < this.slots.length; i++) {
+            for (let i = 0; i < this.slots.length && remaining > 0; i++) {
                 const slot = this.slots[i];
 
                 if (slot !== null && !this.blockedSlots[i] && slot.id === invItem.id && slot.quantity < maxStack) {
@@ -41,7 +35,7 @@ export default class storageRoom {
         while (remaining > 0 && hasSpace) {
             const emptySlot = this.findEmptySlot();
             if (emptySlot === -1) {
-                hasSpace = false; // Detiene el bucle en la siguiente comprobación
+                hasSpace = false;
             } else {
                 const amountToAdd = Math.min(remaining, maxStack);
                 const newItem = { id: invItem.id, quantity: amountToAdd };
@@ -53,69 +47,29 @@ export default class storageRoom {
                 remaining -= amountToAdd;
             }
         }
-        
+
         const totalTransferred = invItem.quantity - remaining;
         if (totalTransferred > 0) {
             inv.removeItemBySlot(inventorySlotIndex, totalTransferred);
-            this.refreshUI();
             return true;
         }
 
         return false;
     }
 
-    removeItemFromChest(chestSlotIndex) {
+    removeItemFromChest(chestSlotIndex, inv) {
+        const chestItem = this.slots[chestSlotIndex];
+        if (!chestItem) return false;
 
-    }
-
-    renderChest() {
-        container.removeAll(true);
-
-        const bg = scene.add.rectangle(0, 0, 425, 425, 0x000000, 1).setOrigin(0);
-        container.add(bg);
-
-        const totalCols = 4; //Columnas totales, luego esto se usa para calcular las filas   
-        const slotSize = 100; //Tamaño en píxeles de cada cuadrícula del inventario     
-        const separation = 5; //Separación entre cuadrados      
-
-        for (let i = 0; i < this.slots.length; i++) {
-            const bloqueado = this.blockedSlots[i];
-            //Guardamos cada objeto
-            let item = this.slots[i];
-
-            //Calculamos las filas y las columnas de la cuadrícula del inventario
-            let col = i % totalCols;
-            const row = Math.floor(i / totalCols); //Math.floor: aproxima decimales
-            let posX = separation + col * (slotSize + separation);
-            let posY = separation + row * (slotSize + separation);
-
-            const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize, bloqueado? 0x555555:0xffffff, 1).setOrigin(0);
-            slotVisual.setInteractive();
-            container.add(slotVisual); 
-            //Si el item existe indicamos su imagen y cantidad
-            if (item !== null) {
-                const itemIcono = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, item.id);
-                itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8).setInteractive();
-                container.add(itemIcono);
-
-                itemIcono.on("pointerdown", () => {
-                    if (player) {
-                        player.removeItemFromChest(i);
-                    }
-                
-                });
-
-                if (item.quantity >= 1) {
-                    const textoCantidad = scene.add.text(
-                        posX + slotSize - 2, 
-                        posY + slotSize - 2, 
-                        item.quantity.toString(), 
-                        { font: '20px Arial', fill: '#000000' }
-                    ).setOrigin(1, 1);
-                    container.add(textoCantidad);
-                }
+        const amountTransferred = inv.addItemFromChest(chestItem);
+        if (amountTransferred > 0) {
+            chestItem.quantity -= amountTransferred;
+            if (chestItem.quantity <= 0) {
+                this.slots[chestSlotIndex] = null;
             }
+            return true;
         }
+        return false;
     }
 
     upgradeCapacity(newSlotsCount) {
@@ -123,13 +77,6 @@ export default class storageRoom {
             const extraSlots = Array(newSlotsCount - this.maxSlots).fill(null);
             this.slots = this.slots.concat(extraSlots); //concat para unir dos arrays
             this.maxSlots = newSlotsCount;
-        }
-    }
-
-    openChest() {
-        this.isVisible = !this.isVisible;
-        if (this.isVisible) {
-            this.renderChest();
         }
     }
 }

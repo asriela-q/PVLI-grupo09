@@ -221,4 +221,66 @@ export default class Inventory {
             this.container.y = y;
         }
     }
+
+    /*
+    Método que sirve para renderizar tanto el inventario como el cofre, la función que se le pasa como parámetro mueve los objetos 
+    a un lado u otro dependiendo de si es el inventario o el almacén (por eso se parece tanto al render de la escena principal)
+    */
+    renderUI(scene, x, y, onSlotClick) {
+        const container = scene.add.container(x, y);
+        container.setDepth(1000);
+
+        const totalCols = 4; //Columnas totales, luego esto se usa para calcular las filas   
+        const slotSize = 100; //Tamaño en píxeles de cada cuadrícula del inventario     
+        const separation = 5; //Separación entre cuadrados      
+
+        
+        for (let i = 0; i < this.slots.length; i++) {
+            const bloqueado = this.blockedSlots[i];
+            //Guardamos cada objeto
+            let item = this.slots[i];
+
+            //Calculamos las filas y las columnas de la cuadrícula del inventario
+            let col = i % totalCols;
+            const row = Math.floor(i / totalCols); //Math.floor: aproxima decimales
+            let posX = separation + col * (slotSize + separation);
+            let posY = separation + row * (slotSize + separation);
+
+            const slotVisual = scene.add.rectangle(posX, posY, slotSize, slotSize, bloqueado? 0x555555:0xffffff, 1).setOrigin(0);
+            slotVisual.setInteractive();
+            container.add(slotVisual); 
+            //Si el item existe indicamos su imagen y cantidad
+            if (item !== null) {
+                const itemIcono = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, item.id);
+                itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8).setInteractive();
+                container.add(itemIcono);
+
+                itemIcono.on("pointerdown", () => {
+                    if (onSlotClick) onSlotClick(i);
+                });
+
+                if (item.quantity >= 1) {
+                    const textoCantidad = scene.add.text(
+                        posX + slotSize - 2, 
+                        posY + slotSize - 2, 
+                        item.quantity.toString(), 
+                        { font: '20px Arial', fill: '#000000' }
+                    ).setOrigin(1, 1);
+                    container.add(textoCantidad);
+                }
+            }
+        }
+        return container;
+    }
+
+    removeItemBySlot(slotIndex, amount) {
+        if (!this.slots[slotIndex]) return false;
+        this.slots[slotIndex].quantity -= amount;
+        if (this.slots[slotIndex].quantity <= 0) {
+            this.slots[slotIndex] = null;
+        }
+        return true;
+    }
+
+    
 }
