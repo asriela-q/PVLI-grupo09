@@ -365,10 +365,10 @@ export default class Animation extends Phaser.Scene {
             this.interactGroup.add(bedroom);
         }
         else if (room == "storage_room") {
-            this.chestStorage = new StorageRoom(6, this.psyInventory.ITEM_ENCYCLOPEDIA);
-            const storagChest = new StorageChest(this, posX, posY, "storageChestClosed", this.psyInventory, this.chestStorage);
+            this.add.image(posX, posY, "storage_room").setScale(0.1);
+            this.chestStorage = new StorageRoom(8, this.psyInventory.ITEM_ENCYCLOPEDIA);
+            const storagChest = new StorageChest(this, posX, posY, "storageChest", this.psyInventory, this.chestStorage).setScale(0.25);
             this.interactGroup.add(storagChest);
         }
-        
     }
 }

@@ -20,7 +20,7 @@ constructor() {
         this.close = this.input.keyboard.addKey("Q");
 
         let bg = this.add.image(0, 0, "storageRoomBg").setOrigin(0, 0);
-        bg.setScale(1);
+        bg.setScale(1.5);
 
         //Dibujar ambos contenedores por primera vez
         this.refreshUI();

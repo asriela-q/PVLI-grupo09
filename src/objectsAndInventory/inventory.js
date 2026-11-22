@@ -231,7 +231,7 @@ export default class Inventory {
         container.setDepth(1000);
 
         const totalCols = 4; //Columnas totales, luego esto se usa para calcular las filas   
-        const slotSize = 100; //Tamaño en píxeles de cada cuadrícula del inventario     
+        const slotSize = 75; //Tamaño en píxeles de cada cuadrícula del inventario     
         const separation = 5; //Separación entre cuadrados      
 
         
@@ -282,5 +282,45 @@ export default class Inventory {
         return true;
     }
 
-    
+    addItemFromChest(chestItem){    
+        const itemInfo = this.ITEM_ENCYCLOPEDIA[chestItem.id];
+        if (!itemInfo) return 0;
+
+        const maxStack = itemInfo.stackable ? (itemInfo.maxStack || 30) : 1;
+        let remaining = chestItem.quantity;
+
+        if (itemInfo.stackable) {
+            for (let i = 0; i < this.slots.length && remaining > 0; i++) {
+                const slot = this.slots[i];
+
+                if (slot !== null && !this.blockedSlots[i] && slot.id === chestItem.id && slot.quantity < maxStack) {
+                    const spaceAvailable = maxStack - slot.quantity;
+                    const amountToAdd = Math.min(remaining, spaceAvailable);
+
+                    slot.quantity += amountToAdd;
+                    remaining -= amountToAdd;
+                }
+            }
+        }
+
+        let hasSpace = true;
+        while (remaining > 0 && hasSpace) {
+            const emptySlot = this.findEmptySlot();
+            if (emptySlot === -1) {
+                hasSpace = false;
+            } else {
+                const amountToAdd = Math.min(remaining, maxStack);
+                const newItem = { id: chestItem.id, quantity: amountToAdd };
+                if (chestItem.durability !== undefined) {
+                    newItem.durability = chestItem.durability;
+                }
+
+                this.slots[emptySlot] = newItem;
+                remaining -= amountToAdd;
+            }
+        }
+
+        return chestItem.quantity - remaining;
+    }
+
 }

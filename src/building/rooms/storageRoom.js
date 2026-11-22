@@ -1,18 +1,15 @@
 import Inventory from "../../objectsAndInventory/inventory.js"
 
 export default class storageRoom extends Inventory {
-    constructor(conterSlots = 6, ITEM_ENCYCLOPEDIA) {
+    constructor(conterSlots = 8, ITEM_ENCYCLOPEDIA, texture) {
         super(conterSlots, ITEM_ENCYCLOPEDIA);
         this.maxSlots = conterSlots;
         this.level = 1;
     }
 
     addItemFromInventory(inventorySlotIndex, inv){
-        if(!this.player || !this.player.inventory) return;
-        
         const invItem = inv.slots[inventorySlotIndex];
         const itemInfo = this.ITEM_ENCYCLOPEDIA[invItem.id];
-
         const maxStack = itemInfo.stackable ? (itemInfo.maxStack || 30) : 1;
         let remaining = invItem.quantity;
 
@@ -72,11 +69,24 @@ export default class storageRoom extends Inventory {
         return false;
     }
 
+    //Métodos para actualizar el cofre cuando se suba de nivel la sala:
+
+    //Aumenta el tamaño del array
     upgradeCapacity(newSlotsCount) {
         if (newSlotsCount > this.maxSlots) {
             const extraSlots = Array(newSlotsCount - this.maxSlots).fill(null);
-            this.slots = this.slots.concat(extraSlots); //concat para unir dos arrays
+            this.slots = this.slots.concat(extraSlots); //concat sirve para unir dos arrays
             this.maxSlots = newSlotsCount;
+        }
+    }
+    //Asocia cada tamaño del array al nivel
+    upgradeChest() {
+        this.level += 1;
+        if(this.level === 2) {
+            this.upgradeCapacity(16);
+        }
+        else if (this.level === 3) {
+            this.upgradeCapacity(24);
         }
     }
 }

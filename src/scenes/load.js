@@ -72,6 +72,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("room_template", "./assets/images/placeholders/room_template.jpg");
         this.load.image("chest", "./assets/images/placeholders/chest.png");
         this.load.image("mercadona", "./assets/images/placeholders/mercadona.jpg")
+        this.load.image("storageChest", "./assets/images/placeholders/storageChestClosed.jpg");
 
         // interfaz de crafting (tanto objetos como salas)
         this.load.image("craftbg", "./assets/images/placeholders/craftbg.jpg");
@@ -98,7 +99,6 @@ export default class Load extends Phaser.Scene {
         this.load.image("stoneBlock", "./assets/images/placeholders/stoneBlock.jpg");
         this.load.image("tree", "./assets/images/placeholders/tree.png");
         this.load.image("tick", "./assets/images/placeholders/pulga.png");
-
 
         // herramientas
         this.load.image("stone_sword", "./assets/images/placeholders/stone_sword.png");
