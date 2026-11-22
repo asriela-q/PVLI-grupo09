@@ -108,9 +108,7 @@ export default class Animation extends Phaser.Scene {
         let tree = new Tree(this, 600, 800, "tree", this.itemsGroup);
         this.resourcesGroup.add(rocks).add(tree);
 
-        let craftingTable = new Craft(this, 200, 400, "craft", this.psyInventory).setScale(0.3);
-        craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
-        this.interactGroup.add(craftingTable);
+        
 
         this.mercadona = new Mercadona(this, 1500, 200, "mercadona").setScale(0.3);
         this.interactGroup.add(this.mercadona);
@@ -378,6 +376,12 @@ export default class Animation extends Phaser.Scene {
             this.add.image(posX, posY, "bathroom");
             const bath = new Bathroom(this, posX, posY, "bath", this.stats).setScale(0.25);
             this.interactGroup.add(bath);
+        }
+        else if (room === "workshop") {
+            this.add.image(posX, posY, "workshop").setScale(0.25);
+            let craftingTable = new Craft(this, posX, posY, "craft", this.psyInventory).setScale(0.3);
+            craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
+            this.interactGroup.add(craftingTable);
         }
     }
 }
