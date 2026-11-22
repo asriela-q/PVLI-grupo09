@@ -73,6 +73,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("chest", "./assets/images/placeholders/chest.png");
         this.load.image("mercadona", "./assets/images/placeholders/mercadona.jpg")
         this.load.image("storageChest", "./assets/images/placeholders/storageChestClosed.jpg");
+        this.load.image("bath", "./assets/images/placeholders/bath.jpg");
 
         // interfaz de crafting (tanto objetos como salas)
         this.load.image("craftbg", "./assets/images/placeholders/craftbg.jpg");

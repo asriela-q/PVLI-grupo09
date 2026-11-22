@@ -14,6 +14,7 @@ import stoneBlock from "../mapObjects/stoneBlock.js";
 import Tree from "../mapObjects/tree.js";
 import Kitchen from "../building/rooms/kitchen.js";
 import Bedroom from "../building/rooms/bedroom.js";
+import Bathroom from "../building/rooms/bathroom.js";
 import StorageRoom from "../building/rooms/storageRoom.js";
 import StorageChest from "../building/storageChest.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
@@ -155,6 +156,9 @@ export default class Animation extends Phaser.Scene {
         }
         for (let i = 0; i < 15; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1150, "stone", "stone", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        }
+        for (let i = 0; i < 15; i++)  {
+            this.itemsGroup.add(new Item(this, 100 * i, 1150, "clay", "clay", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
         for (let i = 0; i < 6; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1200, "metal", "metal", ITEM_ENCYCLOPEDIA).setScale(0.15));
@@ -369,6 +373,11 @@ export default class Animation extends Phaser.Scene {
             this.chestStorage = new StorageRoom(8, this.psyInventory.ITEM_ENCYCLOPEDIA);
             const storagChest = new StorageChest(this, posX, posY, "storageChest", this.psyInventory, this.chestStorage).setScale(0.25);
             this.interactGroup.add(storagChest);
+        }
+        else if (room == "bathroom") {
+            this.add.image(posX, posY, "bathroom");
+            const bath = new Bathroom(this, posX, posY, "bath", this.stats).setScale(0.25);
+            this.interactGroup.add(bath);
         }
     }
 }

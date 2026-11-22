@@ -4,16 +4,16 @@ import StatBar from "./barUIHandler.js"
 import Camera from "./camera.js"
 import{RUN_SPEED,baseDefense} from "./playerManager.js"
 
-const hunger=100;
-const hygiene=100;
-const sleepyness=100;
+const hunger = 100;
+const hygiene = 100;
+const sleepyness = 100;
 
 //para controlar como de rapido o lento se quite
-const hungerRate=2;
-const sleepRate=1;
-const hygieneRate=20;
-const hpLossRate=5; 
-const timer=2000;
+const hungerRate = 2;
+const sleepRate = 1;
+const hygieneRate = 20;
+const hpLossRate = 5; 
+const timer = 2000;
 
 export default class statHandler
 {
@@ -50,15 +50,15 @@ export default class statHandler
         this.timer += dt;
         const s = dt / 1000; // pasamos dt a segundos
         if(this.hunger > 0)
-            this.hunger -= s*hungerRate;
-        if(this.hygiene>0)
-            this.hygiene -= s*hygieneRate;
+            this.hunger -= s * hungerRate;
+        if(this.hygiene > 0)
+            this.hygiene -= s * hygieneRate;
         if(this.sleepyness > 0)
-            this.sleepyness -= s*sleepRate;
+            this.sleepyness -= s * sleepRate;
         
-        this.hungerBar.updateBar(this.hunger,this.maxHunger);
-        this.hygienetBar.updateBar(this.hygiene,this.maxHygiene);
-        this.sleepynessBar.updateBar(this.sleepyness,this.maxSleepyness);
+        this.hungerBar.updateBar(this.hunger, this.maxHunger);
+        this.hygienetBar.updateBar(this.hygiene, this.maxHygiene);
+        this.sleepynessBar.updateBar(this.sleepyness, this.maxSleepyness);
         
         //si llega a 0 , empieza a quitar vida
         if(this.hunger<=0)
@@ -111,5 +111,9 @@ export default class statHandler
 
     resetSleepyness() {
         this.sleepyness = sleepyness;
+    }
+
+    increaseHygiene(amount) {
+        this.hygiene = Math.min(this.maxHygiene, this.hygiene + amount);
     }
 }
