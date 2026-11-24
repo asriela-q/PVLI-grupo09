@@ -164,6 +164,7 @@ export default class Animation extends Phaser.Scene {
         this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 130, 1150, "stone_sword", "stone_sword", ITEM_ENCYCLOPEDIA).setScale(0.15));
         this.itemsGroup.add(new Item(this, 130, 1150, "iron_axe", "iron_axe", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        this.itemsGroup.add(new Item(this, 130, 1150, "iron_armor", "iron_armor", ITEM_ENCYCLOPEDIA).setScale(0.15));
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
@@ -228,7 +229,8 @@ export default class Animation extends Phaser.Scene {
     }
 
     /*
-    Método que cambia la pantalla de color según el tiempo, de momento está en segundos para que sea fácil de ver y probar
+    Método que cambia la pantalla de color según el tiempo, de momento está en pocos segundos para que sea fácil de ver y probar
+    Además, este método se encarga de resetear los recursos, los enemigos y los cofres (estos últimos por añadir) que se encuentran por el mapa
     */
     cicloDia() {
         const colorDia = Phaser.Display.Color.HexStringToColor('#ffffff');      
@@ -278,7 +280,7 @@ export default class Animation extends Phaser.Scene {
                 },
                 //Noche
                 {
-                    alpha: 0.5, 
+                    alpha: 0.3, 
                     duration: 5000,
                     onStart: () => { this.actualizarFantasmas(true); },
                     onUpdate: (tween) => {

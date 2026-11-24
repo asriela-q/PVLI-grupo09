@@ -37,6 +37,9 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.equipedItem.setOrigin(0.5, 0.5).setScale(0.5, 0.5); //Pivote del arma con respecto al jugador
         this.add(this.equipedItem);
         
+        this.armorSprite = this.scene.add.sprite(0, 0, undefined);
+        this.armorSprite.setVisible(false); // Oculta por defecto al empezar
+        this.add(this.armorSprite);
 
         this.scene.add.existing(this); // Nos añadimos a la escena para ser mostrados
         this.scene.physics.add.existing(this); // Le añadimos físicas al jugador
@@ -73,6 +76,7 @@ export default class Psy extends Phaser.GameObjects.Container {
             }
             else if (pointer.rightButtonDown() && !inventory.isVisible) {
                 this.equippedItem = null;
+                this.bonusAttack = 0;
                 this.updateEquipedItem();
             }
         })
@@ -82,8 +86,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.speed = WALK_SPEED; // velocidad del player (la inicializamos a la de caminar)
         this.isRunning = false; // detecta si 
 
-        this.runSpeed=RUN_SPEED;
-        this.walkSpeed=WALK_SPEED;
+        this.runSpeed = RUN_SPEED;
+        this.walkSpeed = WALK_SPEED;
 
         // estamina:
         this.currentStamina = STAMINA; // estamina actual del jugador
@@ -105,6 +109,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.playerAttack = baseAttack;
         this.bonusAttack = 0;
         this.playerDefense = baseDefense;
+        this.bonusDefense = 0;
+        this.equippedArmor = null;
 
         // variables de acción
         this.facingDirection = "right"; //Dirección del último movimiento;
@@ -214,8 +220,13 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.currentLife = maxLife; // lo curamos por completo
         this.currentStamina = STAMINA; // recuperamos toda la stamina
 
+        //Le quitamos a Psy el objeto que tenía equipado y la armadura
         this.equippedItem = null;
         this.updateEquipedItem();
+        this.bonusAttack = 0;
+        this.equippedArmor = null; 
+        this.bonusDefense = 0;
+        this.updateArmor();
         // ponemos al jugador de nuevo en la base
         this.x = xBase;
         this.y = yBase;
@@ -237,7 +248,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         if(Phaser.Input.Keyboard.JustDown(this.statKey)) this.scene.stats.openPanel(); 
         
         this.lifeBar.updateBar(this.currentLife, maxLife);
-        if(this.currentLife<=maxLife/3)
+        if (this.currentLife <= maxLife/3)
         {
             this.scene.cam.flash(dt);
         }
@@ -271,9 +282,11 @@ export default class Psy extends Phaser.GameObjects.Container {
     }
 
     takeDamage(damageAmount) {
-        let totalDamage = damageAmount - this.playerDefense;
+        let totalDefense = this.playerDefense + this.bonusDefense;
+        let totalDamage = damageAmount - totalDefense;
         totalDamage = Math.max(1, totalDamage); //Esto es para que si por lo que sea sale que el daño es negativo hacer 1 de daño
         this.currentLife -= totalDamage;
+        this.damageArmor();
         if(this.currentLife <= 0)
         {
             this.currentLife = 0; //Se evita que tomen valores negativos
@@ -376,7 +389,7 @@ export default class Psy extends Phaser.GameObjects.Container {
     }
 
     updateEquipedItem() {
-        if (this.equippedItem && this.scene.textures.exists(this.equippedItem.id)) {
+        if (this.equippedItem) {
             this.equipedItem.setTexture(this.equippedItem.id);
             this.equipedItem.setVisible(true);
         } 
@@ -388,14 +401,35 @@ export default class Psy extends Phaser.GameObjects.Container {
     equipItemFromInventory(itemId, slotIndex) {
         const itemInfo = this.inventory.ITEM_ENCYCLOPEDIA[itemId];
         if (itemInfo && (itemInfo.type === "weapon" || itemInfo.type === "pick" || itemInfo.type === "shovel" || itemInfo.type === "axe")) {
-        //Guardamos el id y su tipo para saber qué puede hacer después
-        this.equippedItem = {
-            id: itemId,
-            type: itemInfo.type,
-            slotIndex : slotIndex
-        };} 
+            //Guardamos el id y su tipo para saber qué puede hacer después
+            this.equippedItem = {
+                id: itemId,
+                type: itemInfo.type,
+                slotIndex : slotIndex
+            };
+            if (itemInfo.type === "weapon") {
+                this.bonusAttack = itemInfo.bonusAttack;
+            }
+        } 
+        else if (itemInfo && itemInfo.type === "armor") {
+            //Si el jugador hace clic en la misma armadura se la quita
+            if (this.equippedArmor && this.equippedArmor.slotIndex === slotIndex) {
+                this.equippedArmor = null;
+                this.bonusDefense = 0;
+            }
+            else { //El jugador se equipa una armadura nueva
+                this.equippedArmor = {
+                     id: itemId,
+                    type: itemInfo.type,
+                    slotIndex : slotIndex
+                }
+                this.bonusDefense = itemInfo.bonusDefense;
+            }
+            this.updateArmor();
+        }
         else {
             this.equippedItem = null; //Desequipa si seleccionas algo que no es una herramienta
+            this.bonusAttack = 0;
         }
     
         console.log(itemInfo);
@@ -410,7 +444,31 @@ export default class Psy extends Phaser.GameObjects.Container {
         let isBroken = this.inventory.decreaseDurability(this.equippedItem.slotIndex);
         if (isBroken) {
             this.equippedItem = null; 
+            this.bonusAttack = 0;
             this.updateEquipedItem();
+        }
+    }
+
+    updateArmor() {
+        if (this.equippedArmor) {
+            this.armorSprite.setTexture(this.equippedArmor.id);
+            this.armorSprite.setVisible(true);
+        } else {
+            this.armorSprite.setVisible(false);
+        }
+    }
+
+    damageArmor() {
+        if (!this.equippedArmor || this.equippedArmor.slotIndex === undefined) return;
+        let isBroken = this.inventory.decreaseDurability(this.equippedArmor.slotIndex);
+        if (isBroken) {
+            this.equippedArmor = null;
+            this.bonusDefense = 0;
+            this.updateArmor();
+            //Para que la armadura desaparezca del inventario si se rompa con él abierto
+            if (this.inventory.isVisible) {
+                this.inventory.render(this.scene, this.inventory.currentX, this.inventory.currentY, this);
+            }
         }
     }
 }

@@ -45,7 +45,7 @@ export default class stats extends Phaser.Scene {
         const extra = this.add.text(panelWidth / 2, 470, [
             `Vida: ${Math.max(0, (player.currentLife))} / ${player.maxLife}`,
             `Ataque: ${player.playerAttack + player.bonusAttack}`,
-            `Defensa: ${player.playerDefense}`,
+            `Defensa: ${player.playerDefense + player.bonusDefense}`,
         ], {
             fontFamily: "Pixuf", fontSize: "18px", color: "#ffffff", align: "center", lineSpacing: 6
         }).setOrigin(0.5, 0);

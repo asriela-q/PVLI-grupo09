@@ -11,13 +11,23 @@
         "texture": "stone_sword",
         "stackable": false,
         "type": "weapon",
+        "bonusAttack": 5,
         "maxDurability": 30
+    },
+    "iron_sword" : {
+        "name": "Iron sword",
+        "texture": "iron_sword", 
+        "stackable": false,
+        "type": "weapon",
+        "bonusAttack": 10,
+        "maxDurability": 45
     },
     "metal_sword" : {
         "name": "Metal sword",
         "texture": "metal_sword", 
         "stackable": false,
         "type": "weapon",
+        "bonusAttack": 15,
         "maxDurability": 60
     },
     "ghost_sword" : {
@@ -25,6 +35,7 @@
         "texture": "",
         "stackable": false,
         "type": "weapon",
+        "bonusAttack": 25,
         "maxDurability": 200
     },
     "stone_pick" : {
@@ -68,6 +79,30 @@
         "stackable": false,
         "type": "shovel",
         "maxDurability": 60
+    },
+    "iron_armor" : {
+        "name": "Iron armor",
+        "texture": "iron_armor",
+        "stackable": false,
+        "type": "armor",
+        "bonusDefense": 10,
+        "maxDurability": 150
+    },
+    "metal_armor" : {
+        "name": "Metal armor",
+        "texture": "metal_armor",
+        "stackable": false,
+        "type": "armor",
+        "bonusDefense": 25,
+        "maxDurability": 215
+    },
+    "cockroach_armor" : {
+        "name": "Cockroach armor",
+        "texture": "cockroach_armor",
+        "stackable": false,
+        "type": "armor",
+        "bonusDefense": 50,
+        "maxDurability": 300
     },
     "stone" : {
         "name": "Stone", 

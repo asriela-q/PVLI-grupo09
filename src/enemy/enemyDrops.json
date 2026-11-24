@@ -7,6 +7,10 @@
     "ghost": {
         "ghost_sword": {"probability": 5 },
         "fabric": {"probability": 20 }
+    },
+    "cockroach": {
+        "cockroach_armor": {"probability": 5 },
+        "metal": {"probability": 20 }
     }
 
 }
