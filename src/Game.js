@@ -9,6 +9,7 @@ import CraftUI from './scenes/crafting.js';
 import credits from './scenes/credits.js';
 import stats from './scenes/stats.js';
 import storageChest from './scenes/openChest.js';
+import pauseMenu from './scenes/pauseMenu.js';
 
 let config = {
 	type: Phaser.AUTO,
@@ -39,7 +40,7 @@ let config = {
 	},
 
 	// ponemos las escenas utilizando el manager de Phaser
-	scene: [load, mainMenu, game, CraftUI, credits, stats, storageChest]
+	scene: [load, mainMenu, game, CraftUI, credits, stats, storageChest, pauseMenu]
 };
 
 new Phaser.Game(config);

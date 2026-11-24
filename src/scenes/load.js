@@ -63,6 +63,8 @@ export default class Load extends Phaser.Scene {
 
         // interfaz
         this.load.image("button", "./assets/images/placeholders/button.png");
+        this.load.image("resumeButton", "./assets/images/placeholders/resumeButton.jpg");
+        this.load.image("exitButton", "./assets/images/placeholders/buttonExit.jpg");
         this.load.image("dayWheel", "./assets/images/placeholders/dayTimesWheel.jpg");
         this.load.image("arrow", "./assets/images/placeholders/Arrow.png");
         this.load.image("deathStone", "./assets/images/placeholders/deathStone.jpg");

@@ -30,6 +30,7 @@ export default class Animation extends Phaser.Scene {
         this.mercadona;
         this.freezeScene = false;
         this.doubleDropChance = 0;
+
     }
 
     init(data) {
@@ -48,6 +49,12 @@ export default class Animation extends Phaser.Scene {
             } else {
                 this.scale.startFullscreen();
             }
+        });
+
+        this.pauseKey = this.input.keyboard.addKey('SPACE');
+        this.pauseKey.on('down', () => {
+            this.scene.pause();
+            this.scene.launch('pause');
         });
 
         let ITEM_ENCYCLOPEDIA = this.cache.json.get("infoItems");
@@ -107,8 +114,6 @@ export default class Animation extends Phaser.Scene {
         let rocks = new stoneBlock(this, 600, 600, "stoneBlock", this.itemsGroup);
         let tree = new Tree(this, 600, 800, "tree", this.itemsGroup);
         this.resourcesGroup.add(rocks).add(tree);
-
-        
 
         this.mercadona = new Mercadona(this, 1500, 200, "mercadona").setScale(0.3);
         this.interactGroup.add(this.mercadona);
