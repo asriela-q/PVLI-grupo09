@@ -42,6 +42,15 @@ export default class Animation extends Phaser.Scene {
     create () {
         this.input.mouse.disableContextMenu(); //Para quitar lo que sale por defecto al hacer click derecho
 
+        //Música
+        if (!this.sound.get('bgMusic')) {
+        this.musicaFondo = this.sound.add('bgMusic', {
+            volume: 0.5, 
+            loop: true //Se repite infinitamente
+        });
+            this.musicaFondo.play();
+        }
+
         const fullscreenButton = this.add.image(1000, 700, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.15).setDepth(9999).setScrollFactor(0);
         fullscreenButton.on('pointerdown', () => {
             if (this.scale.isFullscreen) {

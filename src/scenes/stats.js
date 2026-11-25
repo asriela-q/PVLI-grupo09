@@ -36,16 +36,16 @@ export default class stats extends Phaser.Scene {
         const stats = this.stats;
         
         //creacion de las columnas de estadisticas de supervivencia
-        this.createStatColumn(panelWidth * 0.25,"sueño", 0x908f9a, stats.sleepyness, stats.maxSleepyness);
-        this.createStatColumn(panelWidth * 0.50,"hunger", 0xE67E22, stats.hunger, stats.maxHunger);
-        this.createStatColumn(panelWidth * 0.75,"higiene", 0x5b94e0, stats.hygiene, stats.maxHygiene);
+        this.createStatColumn(panelWidth * 0.25, "sueño", 0x908f9a, stats.sleepyness, stats.maxSleepyness);
+        this.createStatColumn(panelWidth * 0.50, "hunger", 0xE67E22, stats.hunger, stats.maxHunger);
+        this.createStatColumn(panelWidth * 0.75, "higiene", 0x5b94e0, stats.hygiene, stats.maxHygiene);
        
         //estadisticas
         const player = this.player;
         const extra = this.add.text(panelWidth / 2, 470, [
-            `Vida: ${Math.max(0, (player.currentLife))} / ${player.maxLife}`,
-            `Ataque: ${player.playerAttack + player.bonusAttack}`,
-            `Defensa: ${player.playerDefense + player.bonusDefense}`,
+            `Life: ${Math.max(0, (player.currentLife))} / ${player.maxLife}`,
+            `Attack: ${player.playerAttack + player.bonusAttack}`,
+            `Defense: ${player.playerDefense + player.bonusDefense}`,
         ], {
             fontFamily: "Pixuf", fontSize: "18px", color: "#ffffff", align: "center", lineSpacing: 6
         }).setOrigin(0.5, 0);

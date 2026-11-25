@@ -65,6 +65,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("button", "./assets/images/placeholders/button.png");
         this.load.image("resumeButton", "./assets/images/placeholders/resumeButton.jpg");
         this.load.image("exitButton", "./assets/images/placeholders/buttonExit.jpg");
+        this.load.image("controlsButton", "./assets/images/placeholders/controlsButton.jpg");
         this.load.image("dayWheel", "./assets/images/placeholders/dayTimesWheel.jpg");
         this.load.image("arrow", "./assets/images/placeholders/Arrow.png");
         this.load.image("deathStone", "./assets/images/placeholders/deathStone.jpg");
@@ -162,6 +163,9 @@ export default class Load extends Phaser.Scene {
         this.load.json("infoChest", "./src/mapObjects/infoChest.json");
         this.load.json("infoProducts", "./src/mapObjects/infoProducts.json");
         this.load.json("enemyDrops", "./src/enemy/enemyDrops.json");
+
+        //Cargar música
+        this.load.audio("bgMusic", "./assets/sounds/music/animalCrossingBgMusic.mp3");
 
         this.load.on('complete', () => {
             progressBar.destroy();
