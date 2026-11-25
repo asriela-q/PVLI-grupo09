@@ -6,7 +6,7 @@ var ROOMS_LIST = [
         activeLevel: 0,  // nivel actual de la sala (0 = sin construir, 1 = nivel 1, 2 = nivel 2)
         craftable: false,  // si se puede craftear actualmente con los items del inventario
         numIngredients: 2,  // el número de items que requiere su crafteo
-        ing1: 'metal',  // item 1
+        ing1: 'stone',  // item 1
         quant1: 6,  // cantidad del item 1 rquerida
         ing2: 'wood',  // item 2
         quant2: 20  // cantidad del item 2 rquerida

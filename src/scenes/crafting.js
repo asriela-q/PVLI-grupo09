@@ -24,6 +24,26 @@ export default class Animation extends Phaser.Scene {
         this.inventory = data.inventory;
         this.close = this.input.keyboard.addKey("Q");
 
+        this.craftMode = data.craft; 
+        this.buildSpace = data.buildSpace;
+
+        const maskShape = this.make.graphics();
+        maskShape.fillStyle(0xffffff);
+        maskShape.fillRect(0, 15, 320, 570); //x, y, ancho, alto de la zona de scroll
+        this.recipesMask = maskShape.createGeometryMask();
+        this.recipesContainer = this.add.container(0, 0).setDepth(100);
+        this.recipesContainer.setMask(this.recipesMask);
+
+        this.maxScroll = 0; //Sirve para marcar el tope inferior del scroll
+        this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY) => {
+        //Scroll si el ratón está en la zona de recetas
+        if (pointer.x < 320 && this.recipesContainer) {
+            this.recipesContainer.y -= deltaY * 0.5;
+            //Límites scroll: 0 (arriba) y -this.maxScroll (abajo)
+            this.recipesContainer.y = Phaser.Math.Clamp(this.recipesContainer.y, -this.maxScroll, 0);
+        }
+        });
+
         if(data.craft == 0) {
             this.renderCraftableRecipes();
         }
@@ -45,6 +65,9 @@ export default class Animation extends Phaser.Scene {
         let bg = this.add.image(0, 0, "craftbg").setOrigin(0,0);
         bg.setScale(1);
 
+        this.recipesContainer = this.add.container(0, 0);
+        this.recipesContainer.setMask(this.recipesMask);
+
         let cont = 20;
         console.log(Object.keys(RECIPES_LIST).length);
         for(let i = 0; i < Object.keys(RECIPES_LIST).length; i++) {
@@ -56,11 +79,14 @@ export default class Animation extends Phaser.Scene {
                     var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
                     green.setScale(0.4);
                     green.on("pointerdown", ()=>this.craftRecipe(recipe, false));
+                    this.recipesContainer.add(green);
                 }
                 else {
                     var square = this.add.image(20, cont, "square").setOrigin(0, 0);
                     square.setScale(0.4);
+                    this.recipesContainer.add(square);
                 }
+
 
                 // se renderiza la imagen del objeto de la receta
                 let object = this.add.image(25, cont + 5, recipe.object).setOrigin(0, 0);
@@ -80,11 +106,15 @@ export default class Animation extends Phaser.Scene {
                 //     ingredient3.setScale(0.1);
                 // }
 
+                this.recipesContainer.add([object, ingredient1, ingredient2]);
                 cont = cont + 170;
             }
         }
         if (this.invContainer) this.invContainer.destroy();
         this.invContainer = this.inventory.renderCraft(this, 325, 25);
+        
+        const visibleHeight = 570;
+        this.maxScroll = Math.max(0, cont - visibleHeight);
     }
 
     checkAvaibleCrafts() {
@@ -119,11 +149,14 @@ export default class Animation extends Phaser.Scene {
                     var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
                     green.setScale(0.4);
                     green.on("pointerdown", ()=>this.craftRecipe(room, true, buildSpace));
+                    this.recipesContainer.add(green);
                 }
                 else {
                     var square = this.add.image(20, cont, "square").setOrigin(0, 0);
                     square.setScale(0.4);
+                    this.recipesContainer.add(square);
                 }
+
 
                 // se renderiza la imagen del objeto de la receta
                 let object = this.add.image(25, cont + 5, room.room).setOrigin(0, 0);
@@ -143,11 +176,15 @@ export default class Animation extends Phaser.Scene {
                 //     ingredient3.setScale(0.1);
                 // }
 
+                this.recipesContainer.add([object, ingredient1, ingredient2]);
                 cont = cont + 170;
             }
         }
         if (this.invContainer) this.invContainer.destroy();
         this.invContainer = this.inventory.renderCraft(this, 325, 25);
+
+        const visibleHeight = 570;
+        this.maxScroll = Math.max(0, cont - visibleHeight);
     }
 
     checkAvaibleRooms() {
@@ -180,10 +217,12 @@ export default class Animation extends Phaser.Scene {
                     var green = this.add.image(20, cont, "green").setOrigin(0, 0).setInteractive();
                     green.setScale(0.4);
                     green.on("pointerdown", ()=>this.craftRecipe(recipe, false));
+                    this.recipesContainer.add(green);
                 }
                 else {
                     var square = this.add.image(20, cont, "square").setOrigin(0, 0);
                     square.setScale(0.4);
+                    this.recipesContainer.add(square);
                 }
 
                 // se renderiza la imagen del objeto de la receta
@@ -204,11 +243,15 @@ export default class Animation extends Phaser.Scene {
                 //     ingredient3.setScale(0.1);
                 // }
 
+                this.recipesContainer.add([object, ingredient1, ingredient2]);
                 cont = cont + 170;
             }
         }
         if (this.invContainer) this.invContainer.destroy();
         this.invContainer = this.inventory.renderCraft(this, 325, 25);
+
+        const visibleHeight = 570;
+        this.maxScroll = Math.max(0, cont - visibleHeight);
     }
 
     checkAvaibleCookingRecipes() {
