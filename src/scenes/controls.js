@@ -21,10 +21,11 @@ export default class credits extends Phaser.Scene {
             'G: save progress',
             'Left clic: perform action',
             'Right clic: unequip item',
-            'Tab: consult stats'
+            'Tab: consult stats',
+            'Space: open pause menu'
         ];
 
-        const format = this.add.text(width / 2, height * 0.23, text.join('\n'), {
+        const format = this.add.text(width / 2, height * 0.2, text.join('\n'), {
             fontFamily: 'Arial',
             fontSize: '18px',
             color: '#ffffff',
