@@ -84,7 +84,8 @@ export default class Load extends Phaser.Scene {
         this.load.image("cookingbg", "./assets/images/placeholders/cookingbg.jpg");
         this.load.image("square", "./assets/images/placeholders/square.jpg");
         this.load.image("green", "./assets/images/placeholders/verde.jpg");
-        this.load.image("storageRoomBg", "./assets/images/placeholders/storageRoomBg.jpg")
+        this.load.image("storageRoomBg", "./assets/images/placeholders/storageRoomBg.jpg");
+        this.load.image("armoryCraftBg", "/assets/images/placeholders/armoryCraftfondo.jpg");
 
         // objetos
         this.load.image("coal", "./assets/images/sprites/Materials/coal.png");
@@ -103,6 +104,7 @@ export default class Load extends Phaser.Scene {
         this.load.image("stoneBlock", "./assets/images/placeholders/stoneBlock.jpg");
         this.load.image("tree", "./assets/images/placeholders/tree.png");
         this.load.image("tick", "./assets/images/placeholders/pulga.png");
+        this.load.image("auraOrb", "./assets/images/placeholders/auraOrb.png")
 
         // herramientas
         this.load.image("stone_sword", "./assets/images/placeholders/stone_sword.png");
@@ -157,6 +159,9 @@ export default class Load extends Phaser.Scene {
             frameWidth:192,
             frameHeight:192
         });
+
+        // cargar fonts
+        this.load.font("pixelFont", "./assets/fonts/pixelFont-7-8x14-sproutLands.ttf");
 
         //Cargar json
         this.load.json("infoItems", "./src/objectsAndInventory/infoItems.json");

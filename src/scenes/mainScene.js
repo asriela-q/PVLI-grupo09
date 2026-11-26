@@ -173,7 +173,7 @@ export default class Animation extends Phaser.Scene {
         for (let i = 0; i < 15; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1150, "clay", "clay", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
-        for (let i = 0; i < 6; i++)  {
+        for (let i = 0; i < 10; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1200, "metal", "metal", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
         this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.15));
@@ -401,7 +401,7 @@ export default class Animation extends Phaser.Scene {
             this.interactGroup.add(craftingTable);
         }
         else if (room === "armory") {
-            let armoryRoom = new Armory(this, posX, posY, "armory").setScale(0.25);
+            let armoryRoom = new Armory(this, posX, posY, "armory", this.player, this.stats).setScale(0.25);
             this.interactGroup.add(armoryRoom);
         }
     }

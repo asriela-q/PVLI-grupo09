@@ -1,4 +1,4 @@
-import ARMORY_COLUMNS, { ARMORY_MAX_LEVEL } from "../armoryUpgrades.js";
+import ARMORY_COLUMNS, { ARMORY_MAX_LEVEL } from "../armoryUpgradeInfo.js";
 
 export default class Armory extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, player, stats) {
@@ -64,7 +64,7 @@ export default class Armory extends Phaser.GameObjects.Sprite {
 
         const upgrade = this.findUpgrade(id);
         const tier = this.getTier(id);
-        const oldValue = this.getCurrentValue(up); // variable para guardar el valor de la upgrade anterior para sumar luego la diferencia
+        const oldValue = this.getCurrentValue(upgrade); // variable para guardar el valor de la upgrade anterior para sumar luego la diferencia
 
         this.player.auraOrbs -= upgrade.costs[tier]; // le restamos al jugador el coste de los orbes
         this.player.armoryTiers[id] = tier + 1; // subimos la tier de la upgrade

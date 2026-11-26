@@ -11,6 +11,7 @@ import stats from './scenes/stats.js';
 import storageChest from './scenes/openChest.js';
 import pauseMenu from './scenes/pauseMenu.js';
 import controls from './scenes/controls.js';
+import ArmoryUI from './scenes/armoryUI.js';
 
 let config = {
 	type: Phaser.AUTO,
@@ -41,7 +42,7 @@ let config = {
 	},
 
 	// ponemos las escenas utilizando el manager de Phaser
-	scene: [load, mainMenu, game, CraftUI, credits, stats, storageChest, pauseMenu, controls]
+	scene: [load, mainMenu, game, CraftUI, credits, stats, storageChest, pauseMenu, controls, ArmoryUI]
 };
 
 new Phaser.Game(config);

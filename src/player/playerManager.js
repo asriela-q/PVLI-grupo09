@@ -87,6 +87,7 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         // estamina:
         this.maxStamina = 5; // segundos que puede correr el jugador (estamina máxima)
+        this.staminaRecovery = 1; // multiplicador del recovery time de la stamina según los buffs de la armeria
         this.currentStamina = this.maxStamina; // estamina actual del jugador
         this.recoveryTimer = 0; // segundos que faltan para que empiece a recuperarse la estamina (cooldown)
         this.isExhausted = false; // true si la estamina llegó a 0 y aún no ha pasado el cooldown largo
@@ -104,6 +105,7 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         // estadísticas del player
         this.playerAttack = baseAttack;
+        this.attackSpeed = 1; // multiplicador de la vel de atk
         this.bonusAttack = 0;
         this.playerDefense = baseDefense;
         this.bonusDefense = 0;
@@ -120,6 +122,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         */
 
         this.deathStone = undefined; // lápida del jugador
+
+        this.auraOrbs = 0; // orbes recogidos por el jugador
         
         this.body.setImmovable(true); //para que no pueda ser empujado 
         this.cam = Camera;
@@ -203,7 +207,7 @@ export default class Psy extends Phaser.GameObjects.Container {
         else {
             this.isExhausted = false;
             // vamos recuperando estamina (para no pasarnos usamos el min entre el maximo y la actual)
-            this.currentStamina = Math.min(this.maxStamina, this.currentStamina + s);
+            this.currentStamina = Math.min(this.maxStamina, this.currentStamina + s * this.staminaRecovery);
         }
 
         this.staminaBar.updateBar(this.currentStamina, this.maxStamina);
@@ -215,7 +219,7 @@ export default class Psy extends Phaser.GameObjects.Container {
     }
 
     revive(xBase, yBase){
-        this.currentLife = maxLife; // lo curamos por completo
+        this.currentLife = this.maxLife; // lo curamos por completo
         this.currentStamina = this.maxStamina; // recuperamos toda la stamina
 
         //Le quitamos a Psy el objeto que tenía equipado y la armadura
@@ -245,8 +249,8 @@ export default class Psy extends Phaser.GameObjects.Container {
         if(Phaser.Input.Keyboard.JustDown(this.saveKey)) this.scene.saveGame();
         if(Phaser.Input.Keyboard.JustDown(this.statKey)) this.scene.stats.openPanel(); 
         
-        this.lifeBar.updateBar(this.currentLife, maxLife);
-        if (this.currentLife <= maxLife/3)
+        this.lifeBar.updateBar(this.currentLife, this.maxLife);
+        if (this.currentLife <= this.maxLife / 3)
         {
             this.scene.cam.flash(dt);
         }
@@ -338,7 +342,7 @@ export default class Psy extends Phaser.GameObjects.Container {
             }
 
             //El collider desaparece después de un cooldown
-            this.scene.time.delayedCall(150, () => {
+            this.scene.time.delayedCall(150 / this.attackSpeed, () => {
                 attackCollider.destroy();
                 this.isPerformingAction = false;
             });
