@@ -17,6 +17,7 @@ import Bedroom from "../building/rooms/bedroom.js";
 import Bathroom from "../building/rooms/bathroom.js";
 import StorageRoom from "../building/rooms/storageRoom.js";
 import StorageChest from "../building/storageChest.js";
+import Armory from "../building/rooms/armory.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
@@ -100,7 +101,7 @@ export default class Animation extends Phaser.Scene {
 
         // hay que definir primero el grupo de los items
         let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);
-        testChest.on("pointerdown", ()=> testChest.getRandomItem());
+        //testChest.on("pointerdown", ()=> testChest.getRandomItem());
         
         //Grupo de Phaser para gestionar las físicas de los enemigos
         this.enemiesGroup = this.physics.add.group({
@@ -398,6 +399,10 @@ export default class Animation extends Phaser.Scene {
             let craftingTable = new Craft(this, posX, posY, "craft", this.psyInventory).setScale(0.3);
             craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
             this.interactGroup.add(craftingTable);
+        }
+        else if (room === "armory") {
+            let armoryRoom = new Armory(this, posX, posY, "armory").setScale(0.25);
+            this.interactGroup.add(armoryRoom);
         }
     }
 }

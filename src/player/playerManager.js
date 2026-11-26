@@ -5,19 +5,15 @@ sueño, hambre, estamina, etc.
 
 import StatsBar from "./barUIHandler.js";
 import Camera from "./camera.js";
-// velocidad:
+// constantes de velocidad:
 export const RUN_SPEED = 650; // velocidad al correr
 const WALK_SPEED = 270; // velocidad al caminar
 
 const INTERACT_RANGE = 160; // rango para interactuar con objetos
 
-// estamina:
-const STAMINA = 5; // segundos que puede correr el jugador (estamina máxima)
+// constantes de estamina:
 const RECOVERY_CD = 1.5; // segundos de espera antes de recuperar estamina tras dejar de correr
 const EXHAUST_CD = 4; // segundos de espera si la estamina llegó a 0 (más largo)
-
-// vida:
-const maxLife = 100; // vida máxima del jugador
 
 const baseAttack = 15; // ataque base
 export const baseDefense = 15; // defensa base
@@ -90,13 +86,14 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.walkSpeed = WALK_SPEED;
 
         // estamina:
-        this.currentStamina = STAMINA; // estamina actual del jugador
+        this.maxStamina = 5; // segundos que puede correr el jugador (estamina máxima)
+        this.currentStamina = this.maxStamina; // estamina actual del jugador
         this.recoveryTimer = 0; // segundos que faltan para que empiece a recuperarse la estamina (cooldown)
         this.isExhausted = false; // true si la estamina llegó a 0 y aún no ha pasado el cooldown largo
 
         // variables con la vida
-        this.maxLife = maxLife;
-        this.currentLife = maxLife; //Cuando creamos al jugador su vida es la máxima
+        this.maxLife = 100;
+        this.currentLife = this.maxLife; //Cuando creamos al jugador su vida es la máxima
 
         // inventario y UI
         this.inventory.render(this.scene, x + 20, y, this);
@@ -117,14 +114,15 @@ export default class Psy extends Phaser.GameObjects.Container {
         this.isPerformingAction = false;
 
         // DEBUG BORRAR LUEGO
-        this.rangeCircle = this.scene.add.circle(0, 0, INTERACT_RANGE); // x, y, radio
+        /*this.rangeCircle = this.scene.add.circle(0, 0, INTERACT_RANGE); // x, y, radio
         this.rangeCircle.setStrokeStyle(2, 0xff0000); // borde rojo de 2 px
         this.add(this.rangeCircle); // lo metemos en el contenedor para que siga al jugador
+        */
 
         this.deathStone = undefined; // lápida del jugador
         
-        this.body.setImmovable(true);//para que no pueda ser empujado 
-        this.cam=Camera;
+        this.body.setImmovable(true); //para que no pueda ser empujado 
+        this.cam = Camera;
     }
 
     // método que gestiona las acciones del jugador mediante el input del usuario
@@ -205,10 +203,10 @@ export default class Psy extends Phaser.GameObjects.Container {
         else {
             this.isExhausted = false;
             // vamos recuperando estamina (para no pasarnos usamos el min entre el maximo y la actual)
-            this.currentStamina = Math.min(STAMINA, this.currentStamina + s);
+            this.currentStamina = Math.min(this.maxStamina, this.currentStamina + s);
         }
 
-        this.staminaBar.updateBar(this.currentStamina, STAMINA);
+        this.staminaBar.updateBar(this.currentStamina, this.maxStamina);
     }
 
     // metodo q devuelve si el jugador esta muerto (true) o no
@@ -218,7 +216,7 @@ export default class Psy extends Phaser.GameObjects.Container {
 
     revive(xBase, yBase){
         this.currentLife = maxLife; // lo curamos por completo
-        this.currentStamina = STAMINA; // recuperamos toda la stamina
+        this.currentStamina = this.maxStamina; // recuperamos toda la stamina
 
         //Le quitamos a Psy el objeto que tenía equipado y la armadura
         this.equippedItem = null;
