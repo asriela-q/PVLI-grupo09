@@ -109,7 +109,8 @@ export default class Load extends Phaser.Scene {
         this.load.image("stoneBlock", "./assets/images/placeholders/stoneBlock.jpg");
         this.load.image("tree", "./assets/images/placeholders/tree.png");
         this.load.image("tick", "./assets/images/placeholders/pulga.png");
-        this.load.image("auraOrb", "./assets/images/placeholders/auraOrb.png")
+        this.load.image("auraOrb", "./assets/images/placeholders/auraOrb.png");
+        this.load.image("anvil", "./assets/images/placeholders/anvil.jpg");
         this.load.spritesheet("cofre",  "assets/mapa/tilesets/cofreSprite.png" , { frameWidth: 64, frameHeight: 64 });
 
 

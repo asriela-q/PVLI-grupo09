@@ -20,6 +20,7 @@ import StorageRoom from "../building/rooms/storageRoom.js";
 import StorageChest from "../building/storageChest.js";
 import Armory from "../building/rooms/armory.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
+import Anvil from "../building/anvil.js";
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
 
@@ -178,7 +179,7 @@ export default class Animation extends Phaser.Scene {
         for (let i = 0; i < 15; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1150, "clay", "clay", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
-        for (let i = 0; i < 10; i++)  {
+        for (let i = 0; i < 20; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1200, "metal", "metal", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
         this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.10));
@@ -464,8 +465,10 @@ map.getObjectLayer('Colisiones').objects.forEach(c => {
             this.interactGroup.add(craftingTable);
         }
         else if (room === "armory") {
-            let armoryRoom = new Armory(this, posX, posY, "armory", this.player, this.stats).setScale(0.25);
-            this.interactGroup.add(armoryRoom);
+            const armory = new Armory(this, posX, posY, "armory", this.psyInventory).setScale(0.25);
+            this.interactGroup.add(armory);
+            let anvil = new Anvil(this, posX, posY, "anvil", this.player, this.stats).setScale(0.1);
+            this.interactGroup.add(anvil);
         }
     }
 }
