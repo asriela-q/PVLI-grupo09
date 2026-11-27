@@ -186,7 +186,8 @@
         "texture": "meat", 
         "stackable": true, 
         "maxStack": 30, 
-        "type": "resource" 
+        "foodPoints": 20,
+        "type": "food" 
     },
     "fang" : {
         "name": "Fang", 
@@ -207,28 +208,31 @@
         "texture": "seeds",
         "stackable": true, 
         "maxStack": 30, 
-        "type": "resource" 
+        "foodPoints": 5,
+        "type": "food" 
     },
     "apple" : {
         "name": "Apple", 
         "texture": "apple",
         "stackable": true, 
         "maxStack": 15, 
-        "type": "resource" 
+        "foodPoints": 5,
+        "type": "food" 
     },
     "cereal" : {
         "name": "Cereal", 
         "texture": "cereal",
         "stackable": true, 
         "maxStack": 15, 
-        "type": "resource" 
+        "type": "food" 
     },
     "pineapple" : {
         "name": "Pineapple", 
         "texture": "pineapple",
         "stackable": true, 
         "maxStack": 15, 
-        "type": "resource" 
+        "foodPoints": 30,
+        "type": "food" 
     },
     "straw" : {
         "name": "Straw", 
@@ -278,11 +282,18 @@
         "stackable": false, 
         "type": "resource" 
     },
-    "pan" : {
-        "name": "Pan", 
-        "texture": "pan",
+    "Bread" : {
+        "name": "Bread", 
+        "texture": "bread",
         "stackable": false, 
-        "type": "resource" 
+        "type": "food" 
+    },
+    "Bistec" : {
+        "name": "Bistec", 
+        "texture": "bistec",
+        "stackable": false, 
+        "foodPoints": 50,
+        "type": "food" 
     },
     "bathtub" : {
         "name": "Bathtub", 

@@ -143,11 +143,11 @@ export default class Inventory {
         //Sirve para que se actualice mientras se renderiza el inventario
         container.removeAll(true);
 
-        const bg = scene.add.rectangle(0, 0, 425, 425, 0x000000, 1).setOrigin(0).setScale(0.5);
+        const bg = scene.add.rectangle(0, 0, 425, 425, 0x000000, 1).setOrigin(0).setScale(0.53);
         container.add(bg);
 
         const totalCols = 4; //Columnas totales, luego esto se usa para calcular las filas   
-        const slotSize = 100; //Tamaño en píxeles de cada cuadrícula del inventario     
+        const slotSize = 50; //Tamaño en píxeles de cada cuadrícula del inventario     
         const separation = 5; //Separación entre cuadrados      
 
         

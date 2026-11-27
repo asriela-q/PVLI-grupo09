@@ -25,7 +25,7 @@ import Anvil from "../building/anvil.js";
 import Bed from "../building/bed.js";
 import Grill from "../building/bed.js";
 
-const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
+const SPAWN = new Phaser.Math.Vector2(this.sys.game.canvas.width + 325, this.sys.game.canvas.height + 400); //coordenadas de la base (sitio de spawn)
 
 export default class Animation extends Phaser.Scene {
 
@@ -46,7 +46,6 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
-
         this.createCiudad();
         this.input.mouse.disableContextMenu(); //Para quitar lo que sale por defecto al hacer click derecho
 
@@ -96,7 +95,7 @@ export default class Animation extends Phaser.Scene {
         this.flecha.setAngle(-135);
 
         // creacion de elementos del juego:
-        this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setScale(0.3);
+        this.player = new Psy(this, this.sys.game.canvas.width + 325, this.sys.game.canvas.height + 400, "psy", this.psyInventory).setScale(0.3);
         this.physics.add.collider(this.player, this.murosLayer);
         this.physics.add.collider(this.player, this.vallasLayer);
         this.physics.add.collider(this.player, this.tejadosLayer);

@@ -270,7 +270,7 @@ export default class Psy extends Phaser.GameObjects.Container {
             // calculamos la distancia entre el jugador y el objeto
             const newDist = Phaser.Math.Distance.Between(this.x, this.y, objects[i].x, objects[i].y);
 
-            if (newDist < minDist){
+            if (newDist < minDist){ 
                 nearest = objects[i];
                 minDist = newDist; // cambiamos la distancia mínima
             }
@@ -314,7 +314,7 @@ export default class Psy extends Phaser.GameObjects.Container {
     attack(){
         if (this.isPerformingAction) return;
 
-        let posAttackX = this.x, posAttackY = this.y, colliderHeight = 30, colliderWidth = 50; 
+        let posAttackX = this.x, posAttackY = this.y, colliderHeight = 50, colliderWidth = 70; 
 
         //Miramos la última dirección del jugador y colocamos el collider en función de ello
         if (this.facingDirection === 'right') {
