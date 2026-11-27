@@ -14,8 +14,4 @@ export default class Bathroom extends Phaser.GameObjects.Sprite {
         if (this.level === 3) amount = 60;
         this.stats.increaseHygiene(amount);
     }
-
-    upgrateBathroom() {
-        this.level += 1;
-    }
 }

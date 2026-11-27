@@ -15,7 +15,8 @@ import Tree from "../mapObjects/tree.js";
 import ROOMS_LIST from "../building/rooms.js";
 import Kitchen from "../building/rooms/kitchen.js";
 import Bedroom from "../building/rooms/bedroom.js";
-import Bathroom from "../building/rooms/bathroom.js";
+import Bath from "../building/rooms/bath.js";
+import Bathroom from "../building/bathroom.js";
 import StorageRoom from "../building/rooms/storageRoom.js";
 import StorageChest from "../building/storageChest.js";
 import Armory from "../building/rooms/armory.js";
@@ -185,7 +186,7 @@ export default class Animation extends Phaser.Scene {
         this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.10));
         this.itemsGroup.add(new Item(this, 130, 1150, "stone_sword", "stone_sword", ITEM_ENCYCLOPEDIA).setScale(0.10));
         this.itemsGroup.add(new Item(this, 130, 1150, "iron_axe", "iron_axe", ITEM_ENCYCLOPEDIA).setScale(0.10));
-        this.itemsGroup.add(new Item(this, 130, 1150, "iron_armor", "iron_armor", ITEM_ENCYCLOPEDIA).setScale(0.10));
+        this.itemsGroup.add(new Item(this, 0, 1150, "iron_armor", "iron_armor", ITEM_ENCYCLOPEDIA).setScale(0.10));
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
@@ -454,8 +455,9 @@ map.getObjectLayer('Colisiones').objects.forEach(c => {
             this.interactGroup.add(storagChest);
         }
         else if (room == "bathroom") {
-            this.add.image(posX, posY, "bathroom");
-            const bath = new Bathroom(this, posX, posY, "bath", this.stats).setScale(0.25);
+            const bathroom = new Bathroom(this, posX, posY, "bathroom", this.psyInventory).setScale(0.45);
+            const bath = new Bath(this, posX, posY, "bath", this.stats).setScale(0.15);
+            this.interactGroup.add(bathroom);
             this.interactGroup.add(bath);
         }
         else if (room === "workshop") {
