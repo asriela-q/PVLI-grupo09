@@ -2,9 +2,8 @@ import statHandler from "../../player/statHandler.js";
 import ROOMS_LIST from "../rooms.js";
 
 export default class Bedroom extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, stats, inventory) {
+    constructor(scene, x, y, texture, inventory) {
         super(scene, x, y, texture);
-        this.stats = stats;
         this.inventory = inventory;
 
         this.scene.add.existing(this); 
@@ -12,9 +11,6 @@ export default class Bedroom extends Phaser.GameObjects.Sprite {
     }
 
     interact(){
-        const room = ROOMS_LIST.find(r => r.room === 'bedroom');
-        this.stats.resetSleepyness(room.activeLevel);
-
         this.activateLevelingUp();
     }
 

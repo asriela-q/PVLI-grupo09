@@ -21,6 +21,7 @@ import StorageChest from "../building/storageChest.js";
 import Armory from "../building/rooms/armory.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 import Anvil from "../building/anvil.js";
+import Bed from "../building/bed.js";
 
 const SPAWN = new Phaser.Math.Vector2(300, 300); //coordenadas de la base (sitio de spawn)
 
@@ -439,13 +440,12 @@ map.getObjectLayer('Colisiones').objects.forEach(c => {
         roomToCraft.activeLevel = 1;
         if (room === "kitchen") {
             let kitchen = new Kitchen(this, posX, posY, "kitchen", this.psyInventory).setScale(0.3);
-            kitchen.on("pointerdown", () => kitchen.activateCooking());
             this.interactGroup.add(kitchen);
         }
         else if (room === "bedroom") {
-            let bedroom = new Bedroom(this, posX, posY, "bedroom", this.stats, this.psyInventory).setScale(0.3);
-            bedroom.on("pointerdown", () => bedroom.activateCooking());
+            let bedroom = new Bedroom(this, posX, posY, "bedroom", this.psyInventory).setScale(0.3);
             this.interactGroup.add(bedroom);
+            let bed = new Bed(this, posX, posY, "bed", this.stats).setScale(0.3);
         }
         else if (room == "storage_room") {
             this.add.image(posX, posY, "storage_room").setScale(0.1);

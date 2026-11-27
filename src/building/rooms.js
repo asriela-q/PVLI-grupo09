@@ -26,7 +26,11 @@ var ROOMS_LIST = [
         ing1: 'metal',  // item 1
         quant1: 6,  // cantidad del item 1 rquerida
         ing2: 'wood',  // item 2
-        quant2: 20  // cantidad del item 2 rquerida
+        quant2: 20,  // cantidad del item 2 rquerida
+        quant1lvl2: 12,
+        quant2lvl2: 30,
+        quant1lvl3: 18,
+        quant2lvl3 : 50
         // items_lvl0: [{id: 'metal', quantity: 6}, {id: 'wood', quantity: 20}]
     },
     {  
@@ -39,7 +43,11 @@ var ROOMS_LIST = [
         ing1: 'wood',  // item 1
         quant1: 10,  // cantidad del item 1 rquerida
         ing2: 'fabric',  // item 2
-        quant2: 5  // cantidad del item 2 rquerida
+        quant2: 5,  // cantidad del item 2 rquerida
+        quant1lvl2: 12,
+        quant2lvl2: 30,
+        quant1lvl3: 18,
+        quant2lvl3 : 50
         // items_lvl0: [{id: 'wood', quantity: 10}, {id: 'fabric', quantity: 5}]
     },
     {  
@@ -52,7 +60,11 @@ var ROOMS_LIST = [
         ing1: 'stone',
         quant1: 8,
         ing2: 'clay',
-        quant2: 12
+        quant2: 12,
+        quant1lvl2: 12,
+        quant2lvl2: 30,
+        quant1lvl3: 18,
+        quant2lvl3 : 50
         // items_lvl0: [{id: 'stone', quantity: 8}, {id: 'clay', quantity: 12}]        
     },
     {  
@@ -65,7 +77,11 @@ var ROOMS_LIST = [
         ing1: 'wood',
         quant1: 15,
         ing2: 'stone',
-        quant2: 10
+        quant2: 10,
+        quant1lvl2: 12,
+        quant2lvl2: 30,
+        quant1lvl3: 18,
+        quant2lvl3 : 50
         // items_lvl0: [{id: 'wood', quantity: 15}, {id: 'stone', quantity: 10}]
     },
     {  
@@ -78,7 +94,11 @@ var ROOMS_LIST = [
         ing1: 'metal',
         quant1: 10,
         ing2: 'stone',
-        quant2: 5
+        quant2: 5,
+        quant1lvl2: 12,
+        quant2lvl2: 30,
+        quant1lvl3: 18,
+        quant2lvl3 : 50
         // items_lvl0: [{id: 'metal', quantity: 10}, {id: 'stone', quantity: 5}]
     }
 ]

@@ -13,9 +13,9 @@ const BAR_W = 20;
 const BAR_H = 150;
 
 //para controlar como de rapido o lento se quite
-const hungerRate = 2;
+const hungerRate = 0.5;
 const sleepRate = 1;
-const hygieneRate = 20;
+const hygieneRate = 0.25;
 const hpLossRate = 5; 
 const timer = 2000;
 
