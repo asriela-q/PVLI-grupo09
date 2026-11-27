@@ -168,11 +168,19 @@ export default class Inventory {
             //Si el item existe indicamos su imagen y cantidad
             if (item !== null) {
                 const itemIcono = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, item.id);
-                itemIcono.setDisplaySize(slotSize * 0.4, slotSize * 0.4).setInteractive();
+                itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8).setInteractive();
                 container.add(itemIcono);
 
                 itemIcono.on("pointerdown", () => {
-                    if (player) {
+                    const itemInfo = this.ITEM_ENCYCLOPEDIA[item.id];
+
+                    if (itemInfo.type === "food") {
+                    const puntosComida = itemInfo.foodPoints; 
+                    scene.stats.increaseHunger(puntosComida); 
+                    //Quitamos 1 del alimento comido y se actualiza el inventario
+                    this.removeItemBySlot(i, 1);
+                    this.renderInventory(scene, container, player);
+                    } else if (player) {
                         player.equipItemFromInventory(item.id);
                     }
                     

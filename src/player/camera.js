@@ -19,7 +19,7 @@ export default class Camera {
     //metodo que sigue al jugador
     followPl()
     {
-        const cam=this.scene.cameras.main;
+        const cam = this.scene.cameras.main;
         cam.startFollow(this.player, true, this.lerp, this.lerp)
         cam.setBounds(0, 0, this.ancho, this.alto);
         cam.setZoom(this.zoom);
@@ -27,12 +27,12 @@ export default class Camera {
     //metodo que hace el efecto de flasheo en pantalla
     flash(dt)
     {
-        const cam=this.scene.cameras.main;
-        this.timer+=dt;
+        const cam = this.scene.cameras.main;
+        this.timer += dt;
         const { r, g, b } = this.color;
-        if(!cam.flashEffect.isRunning&&this.timer>=this.wait){
+        if (!cam.flashEffect.isRunning&&this.timer >= this.wait){
             this.time=0;
-            cam.flash(this.duration,r,0,0);
+            cam.flash(this.duration, r, 0, 0);
         }
     }
 }

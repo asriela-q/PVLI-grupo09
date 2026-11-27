@@ -130,4 +130,8 @@ export default class statHandler
     increaseHygiene(amount) {
         this.hygiene = Math.min(this.maxHygiene, this.hygiene + amount);
     }
+
+    increaseHunger(amount) {
+        this.hunger = Math.min(this.maxHunger, this.hunger + amount);
+    }
 }

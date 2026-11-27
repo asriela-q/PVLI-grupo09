@@ -25,7 +25,7 @@ import Anvil from "../building/anvil.js";
 import Bed from "../building/bed.js";
 import Grill from "../building/bed.js";
 
-const SPAWN = new Phaser.Math.Vector2(this.sys.game.canvas.width + 325, this.sys.game.canvas.height + 400); //coordenadas de la base (sitio de spawn)
+
 
 export default class Animation extends Phaser.Scene {
 
@@ -79,7 +79,7 @@ export default class Animation extends Phaser.Scene {
         // let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
         // bggame.setScale(2.5);
 
-        let hudContenedor = this.add.container(0, 40).setScale(0.4); // contenedor anclado a la esquina superior de la camara
+        let hudContenedor = this.add.container(40, 40).setScale(0.4); // contenedor anclado a la esquina superior de la camara
         hudContenedor.setScrollFactor(0);
         hudContenedor.setDepth(100000);
 
@@ -94,6 +94,7 @@ export default class Animation extends Phaser.Scene {
         hudContenedor.add(this.flecha);
         this.flecha.setAngle(-135);
 
+        this.spawn = new Phaser.Math.Vector2(this.sys.game.canvas.width + 325, this.sys.game.canvas.height + 400); //coordenadas de la base (sitio de spawn)
         // creacion de elementos del juego:
         this.player = new Psy(this, this.sys.game.canvas.width + 325, this.sys.game.canvas.height + 400, "psy", this.psyInventory).setScale(0.3);
         this.physics.add.collider(this.player, this.murosLayer);
@@ -140,15 +141,15 @@ export default class Animation extends Phaser.Scene {
         this.mercadona = new Mercadona(this, 1500, 200, "mercadona").setScale(0.1);
         this.interactGroup.add(this.mercadona);
 
-        let contX = 800;
-        let contY = 400;
+        let contX = 920;
+        let contY = 900;
         let complete = false;
         for (let i = 0; i < 6; i++) {
             let blankSpace = new buildSpace(this, contX, contY, "room_template", this.psyInventory).setScale(0.2);
             blankSpace.on("pointerdown", () => blankSpace.activateCrafting());
-            if (contX > 1000 && !complete) { 
+            if (contX > 1200 && !complete) { 
                 contY += 200;
-                contX = 800;
+                contX = 920;
                 complete = true;
             }
             else {
@@ -157,8 +158,8 @@ export default class Animation extends Phaser.Scene {
             this.interactGroup.add(blankSpace);
         }
         
-         let w = this.scale.width ;
-         let h = this.scale.height ;
+        let w = this.scale.width;
+        let h = this.scale.height;
         //llamada a la función que organiza todo de la cámara
         this.cam = new Camera(this, this.player, 1, 1, this.mapaCiudad.widthInPixels, this.mapaCiudad.heightInPixels);        
         this.cam.followPl();
@@ -189,7 +190,6 @@ export default class Animation extends Phaser.Scene {
         this.itemsGroup.add(new Item(this, 130, 1150, "iron_axe", "iron_axe", ITEM_ENCYCLOPEDIA).setScale(0.10));
         this.itemsGroup.add(new Item(this, 0, 1150, "iron_armor", "iron_armor", ITEM_ENCYCLOPEDIA).setScale(0.10));
 
-        //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
         this.physics.add.overlap(this.player, this.itemsGroup, this.player.collectItem, null, this.player); //Null: callback 
         //this.physics.add.collider(player,this.enemiesGroup);
@@ -214,12 +214,11 @@ export default class Animation extends Phaser.Scene {
             }
         }
 
-        this.capaLuz = this.add.rectangle(0, 0, w / 0.25, h / 0.25, 0xffffff).setAlpha(0);
+        this.capaLuz = this.add.rectangle(0, 0, w, h, 0xffffff).setAlpha(0);
         this.capaLuz.setScrollFactor(0);
         this.capaLuz.setDepth(100);
         
         this.cicloDia();
-
     }
 
    
@@ -263,19 +262,19 @@ export default class Animation extends Phaser.Scene {
 
     map.addTilesetImage('Objetos_Ciudad', 'objetos');
 
-// objetos de Tiled
-map.createFromObjects('Decoracion_suelo', {});
-map.createFromObjects('Fachadas', {});
-const objetos = map.createFromObjects('Objetos', {});
-objetos.forEach(o => o.setDepth(10 + o.y / 10000));
+    // objetos de Tiled
+    map.createFromObjects('Decoracion_suelo', {});
+    map.createFromObjects('Fachadas', {});
+    const objetos = map.createFromObjects('Objetos', {});
+    objetos.forEach(o => o.setDepth(10 + o.y / 10000));
 
-// colisiones de Tiled
-this.colisiones = this.physics.add.staticGroup();
-map.getObjectLayer('Colisiones').objects.forEach(c => {
-    this.colisiones.add(this.add.rectangle(c.x + c.width / 2, c.y + c.height / 2, c.width, c.height));
-});
-    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-}
+    // colisiones de Tiled
+    this.colisiones = this.physics.add.staticGroup();
+    map.getObjectLayer('Colisiones').objects.forEach(c => {
+        this.colisiones.add(this.add.rectangle(c.x + c.width / 2, c.y + c.height / 2, c.width, c.height));
+    });
+        this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    }
 
 
     update(t,dt) {
@@ -304,7 +303,7 @@ map.getObjectLayer('Colisiones').objects.forEach(c => {
             // TODO: que aqui aparezca un gui o algo de q se murio el psy :3
             // ...
 
-            this.player.revive(SPAWN.x, SPAWN.y); // revivimos al jugador
+            this.player.revive(this.spawn.x, this.spawn.y); // revivimos al jugador
 
         }
     }
@@ -323,7 +322,7 @@ map.getObjectLayer('Colisiones').objects.forEach(c => {
                 //Dia
                 {
                     alpha: 0, 
-                    duration: 5000,
+                    duration: 120000, //Dos minutos
                     onStart: () => { 
                         this.actualizarFantasmas(false); 
                         this.doubleDropChance = 0.5;
@@ -335,7 +334,7 @@ map.getObjectLayer('Colisiones').objects.forEach(c => {
                 },
                 {
                     alpha: 0,
-                    duration: 5000, 
+                    duration: 120000, 
                     onStart: () => {
                         this.capaLuz.setFillStyle(Phaser.Display.Color.GetColor(colorDia.r, colorDia.g, colorDia.b));
                     }
@@ -344,7 +343,7 @@ map.getObjectLayer('Colisiones').objects.forEach(c => {
                 //Tarde
                 {
                     alpha: 0.4, 
-                    duration: 5000,
+                    duration: 120000,
                     onStart: () => { this.doubleDropChance = 0},
                     onUpdate: (tween) => {
                         let colorInterpolado = Phaser.Display.Color.Interpolate.ColorWithColor(colorDia, colorTarde, 100, tween.progress * 100);
