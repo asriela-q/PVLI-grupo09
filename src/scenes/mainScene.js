@@ -13,13 +13,10 @@ import statHandler from "../player/statHandler.js";
 import stoneBlock from "../mapObjects/stoneBlock.js";
 import Tree from "../mapObjects/tree.js";
 import ROOMS_LIST from "../building/rooms.js";
-import Kitchen from "../building/rooms/kitchen.js";
-import Bedroom from "../building/rooms/bedroom.js";
 import Bath from "../building/rooms/bath.js";
-import Bathroom from "../building/bathroom.js";
+import Room from "../building/rooms/room.js";
 import StorageRoom from "../building/rooms/storageRoom.js";
 import StorageChest from "../building/storageChest.js";
-import Armory from "../building/rooms/armory.js";
 import { saveProgress, loadProgress, deleteProgress } from '../saves/saveGame.js';
 import Anvil from "../building/anvil.js";
 import Bed from "../building/bed.js";
@@ -446,37 +443,39 @@ export default class Animation extends Phaser.Scene {
         const roomToCraft = ROOMS_LIST.find(r => r.room === room);
         roomToCraft.activeLevel = 1;
         if (room === "kitchen") {
-            let kitchen = new Kitchen(this, posX, posY, "kitchen", this.psyInventory).setScale(0.3);
+            let kitchen = new Room(this, posX, posY, "kitchen", this.psyInventory, "kitchen").setScale(0.3);
             this.interactGroup.add(kitchen);
             let grill = new Grill(this, posX, posY, "grill", this.psyInventory).setScale(0.3);
             this.interactGroup.add(grill);
         }
         else if (room === "bedroom") {
-            let bedroom = new Bedroom(this, posX, posY, "bedroom", this.psyInventory).setScale(0.3);
+            let bedroom = new Room(this, posX, posY, "bedroom", this.psyInventory, "bedroom").setScale(0.3);
             this.interactGroup.add(bedroom);
             let bed = new Bed(this, posX, posY, "bed", this.stats).setScale(0.3);
             this.interactGroup.add(bed);
         }
         else if (room == "storage_room") {
-            this.add.image(posX, posY, "storage_room").setScale(0.1);
+            let storageRoom = new Room(this, posX, posY, "storage_room", this.psyInventory, "storage_room").setScale(0.1);
+            this.interactGroup.add(storageRoom);
             this.chestStorage = new StorageRoom(8, this.psyInventory.ITEM_ENCYCLOPEDIA);
             const storagChest = new StorageChest(this, posX, posY, "storageChest", this.psyInventory, this.chestStorage).setScale(0.25);
             this.interactGroup.add(storagChest);
         }
         else if (room == "bathroom") {
-            const bathroom = new Bathroom(this, posX, posY, "bathroom", this.psyInventory).setScale(0.45);
+            const bathroom = new Room(this, posX, posY, "bathroom", this.psyInventory, "bathroom").setScale(0.45);
             const bath = new Bath(this, posX, posY, "bath", this.stats).setScale(0.15);
             this.interactGroup.add(bathroom);
             this.interactGroup.add(bath);
         }
         else if (room === "workshop") {
-            this.add.image(posX, posY, "workshop").setScale(0.25);
+            const workshop = new Room(this, posX, posY, "workshop", this.psyInventory, "workshop").setScale(0.25);
+            this.interactGroup.add(workshop);
             let craftingTable = new Craft(this, posX, posY, "craft", this.psyInventory).setScale(0.3);
             craftingTable.on("pointerdown", () => craftingTable.activateCrafting());
             this.interactGroup.add(craftingTable);
         }
         else if (room === "armory") {
-            const armory = new Armory(this, posX, posY, "armory", this.psyInventory).setScale(0.25);
+            const armory = new Room(this, posX, posY, "armory", this.psyInventory, "armory").setScale(0.25);
             this.interactGroup.add(armory);
             let anvil = new Anvil(this, posX, posY, "anvil", this.player, this.stats).setScale(0.1);
             this.interactGroup.add(anvil);
