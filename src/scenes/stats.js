@@ -25,7 +25,7 @@ export default class stats extends Phaser.Scene {
         this.closeQ = this.input.keyboard.addKey("Q");
  
         // panel dentro de un contenedor
-        this.panel = this.add.container(width / 2, 0);
+        this.panel = this.add.container(width / 2+ 70, 0);
  
         const bg = this.add.rectangle(0, 0, panelWidth, height, 0x000000, 0.75).setOrigin(0, 0);
         this.panel.add(bg);

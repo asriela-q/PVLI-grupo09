@@ -314,7 +314,7 @@ export default class Psy extends Phaser.GameObjects.Container {
     attack(){
         if (this.isPerformingAction) return;
 
-        let posAttackX = this.x, posAttackY = this.y, colliderHeight = 50, colliderWidth = 70; 
+        let posAttackX = this.x, posAttackY = this.y, colliderHeight = 30, colliderWidth = 50; 
 
         //Miramos la última dirección del jugador y colocamos el collider en función de ello
         if (this.facingDirection === 'right') {

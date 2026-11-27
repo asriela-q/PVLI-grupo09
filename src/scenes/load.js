@@ -69,6 +69,11 @@ export default class Load extends Phaser.Scene {
         this.load.image("dayWheel", "./assets/images/placeholders/dayTimesWheel.jpg");
         this.load.image("arrow", "./assets/images/placeholders/Arrow.png");
         this.load.image("deathStone", "./assets/images/placeholders/deathStone.jpg");
+        this.load.image("bgPause", "./assets/images/placeholders/bg.jpg");
+        this.load.image("buttonPause", "./assets/images/placeholders/button.jpg");
+
+
+
 
         // elementos del juego
         this.load.image("craft", "./assets/images/placeholders/craft.jpg");
@@ -105,6 +110,8 @@ export default class Load extends Phaser.Scene {
         this.load.image("tree", "./assets/images/placeholders/tree.png");
         this.load.image("tick", "./assets/images/placeholders/pulga.png");
         this.load.image("auraOrb", "./assets/images/placeholders/auraOrb.png")
+        this.load.spritesheet("cofre",  "assets/mapa/tilesets/cofreSprite.png" , { frameWidth: 64, frameHeight: 64 });
+
 
         // herramientas
         this.load.image("stone_sword", "./assets/images/placeholders/stone_sword.png");
@@ -183,11 +190,12 @@ export default class Load extends Phaser.Scene {
         }); 
 
 
-       // Ciudad
+       // Ciudad mapa
         this.load.image("bgYellow", "assets/mapa/tilesets/Background_Bleak-Yellow_TileSet.png");
         this.load.image("bgGreen",  "assets/mapa/tilesets/Background_Green_TileSet.png");
         this.load.image("bgDark",   "assets/mapa/tilesets/Background_Dark-Green_TileSet.png");
-        this.load.image("brick",    "assets/mapa/tilesets/Brick-Wall_TileSet.png");
+        this.load.image("brick", "./assets/images/sprites/Materials/brick.png");
+        this.load.image("brickWall", "assets/mapa/tilesets/Brick-Wall_TileSet.png");      
         this.load.image("garbage",  "assets/mapa/tilesets/Garbage_TileSet.png");
         this.load.image("grassTop", "assets/mapa/tilesets/Grass_On-Top_TileSet.png");
         this.load.image("gutter",   "assets/mapa/tilesets/Gutter-And-Downspout.png");
@@ -197,12 +205,12 @@ export default class Load extends Phaser.Scene {
         this.load.image("snowTop",  "assets/mapa/tilesets/Snow_On-Top_TileSet.png");
         this.load.image("fence",  "assets/mapa/tilesets/Iron-Fence_TileSet.png");
         this.load.spritesheet("objetos",  "assets/mapa/tilesets/Objetos_Ciudad.png" , { frameWidth: 192, frameHeight: 116 });
-
     
          this.load.tilemapTiledJSON('ciudad', 'assets/mapa/ciudad.tmj');
     }
 
     create() {
+
 
         //anim perro
         this.anims.create({

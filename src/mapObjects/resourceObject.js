@@ -49,7 +49,7 @@ export default class resourceObject extends Phaser.GameObjects.Sprite {
             let offsetX = Phaser.Math.Between(-100, 100);
             let offsetY = Phaser.Math.Between(-100, 100);
 
-            let droppedItem = new Item(this.scene, this.x + offsetX, this.y + offsetY, this.itemDropId, this.itemDropId, ITEM_ENCYCLOPEDIA).setScale(0.15);
+            let droppedItem = new Item(this.scene, this.x + offsetX, this.y + offsetY, this.itemDropId, this.itemDropId, ITEM_ENCYCLOPEDIA).setScale(0.05);
 
             this.group.add(droppedItem);
         }
