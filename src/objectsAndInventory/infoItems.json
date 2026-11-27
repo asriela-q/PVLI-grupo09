@@ -307,5 +307,11 @@
         "texture": "bucket",
         "stackable": false, 
         "type": "resource" 
+    },
+    "auraOrb" : {
+        "name": "Aura Orb",
+        "texture": "auraOrb",
+        "stackable": true, 
+        "type": "orb" 
     }
 }

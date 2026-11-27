@@ -283,6 +283,11 @@ export default class Psy extends Phaser.GameObjects.Container {
         }
     }
 
+    addOrbs(num){
+        console.log(num);
+        this.auraOrbs += num;
+    }
+
     takeDamage(damageAmount) {
         let totalDefense = this.playerDefense + this.bonusDefense;
         let totalDamage = damageAmount - totalDefense;

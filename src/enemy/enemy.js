@@ -101,7 +101,11 @@ constructor(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown
 
         let rng = Math.random() * 100;
         for (let i = 0; i < dataArray.length; i++){
+            // detectamos si es un orbe o no
+                
             let n = dataArray[i]; // guarda el nombre del objeto para poder buscarlo en el json
+            if (enemyData[n].number) return this.player.addOrbs(enemyData[n].number);
+
             if (rng < enemyData[n].probability) {
                 this.itemSpawner(dataArray[i]);
             }
@@ -129,6 +133,10 @@ constructor(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown
         if (this.body) {
             this.body.enable = true;
         }
+        this.currentLife = this.maxLife;
+        
+        this.lifeBar = new StatsBar(this.scene, this.x, this.y, 100, 25, 0x56F85400).setDepth(200); //barra de vida
+
     }
 
 }

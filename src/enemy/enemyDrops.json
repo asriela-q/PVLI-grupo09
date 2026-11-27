@@ -2,15 +2,18 @@
     "dog": {
         "animal_skin": {"probability": 15 },
         "fang": {"probability": 20 },
-        "meat": {"probability": 60 }
+        "meat": {"probability": 60 },
+        "orb": {"number": 5 }
     },
     "ghost": {
         "ghost_sword": {"probability": 5 },
-        "fabric": {"probability": 20 }
+        "fabric": {"probability": 20 },
+        "orb": {"number": 45 }
     },
     "cockroach": {
         "cockroach_armor": {"probability": 5 },
-        "metal": {"probability": 20 }
+        "metal": {"probability": 20 },
+        "orb": {"number": 30 }
     }
 
 }

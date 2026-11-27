@@ -5,6 +5,8 @@ const BAR_HEIGHT = 250;
 const BAR_BOTTOM = 380; 
 const FRAME_W = 50;   //ancho borde de stat    
 const FRAME_H = 300; //alto borde de stat
+
+const FONT = "pixelFont";
  
 export default class stats extends Phaser.Scene {
     constructor() {
@@ -28,8 +30,8 @@ export default class stats extends Phaser.Scene {
         const bg = this.add.rectangle(0, 0, panelWidth, height, 0x000000, 0.75).setOrigin(0, 0);
         this.panel.add(bg);
  
-        const title = this.add.text(panelWidth / 2, 30, "ESTADÍSTICAS", {
-            fontFamily: "Pixelify Sans", fontSize: "28px", color: "#ffffff", fontStyle: "bold"
+        const title = this.add.text(panelWidth / 2, 30, "STATS", {
+            fontFamily: FONT, fontSize: "28px", color: "#ffffff", fontStyle: "bold"
         }).setOrigin(0.5, 0);
         this.panel.add(title);
  
@@ -46,8 +48,9 @@ export default class stats extends Phaser.Scene {
             `Life: ${Math.max(0, (player.currentLife))} / ${player.maxLife}`,
             `Attack: ${player.playerAttack + player.bonusAttack}`,
             `Defense: ${player.playerDefense + player.bonusDefense}`,
+            `Aura Orbs: x${player.auraOrbs}`,
         ], {
-            fontFamily: "Pixuf", fontSize: "18px", color: "#ffffff", align: "center", lineSpacing: 6
+            fontFamily: FONT, fontSize: "18px", color: "#ffffff", align: "center", lineSpacing: 6
         }).setOrigin(0.5, 0);
         this.panel.add(extra);
     }
@@ -68,7 +71,7 @@ export default class stats extends Phaser.Scene {
             //porcentaje
             const percent = Phaser.Math.Clamp(Math.round((value / max) * 100), 0, 100);
             const text = this.add.text(centerX, BAR_BOTTOM  + 15, `${percent}%`, {
-            fontFamily: "Arial", fontSize: "18px", color: "#ffffff"
+            fontFamily: FONT, fontSize: "18px", color: "#ffffff"
         }).setOrigin(0.5, 0);
  
         this.panel.add([bar, frame, text]);
