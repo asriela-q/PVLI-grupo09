@@ -44,14 +44,17 @@ export default class Animation extends Phaser.Scene {
         }
         });
 
-        if(data.craft == 0) {
+        if(data.craft === 0) {
             this.renderCraftableRecipes();
         }
-        else if (data.craft == 1) {
+        else if (data.craft === 1) {
             this.renderCraftableRooms(data.buildSpace);
         }
-        else {
+        else if (data.craft === 2 ) {
             this.renderCraftableCookingRecipes();
+        }
+        else {
+            this.upgradeRoom(data.roomId);
         }
     }
 
@@ -267,6 +270,56 @@ export default class Animation extends Phaser.Scene {
         }
     }
 
+    upgradeRoom(roomId) {
+        let bg = this.add.image(0, 0, "roombg").setOrigin(0,0);
+        bg.setScale(1.2);
+        console.log(roomId);
+        const room = ROOMS_LIST.find(r => r.room === roomId);
+        if (room.activeLevel === 1) {
+            if(this.inventory.checkInventory(room.ing1) >= room.quant1lvl2 &&
+               this.inventory.checkInventory(room.ing2) >= room.quant2lvl2) {
+                var green = this.add.image(20, 20, "green").setOrigin(0, 0).setInteractive();
+                green.setScale(0.4);
+                green.on("pointerdown", ()=>this.lvlUpRoom(room));
+                this.recipesContainer.add(green);
+            }
+            else {
+                var square = this.add.image(20, 20, "square").setOrigin(0, 0);
+                square.setScale(0.4);
+                this.recipesContainer.add(square);
+            }   
+        }
+        else if (room.activeLevel === 2) {
+            if(this.inventory.checkInventory(room.ing1) >= room.quant1lvl3 &&
+               this.inventory.checkInventory(room.ing2) >= room.quant2lvl3) {
+                var green = this.add.image(20, 20, "green").setOrigin(0, 0).setInteractive();
+                green.setScale(0.4);
+                green.on("pointerdown", ()=>this.lvlUpRoom(room));
+                this.recipesContainer.add(green);
+            }
+            else {
+                var square = this.add.image(20, 20, "square").setOrigin(0, 0);
+                square.setScale(0.4);
+                this.recipesContainer.add(square);
+            }   
+        }
+
+        let object = this.add.image(25, 25, room.room).setOrigin(0, 0);
+        object.setScale(0.1);
+        let ingredient1 = this.add.image(125, 25, room.ing1).setOrigin(0, 0);
+        ingredient1.setScale(0.1);
+        let ingredient2 = this.add.image(225, 25, room.ing2).setOrigin(0, 0);
+        ingredient2.setScale(0.1);
+
+        this.recipesContainer.add([object, ingredient1, ingredient2]);
+
+        if (this.invContainer) this.invContainer.destroy();
+        this.invContainer = this.inventory.renderCraft(this, 325, 25);
+
+        const visibleHeight = 570;
+        this.maxScroll = Math.max(0, 20 - visibleHeight);
+    }
+
     craftRecipe(recipe, isRoom, buildSpace) {
         if (recipe.craftable) {
             for(let i = 0; i < recipe.quant1; i++) {
@@ -285,8 +338,12 @@ export default class Animation extends Phaser.Scene {
                 this.inventory.addItemToInventory(recipe.object)
                 this.renderCraftableRecipes();
             }
-        }
-        
+        }    
+    }
+
+    lvlUpRoom(room) {
+        room.activeLevel++;
+        this.closeUI();
     }
 
     closeUI() {

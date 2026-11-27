@@ -1,15 +1,26 @@
 import statHandler from "../../player/statHandler.js";
+import ROOMS_LIST from "../rooms.js";
 
 export default class Bedroom extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, texture, stats) {
+    constructor(scene, x, y, texture, stats, inventory) {
         super(scene, x, y, texture);
         this.stats = stats;
+        this.inventory = inventory;
 
         this.scene.add.existing(this); 
         this.scene.physics.add.existing(this, true);
     }
 
     interact(){
-        this.stats.resetSleepyness();
+        const room = ROOMS_LIST.find(r => r.room === 'bedroom');
+        this.stats.resetSleepyness(room.activeLevel);
+
+        this.activateLevelingUp();
+    }
+
+    activateLevelingUp() {
+        this.scene.scene.pause("main");
+        console.log("sugoi");
+        this.scene.scene.launch("CraftUI", { inventory: this.inventory, craft: 3, roomId: 'bedroom' });
     }
 }

@@ -9,7 +9,11 @@ var ROOMS_LIST = [
         ing1: 'stone',  // item 1
         quant1: 6,  // cantidad del item 1 rquerida
         ing2: 'wood',  // item 2
-        quant2: 20  // cantidad del item 2 rquerida
+        quant2: 20,  // cantidad del item 2 rquerida
+        quant1lvl2: 12,
+        quant2lvl2: 30,
+        quant1lvl3: 18,
+        quant2lvl3 : 50
         // items_lvl0: [{id: 'metal', quantity: 6}, {id: 'wood', quantity: 20}]  // items para construir la sala al nivel 0
     },
     {  

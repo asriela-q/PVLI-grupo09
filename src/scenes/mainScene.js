@@ -12,6 +12,7 @@ import Mercadona from "../mapObjects/mercadona.js";
 import statHandler from "../player/statHandler.js";
 import stoneBlock from "../mapObjects/stoneBlock.js";
 import Tree from "../mapObjects/tree.js";
+import ROOMS_LIST from "../building/rooms.js";
 import Kitchen from "../building/rooms/kitchen.js";
 import Bedroom from "../building/rooms/bedroom.js";
 import Bathroom from "../building/rooms/bathroom.js";
@@ -371,15 +372,15 @@ export default class Animation extends Phaser.Scene {
 
     // crea las habitaciones (se llama desde el buildspace justo antes de que se destruya)
     createRoom(room, posX, posY) {
+        const roomToCraft = ROOMS_LIST.find(r => r.room === room);
+        roomToCraft.activeLevel = 1;
         if (room === "kitchen") {
-            console.log("nya");
             let kitchen = new Kitchen(this, posX, posY, "kitchen", this.psyInventory).setScale(0.3);
             kitchen.on("pointerdown", () => kitchen.activateCooking());
             this.interactGroup.add(kitchen);
         }
         else if (room === "bedroom") {
-            console.log("kawaii");
-            let bedroom = new Bedroom(this, posX, posY, "bedroom", this.stats).setScale(0.3);
+            let bedroom = new Bedroom(this, posX, posY, "bedroom", this.stats, this.psyInventory).setScale(0.3);
             bedroom.on("pointerdown", () => bedroom.activateCooking());
             this.interactGroup.add(bedroom);
         }

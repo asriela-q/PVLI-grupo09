@@ -81,8 +81,8 @@ export default class statHandler
             this.Player.playerDefense = Math.max(1, this.defense / 2);
 
             if (this.timer > this.wait){
-                this.timer = 0;
-                this.Inventory.blockInventory();
+            this.timer = 0;
+            this.Inventory.blockInventory();
             }
         }
         else 
@@ -107,10 +107,20 @@ export default class statHandler
     openPanel() {
         this.scene.scene.pause("main");
         this.scene.scene.launch("stats", { stats: this, player: this.Player });
-    }  
+    }
 
-    resetSleepyness() {
-        this.sleepyness = sleepyness;
+    resetSleepyness(currentLvl) {
+        if (this.sleepynes < 50) {
+            if (currentLvl === 1) {
+                this.sleepyness = sleepyness - 20;
+            }
+            else if (currentLvl === 2) {
+                this.sleepyness = sleepyness - 10;
+            }
+            else if (currentLvl === 3) {
+                this.sleepyness = sleepyness;
+            }
+        }
     }
 
     increaseHygiene(amount) {
