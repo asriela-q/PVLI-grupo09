@@ -6,8 +6,8 @@ sueño, hambre, estamina, etc.
 import StatsBar from "./barUIHandler.js";
 import Camera from "./camera.js";
 // constantes de velocidad:
-export const RUN_SPEED = 650; // velocidad al correr
-const WALK_SPEED = 270; // velocidad al caminar
+export const RUN_SPEED = 400; // velocidad al correr
+const WALK_SPEED = 200; // velocidad al caminar
 
 const INTERACT_RANGE = 160; // rango para interactuar con objetos
 
@@ -17,6 +17,9 @@ const EXHAUST_CD = 4; // segundos de espera si la estamina llegó a 0 (más larg
 
 const baseAttack = 15; // ataque base
 export const baseDefense = 15; // defensa base
+
+const BARRA_X=80;
+const BARRA_Y=20;
 
 
 export default class Psy extends Phaser.GameObjects.Container {
@@ -98,10 +101,10 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         // inventario y UI
         this.inventory.render(this.scene, x + 20, y, this);
-        this.lifeBar = new StatsBar(this.scene, -170, -250, 310, 50, 0xc14f4f).setScrollFactor(0).setDepth(200); //barra de vida
-        scene.add.image(-230, -260, "vida").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(0.5);
-        this.staminaBar = new StatsBar(this.scene, -170, -180, 310, 50, 0xe5c57e).setScrollFactor(0).setDepth(200); // barra de estamina
-        scene.add.image(-230, -195, "stamina").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(0.5);
+        this.lifeBar = new StatsBar(this.scene, BARRA_X, BARRA_Y, 150, 25, 0xc14f4f).setScrollFactor(0).setDepth(200); //barra de vida
+        scene.add.image(BARRA_X-35 , BARRA_Y-5, "vida").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(0.25);
+        this.staminaBar = new StatsBar(this.scene, BARRA_X, BARRA_Y*2.5, 150, 25, 0xe5c57e).setScrollFactor(0).setDepth(200); // barra de estamina
+        scene.add.image(BARRA_X-35, BARRA_Y*2.5-5, "stamina").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(0.25);
 
         // estadísticas del player
         this.playerAttack = baseAttack;
@@ -125,7 +128,7 @@ export default class Psy extends Phaser.GameObjects.Container {
 
         this.auraOrbs = 0; // orbes recogidos por el jugador
         
-        this.body.setImmovable(true); //para que no pueda ser empujado 
+        //this.body.setImmovable(true); //para que no pueda ser empujado 
         this.cam = Camera;
     }
 

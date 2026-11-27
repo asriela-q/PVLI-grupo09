@@ -30,8 +30,10 @@ export default class stats extends Phaser.Scene {
         const bg = this.add.rectangle(0, 0, panelWidth, height, 0x000000, 0.75).setOrigin(0, 0);
         this.panel.add(bg);
  
+
         const title = this.add.text(panelWidth / 2, 30, "STATS", {
             fontFamily: FONT, fontSize: "28px", color: "#ffffff", fontStyle: "bold"
+
         }).setOrigin(0.5, 0);
         this.panel.add(title);
  
@@ -51,6 +53,7 @@ export default class stats extends Phaser.Scene {
             `Aura Orbs: x${player.auraOrbs}`,
         ], {
             fontFamily: FONT, fontSize: "18px", color: "#ffffff", align: "center", lineSpacing: 6
+
         }).setOrigin(0.5, 0);
         this.panel.add(extra);
     }
@@ -72,6 +75,7 @@ export default class stats extends Phaser.Scene {
             const percent = Phaser.Math.Clamp(Math.round((value / max) * 100), 0, 100);
             const text = this.add.text(centerX, BAR_BOTTOM  + 15, `${percent}%`, {
             fontFamily: FONT, fontSize: "18px", color: "#ffffff"
+
         }).setOrigin(0.5, 0);
  
         this.panel.add([bar, frame, text]);

@@ -9,8 +9,8 @@ import Patrol from "../enemy/patrol.js"
 export default class Dog extends Enemy {
     constructor(scene, x, y, player, itemGroup, patrolPoints)
     {   const texture = 'dog';
-        const vel = 200;
-        const chaseVel = 400;
+        const vel = 150;
+        const chaseVel = 300;
         const damage = 20;
         const defense = 12;
         const life = 150;

@@ -8,6 +8,10 @@ const hunger = 100;
 const hygiene = 100;
 const sleepyness = 100;
 
+const BAR_Y = 350;   // parte de abajo de las barras
+const BAR_W = 20;
+const BAR_H = 150;
+
 //para controlar como de rapido o lento se quite
 const hungerRate = 2;
 const sleepRate = 1;
@@ -35,14 +39,14 @@ export default class statHandler
         this.wait = timer; //tiempo que espera entre cada pulga
         this.timer = 0;
         this.Inventory = scene.psyInventory;
-        this.hungerBar = new StatBar(this.scene, 1170, 300, 30,200, 0xE67E22, true).setScrollFactor(0).setDepth(200); //barra de hunger
-            scene.add.image(1170, 55, "hunger").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(3);
+        this.hungerBar = new StatBar(this.scene, 780, BAR_Y, BAR_W, BAR_H, 0xE67E22, true).setScrollFactor(0).setDepth(200); //barra de hunger
+        scene.add.image(780 + BAR_W / 2, BAR_Y, "hunger").setOrigin(0.5, 1).setScrollFactor(0).setDepth(1000).setScale(2);
 
-        this.hygienetBar = new StatBar(this.scene, 1140, 300, 30, 200, 0x5b94e0, true).setScrollFactor(0).setDepth(200); //barra de higiene
-            scene.add.image(1140, 55, "higiene").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(3);
+        this.hygienetBar = new StatBar(this.scene, 760, BAR_Y, BAR_W, BAR_H, 0x5b94e0, true).setScrollFactor(0).setDepth(200); //barra de higiene
+        scene.add.image(760 + BAR_W / 2, BAR_Y, "higiene").setOrigin(0.5, 1).setScrollFactor(0).setDepth(1000).setScale(2);
 
-        this.sleepynessBar = new StatBar(this.scene, 1110, 300, 30, 200, 0x908f9a, true).setScrollFactor(0).setDepth(200); //barra de sueño
-            scene.add.image(1110, 55, "sueño").setOrigin(0, 0).setScrollFactor(0).setDepth(1000).setScale(3);
+        this.sleepynessBar = new StatBar(this.scene, 740, BAR_Y, BAR_W, BAR_H, 0x908f9a, true).setScrollFactor(0).setDepth(200); //barra de sueño
+        scene.add.image(740 + BAR_W / 2, BAR_Y, "sueño").setOrigin(0.5, 1).setScrollFactor(0).setDepth(1000).setScale(2);
 
     }
         

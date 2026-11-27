@@ -42,6 +42,8 @@ export default class Animation extends Phaser.Scene {
 
     // create - método de las escenas que se llama una vez la escena está instanciada
     create () {
+
+        this.createCiudad();
         this.input.mouse.disableContextMenu(); //Para quitar lo que sale por defecto al hacer click derecho
 
         //Música
@@ -71,8 +73,8 @@ export default class Animation extends Phaser.Scene {
         let ITEM_ENCYCLOPEDIA = this.cache.json.get("infoItems");
         this.psyInventory.ITEM_ENCYCLOPEDIA = ITEM_ENCYCLOPEDIA;
 
-        let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
-        bggame.setScale(2.5);
+        // let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
+        // bggame.setScale(2.5);
 
         let hudContenedor = this.add.container(-300, -200); // contenedor anclado a la esquina superior de la camara
         hudContenedor.setScrollFactor(0);
@@ -90,8 +92,14 @@ export default class Animation extends Phaser.Scene {
         this.flecha.setAngle(-135);
 
         // creacion de elementos del juego:
-        this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setScale(0.9);
+        this.player = new Psy(this, this.sys.game.canvas.width * 0.5, this.sys.game.canvas.height * 0.5, "psy", this.psyInventory).setScale(0.3);
+        this.physics.add.collider(this.player, this.murosLayer);
+        this.physics.add.collider(this.player, this.vallasLayer);
+        this.physics.add.collider(this.player, this.tejadosLayer);
+        this.physics.add.collider(this.player, this.basuraLayer);
 
+        this.physics.add.collider(this.player, this.colisiones);
+        
         //quitar
         this.stats = new statHandler(this,this.player);
 
@@ -108,8 +116,8 @@ export default class Animation extends Phaser.Scene {
         this.enemiesGroup = this.physics.add.group({
             allowGravity: false,
         });
-        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.9);
-        let enemy2 = new Ghost(this, this.sys.game.canvas.width, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.6);
+        let enemy = new Dog(this, this.sys.game.canvas.width * 0.8, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.2);
+        let enemy2 = new Ghost(this, this.sys.game.canvas.width, this.sys.game.canvas.height * 0.8, this.player, this.itemsGroup).setScale(0.2);
         this.enemiesGroup.add(enemy);
         this.enemiesGroup.add(enemy2);
 
@@ -146,14 +154,10 @@ export default class Animation extends Phaser.Scene {
             this.interactGroup.add(blankSpace);
         }
         
-        //coger las dimensiones que ocupa el juego 
-        let width = this.sys.game.config.width;
-        let height = this.sys.game.config.height;
-
-        let w = bggame.width * 2.5;
-        let h = bggame.height * 2.5;
+         let w = this.scale.width ;
+         let h = this.scale.height ;
         //llamada a la función que organiza todo de la cámara
-        this.cam = new Camera(this, this.player, 1, 0.5, w, h);
+        this.cam = new Camera(this, this.player, 1, 1, this.mapaCiudad.widthInPixels, this.mapaCiudad.heightInPixels);        
         this.cam.followPl();
         
         //Creación de objetos
@@ -177,10 +181,10 @@ export default class Animation extends Phaser.Scene {
         for (let i = 0; i < 10; i++)  {
             this.itemsGroup.add(new Item(this, 100 * i, 1200, "metal", "metal", ITEM_ENCYCLOPEDIA).setScale(0.15));
         }
-        this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.15));
-        this.itemsGroup.add(new Item(this, 130, 1150, "stone_sword", "stone_sword", ITEM_ENCYCLOPEDIA).setScale(0.15));
-        this.itemsGroup.add(new Item(this, 130, 1150, "iron_axe", "iron_axe", ITEM_ENCYCLOPEDIA).setScale(0.15));
-        this.itemsGroup.add(new Item(this, 130, 1150, "iron_armor", "iron_armor", ITEM_ENCYCLOPEDIA).setScale(0.15));
+        this.itemsGroup.add(new Item(this, 100, 1150, "stone_pick", "stone_pick", ITEM_ENCYCLOPEDIA).setScale(0.10));
+        this.itemsGroup.add(new Item(this, 130, 1150, "stone_sword", "stone_sword", ITEM_ENCYCLOPEDIA).setScale(0.10));
+        this.itemsGroup.add(new Item(this, 130, 1150, "iron_axe", "iron_axe", ITEM_ENCYCLOPEDIA).setScale(0.10));
+        this.itemsGroup.add(new Item(this, 130, 1150, "iron_armor", "iron_armor", ITEM_ENCYCLOPEDIA).setScale(0.10));
 
         //new Item(this, 10, 10, "wood", "wood").setScale(0.15)
         //Mira si el jugador ha colisionado con un objeto
@@ -212,9 +216,67 @@ export default class Animation extends Phaser.Scene {
         this.capaLuz.setDepth(100);
         
         this.cicloDia();
+
     }
 
+   
+    createCiudad(){
+    const map = this.make.tilemap({key: 'ciudad'});
+    this.mapaCiudad = map;
+
+    const tilesets = [
+        map.addTilesetImage('Background_Bleak-Yellow_TileSet', 'bgYellow'),
+        map.addTilesetImage('Background_Green_TileSet', 'bgGreen'),
+        map.addTilesetImage('Background_Dark-Green_TileSet', 'bgDark'),
+        map.addTilesetImage('Brick-Wall_TileSet', 'brick'),
+        map.addTilesetImage('Garbage_TileSet', 'garbage'),
+        map.addTilesetImage('Grass_On-Top_TileSet', 'grassTop'),
+        map.addTilesetImage('Gutter-And-Downspout', 'gutter'),
+        map.addTilesetImage('Iron-Fence_TileSet', 'fence'),
+        map.addTilesetImage('Roof_TileSet', 'roof'),
+        map.addTilesetImage('Background_Snow_TileSet', 'bgSnow'),
+        map.addTilesetImage('Snow_On-Top_TileSet', 'snowTop'),
+        map.addTilesetImage('Gutter-And-Downspout', 'pipe'),
+    ];
+
+    this.sueloLayer = map.createLayer('Terreno/Suelo', tilesets);
+    this.bordesLayer = map.createLayer('Terreno/Suelo_bordes', tilesets);
+    this.callesLayer = map.createLayer('Terreno/Calles', tilesets);
+    this.interioresLayer = map.createLayer('Terreno/Interiores', tilesets);
+    this.escombrosLayer = map.createLayer('Terreno/Escombros', tilesets);
+    this.basuraLayer = map.createLayer('Obstaculos/Basura', tilesets);
+    this.murosLayer = map.createLayer('Edificios/Muros', tilesets);
+    this.tejadosLayer = map.createLayer('Edificios/Tejados', tilesets);
+    this.vallasLayer = map.createLayer('Edificios/Vallas', tilesets);
+    this.canalonesLayer = map.createLayer('Edificios/Canalones', tilesets);
+    this.musgoLayer = map.createLayer('Edificios/Musgo', tilesets);
+
+    this.basuraLayer.setCollisionByProperty({ colision: true });
+    this.murosLayer.setCollisionByProperty({ colision: true });
+    this.tejadosLayer.setCollisionByProperty({ colision: true });
+    this.vallasLayer.setCollisionByProperty({ colision: true });
+
+    map.addTilesetImage('Objetos_Ciudad', 'objetos');  
+
+    map.addTilesetImage('Objetos_Ciudad', 'objetos');
+
+// objetos de Tiled
+map.createFromObjects('Decoracion_suelo', {});
+map.createFromObjects('Fachadas', {});
+const objetos = map.createFromObjects('Objetos', {});
+objetos.forEach(o => o.setDepth(10 + o.y / 10000));
+
+// colisiones de Tiled
+this.colisiones = this.physics.add.staticGroup();
+map.getObjectLayer('Colisiones').objects.forEach(c => {
+    this.colisiones.add(this.add.rectangle(c.x + c.width / 2, c.y + c.height / 2, c.width, c.height));
+});
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+}
+
+
     update(t,dt) {
+        this.player.setDepth(10 + this.player.y / 10000);
         if (this.capaLuz) {
             this.capaLuz.x = this.cameras.main.worldView.centerX;
             this.capaLuz.y = this.cameras.main.worldView.centerY;

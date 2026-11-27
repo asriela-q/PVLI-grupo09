@@ -4,8 +4,8 @@ import Patrol from "../enemy/patrol.js"
 export default class Ghost extends Enemy {
     constructor(scene, x, y, player, itemGroup, patrolPoints)
     {   const texture = 'ghost';
-        const vel = 200;
-        const chaseVel = 400;
+        const vel = 150;
+        const chaseVel = 300;
         const damage = 40;
         const defense = 20;
         const life = 300;

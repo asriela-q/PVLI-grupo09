@@ -181,9 +181,29 @@ export default class Load extends Phaser.Scene {
 
             this.scene.start("start");
         }); 
+
+
+       // Ciudad
+        this.load.image("bgYellow", "assets/mapa/tilesets/Background_Bleak-Yellow_TileSet.png");
+        this.load.image("bgGreen",  "assets/mapa/tilesets/Background_Green_TileSet.png");
+        this.load.image("bgDark",   "assets/mapa/tilesets/Background_Dark-Green_TileSet.png");
+        this.load.image("brick",    "assets/mapa/tilesets/Brick-Wall_TileSet.png");
+        this.load.image("garbage",  "assets/mapa/tilesets/Garbage_TileSet.png");
+        this.load.image("grassTop", "assets/mapa/tilesets/Grass_On-Top_TileSet.png");
+        this.load.image("gutter",   "assets/mapa/tilesets/Gutter-And-Downspout.png");
+        this.load.image("fence",    "assets/mapa/tilesets/Iron-Fence_TileSet.png");
+        this.load.image("roof",     "assets/mapa/tilesets/Roof_TileSet.png");
+        this.load.image("bgSnow",   "assets/mapa/tilesets/Background_Snow_TileSet.png");
+        this.load.image("snowTop",  "assets/mapa/tilesets/Snow_On-Top_TileSet.png");
+        this.load.image("fence",  "assets/mapa/tilesets/Iron-Fence_TileSet.png");
+        this.load.spritesheet("objetos",  "assets/mapa/tilesets/Objetos_Ciudad.png" , { frameWidth: 192, frameHeight: 116 });
+
+    
+         this.load.tilemapTiledJSON('ciudad', 'assets/mapa/ciudad.tmj');
     }
 
     create() {
+
         //anim perro
         this.anims.create({
                 key:'dogLeft',
