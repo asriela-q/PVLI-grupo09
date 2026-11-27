@@ -342,8 +342,34 @@ export default class Animation extends Phaser.Scene {
     }
 
     lvlUpRoom(room) {
+        let cost1 = 0;
+        let cost2 = 0;
+
+        // Determinamos cuánto cuesta la mejora según el nivel actual de la sala
+        if (room.activeLevel === 1) {
+            cost1 = room.quant1lvl2;
+            cost2 = room.quant2lvl2;
+        } else if (room.activeLevel === 2) {
+            cost1 = room.quant1lvl3;
+            cost2 = room.quant2lvl3;
+        }
+
+        // Restamos los materiales del inventario
+        for (let i = 0; i < cost1; i++) {
+            this.inventory.removeItem(room.ing1);
+        }
+        for (let i = 0; i < cost2; i++) {
+            this.inventory.removeItem(room.ing2);
+        }
         room.activeLevel++;
+
         this.closeUI();
+        if (ROOMS_LIST.every(r => r.activeLevel >= 3)) {
+            console.log("Todas las salas han alcanzado el nivel máximo");
+            this.scene.pause();
+            this.scene.launch('end');
+        }
+
     }
 
     closeUI() {

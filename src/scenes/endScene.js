@@ -5,23 +5,23 @@ export default class credits extends Phaser.Scene {
 
     create() {
         const { width, height } = this.scale;
+        const panelWidth = width;
 
-        let creditsbg = this.add.image(0, 0, "creditsbg").setOrigin(0,0);
-        creditsbg.setScale(1);
+        this.panel = this.add.container(0, 0);
+
+        const fondoTransparente = this.add.rectangle(0, 0, panelWidth, height, 0x000000, 0.75).setOrigin(0, 0).setAlpha(0.5).setDepth(-1);
+        const bg = this.add.rectangle(panelWidth / 2, height / 2, panelWidth / 1.5, height / 1.5, 0x000000, 0.75);
+        this.panel.add(bg);
 
         const text = [
-            
+            "Congratulations, you have completed the game!"
         ];
 
-        // formato del texto (yo he puesto un poco lo que me ha parecido pero se puede cambiar)
-        const format = this.add.text(width / 2, height + 50, text.join('\n'), {
-            fontFamily: 'Arial',
-            fontSize: '28px',
-            color: '#000000',
-            align: 'center',
-            lineSpacing: 12
-        }).setOrigin(0.5, 0);
-
+        let resumeButton = this.add.image(width / 2, height * 0.3, "resumeButton").setInteractive().setScale(0.25);
+        resumeButton.on('pointerdown', () => {
+            this.closeUI();
+        });
+        this.panel.add(resumeButton);
 
         const fullscreenButton = this.add.image(730, 500, 'fullscreen', 0).setOrigin(0, 0).setInteractive().setScale(0.1);
 

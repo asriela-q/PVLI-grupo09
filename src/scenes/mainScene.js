@@ -298,13 +298,20 @@ export default class Animation extends Phaser.Scene {
             this.interactGroup.add(this.player.deathStone);
             this.player.deathStone.fillDeath();
 
-            this.psyInventory.slots.fill(null); // vaciamos el inventario
+            this.psyInventory.slots.fill(null); //vaciamos el inventario
 
             // TODO: que aqui aparezca un gui o algo de q se murio el psy :3
             // ...
 
             this.player.revive(this.spawn.x, this.spawn.y); // revivimos al jugador
+        }
 
+        //Comprobamos si todas las salas han llegado al nivel máximo para sacar la escena de fin
+        const todasAlMaximo = ROOMS_LIST.every(room => room.activeLevel == 3);
+        if (todasAlMaximo) {
+            console.log("Todas las salas han alcanzado el nivel máximo");
+            this.scene.pause();
+            this.scene.launch('end');
         }
     }
 
