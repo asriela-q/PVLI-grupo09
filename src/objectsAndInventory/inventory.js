@@ -143,7 +143,7 @@ export default class Inventory {
         //Sirve para que se actualice mientras se renderiza el inventario
         container.removeAll(true);
 
-        const bg = scene.add.rectangle(0, 0, 425, 425, 0x000000, 1).setOrigin(0);
+        const bg = scene.add.rectangle(0, 0, 425, 425, 0x000000, 1).setOrigin(0).setScale(0.5);
         container.add(bg);
 
         const totalCols = 4; //Columnas totales, luego esto se usa para calcular las filas   
@@ -168,7 +168,7 @@ export default class Inventory {
             //Si el item existe indicamos su imagen y cantidad
             if (item !== null) {
                 const itemIcono = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, item.id);
-                itemIcono.setDisplaySize(slotSize * 0.8, slotSize * 0.8).setInteractive();
+                itemIcono.setDisplaySize(slotSize * 0.4, slotSize * 0.4).setInteractive();
                 container.add(itemIcono);
 
                 itemIcono.on("pointerdown", () => {
@@ -192,7 +192,7 @@ export default class Inventory {
             if (bloqueado)
             {
                 const pulga = scene.add.image(posX + slotSize / 2, posY + slotSize / 2, 'tick');
-                pulga.setDisplaySize(slotSize * 0.8, slotSize * 0.8); 
+                pulga.setDisplaySize(slotSize * 0.4, slotSize * 0.4); 
                 container.add(pulga);
             }
         }

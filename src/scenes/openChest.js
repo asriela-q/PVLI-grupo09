@@ -1,5 +1,7 @@
+const FONT = "pixelFont"; // letra
+
 export default class openChest extends Phaser.Scene {
-constructor() {
+    constructor() {
         super({ key: "openChest" });
     }
 
@@ -21,6 +23,9 @@ constructor() {
 
         let bg = this.add.image(0, 0, "storageRoomBg").setOrigin(0, 0);
         bg.setScale(1.5);
+
+        // titulo
+        this.add.text(400, 22, "CHEST", { fontFamily: FONT, fontSize: "28px", color: "#000000" }).setOrigin(0.5, 0);
 
         //Dibujar ambos contenedores por primera vez
         this.refreshUI();

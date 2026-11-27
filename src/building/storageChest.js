@@ -13,7 +13,6 @@ export default class storageChest extends Phaser.GameObjects.Sprite {
         this.scene.scene.launch("openChest", { 
             inventory: this.inventory, 
             chest: this.storageChest,
-            craft: 3
         });
     }
 }

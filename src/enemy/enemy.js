@@ -24,7 +24,7 @@ constructor(scene, x, y, texture, vel, chaseVel, damage, defense, life, cooldown
     //para manejar tiempo entre ataques
      this.cooldown = cooldown;
   
-     this.lifeBar = new StatsBar(this.scene, x, y, 100, 25, 0x56F85400).setDepth(200); //barra de vida
+     this.lifeBar = new StatsBar(this.scene, x, y, 100, 25, 0x56F85400).setDepth(200).setScale(0.5); //barra de vida
 
      //comportamiento del enemigo, lo iniciamos vacio para decirlo que todavia no haga nada
      this.status = null;

@@ -76,9 +76,9 @@ export default class Animation extends Phaser.Scene {
         // let bggame = this.add.image(0, 0, "bggame").setOrigin(0,0);
         // bggame.setScale(2.5);
 
-        let hudContenedor = this.add.container(-300, -200); // contenedor anclado a la esquina superior de la camara
+        let hudContenedor = this.add.container(0, 40).setScale(0.4); // contenedor anclado a la esquina superior de la camara
         hudContenedor.setScrollFactor(0);
-        hudContenedor.setDepth(1000);
+        hudContenedor.setDepth(100000);
 
         let rueda = this.add.image(0, 0, "dayWheel").setOrigin(0.5, 0.5).setScale(0.15); // rueda para el ciclo de dia
         hudContenedor.add(rueda);
@@ -109,7 +109,7 @@ export default class Animation extends Phaser.Scene {
         });
 
         // hay que definir primero el grupo de los items
-        let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.6);
+        let testChest = new Chest(this, 500, 400, "chest", 'WOODEN', this.itemsGroup).setScale(0.25);
         //testChest.on("pointerdown", ()=> testChest.getRandomItem());
         
         //Grupo de Phaser para gestionar las físicas de los enemigos
@@ -130,11 +130,11 @@ export default class Animation extends Phaser.Scene {
         this.resourcesGroup = this.physics.add.group({
             allowGravity: false,
         });
-        let rocks = new stoneBlock(this, 600, 600, "stoneBlock", this.itemsGroup);
-        let tree = new Tree(this, 600, 800, "tree", this.itemsGroup);
+        let rocks = new stoneBlock(this, 600, 600, "stoneBlock", this.itemsGroup).setScale(0.25);
+        let tree = new Tree(this, 600, 800, "tree", this.itemsGroup).setScale(0.25);
         this.resourcesGroup.add(rocks).add(tree);
 
-        this.mercadona = new Mercadona(this, 1500, 200, "mercadona").setScale(0.3);
+        this.mercadona = new Mercadona(this, 1500, 200, "mercadona").setScale(0.1);
         this.interactGroup.add(this.mercadona);
 
         let contX = 800;
