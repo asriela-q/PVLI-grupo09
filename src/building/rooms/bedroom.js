@@ -1,6 +1,3 @@
-import statHandler from "../../player/statHandler.js";
-import ROOMS_LIST from "../rooms.js";
-
 export default class Bedroom extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, texture, inventory) {
         super(scene, x, y, texture);

@@ -8,12 +8,11 @@ export default class Kitchen extends Phaser.GameObjects.Sprite {
     }
 
     interact(){
-        this.activateCooking();
+        this.activateLevelingUp();
     }
 
-    activateCooking() {
+    activateLevelingUp() {
         this.scene.scene.pause("main");
-        console.log("i love cocking");
-        this.scene.scene.launch("CraftUI", { inventory: this.inventory, craft: 2 });
+        this.scene.scene.launch("CraftUI", { inventory: this.inventory, craft: 3, roomId: 'kitchen' });
     }
 }
